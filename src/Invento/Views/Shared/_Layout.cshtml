@@ -1,0 +1,128 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>    
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>@ViewData["Title"] BiznsBook</title>
+        <meta name="description" content="BiznsBook-Cloud POS & Accounting Software." />
+        <meta name="keywords" content="BiznsBook-Cloud POS & Accounting Software." />
+        <meta name="Fahad Hameed" content="" />
+        <!-- Bootstrap -->
+        <environment names="Development">
+            <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+                  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+                  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />            
+            <script src="~/js/modernizr.custom.js"></script>
+            <link href="~/css/jquery.fancybox.css" rel="stylesheet" />
+            <link href="~/css/flickity.css" rel="stylesheet" />
+            <link href="~/css/animate.css" rel="stylesheet" />
+            <link href="~/css/styles.css" rel="stylesheet" />
+            <link href="~/css/queries.css" rel="stylesheet" />            
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">                                    
+        </environment>
+        <environment names="Staging,Production">
+            <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+                  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+                  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+            <script src="~/js/modernizr.custom.js"></script>
+            <link href="~/css/jquery.fancybox.css" rel="stylesheet" />
+            <link href="~/css/flickity.css" rel="stylesheet" />
+            <link href="~/css/animate.css" rel="stylesheet" />
+            <link href="~/css/styles.css" rel="stylesheet" />
+            <link href="~/css/queries.css" rel="stylesheet" />
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">            
+            @*<link href='//fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>*@    
+        </environment>
+        <!-- Facebook and Twitter integration -->
+        <meta property="og:title" content="" />
+        <meta property="og:image" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:site_name" content="" />
+        <meta property="og:description" content="" />
+        <meta name="twitter:title" content="" />
+        <meta name="twitter:image" content="" />
+        <meta name="twitter:url" content="" />
+        <meta name="twitter:card" content="" />    
+</head>
+<body>
+        @RenderBody()    
+        @RenderSection("scripts", required: false)
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h1 class="footer-logo">
+                        <a href="#" style="font-size:xx-large ; font-family:'Nunito'">Biznsbook</a>
+                    </h1>
+                    <p>Cloud Based POS &amp; Accounting Software</p>
+                </div>
+                <div class="col-md-9">
+                    <ul class="footer-nav">
+                        <li style="font-weight:bolder"><a asp-area="" asp-controller="Home" asp-action="About">About US</a></li>
+                        <li style="font-weight:bolder"><a asp-area="" asp-controller="Home" asp-action="Pricing">Pricing</a></li>
+                        <li style="font-weight:bolder"><a asp-area="" asp-controller="Home" asp-action="Contact">Contact Us</a></li>
+                        <li style="font-weight:bolder"><a asp-area="" asp-controller="Home" asp-action="CustomerSupport">Customer Support</a></li>
+                    </ul>
+                    <br /><br />
+                    <ul class="footer-nav">
+                        <li style="font-weight:bolder"><a href="https://www.youtube.com/channel/UCBQJmYpnFH4caKLjt7Xi-Tw" target="_blank">Youtube</a></li>
+                        <li style="font-weight:bolder"><a href="https://www.facebook.com/BiznsBook-715116301980915/" target="_blank">Facebook</a></li>
+                        <li style="font-weight:bolder"><a href="https://twitter.com/BiznsBook" target="_blank">Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div class="overlay overlay-boxify">
+        <nav>
+            <ul>
+                <li><a asp-area="" asp-controller="Home" asp-action="Features"><i class=""></i>Features</a></li>
+                <li><a asp-area="" asp-controller="Home" asp-action="Pricing"><i class=""></i>Pricing</a></li>
+            </ul>
+            <ul>
+                <li><a asp-area="" asp-controller="Account" asp-action="Login"><i class=""></i>Customer Login</a></li>
+                <li><a asp-area="" asp-controller="Home" asp-action="Contact"><i class=""></i>Contact Us</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <environment names="Development">
+        <script src="~/js/toucheffects.js"></script>        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="~/js/flickity.pkgd.min.js"></script>
+        <script src="~/js/jquery.fancybox.pack.js"></script>
+        <script src="~/js/retina.js"></script>
+        <script src="~/js/min/scripts-min.js"></script>
+        <script src="~/js/waypoints.min.js"></script>
+        <script src="~/js/bootstrap.min.js"></script>        
+        <script>
+		(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+		function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+		e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+		e.src='//www.google-analytics.com/analytics.js';
+		r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+		ga('create','UA-XXXXX-X');ga('send','pageview');
+        </script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/toucheffects.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="~/js/flickity.pkgd.min.js"></script>
+        <script src="~/js/jquery.fancybox.pack.js"></script>
+        <script src="~/js/retina.js"></script>
+        <script src="~/js/min/scripts-min.js"></script>
+        <script src="~/js/waypoints.min.js"></script>
+        <script src="~/js/bootstrap.min.js"></script>
+        <script>
+		(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+		function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+		e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+		e.src='//www.google-analytics.com/analytics.js';
+		r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+		ga('create','UA-XXXXX-X');ga('send','pageview');
+        </script>
+    </environment>
+</body>
+</html>

@@ -1,0 +1,78 @@
+@model IEnumerable<Invento.Areas.CompanyAdmin.Models.Company.Bank>
+
+@{
+    ViewData["Title"] = "Bank";
+    Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+}
+
+@await Html.PartialAsync("_PageHeader")
+
+<table class="table table-bordered table-hover " id="MyTable">
+    <thead>
+        <tr class="active">         
+            <th>
+                @Html.DisplayNameFor(model => model.BankName)
+            </th>
+            <th >
+                @Html.DisplayNameFor(model => model.BankDescription)
+            </th>
+            <th></th>
+            @*<th></th>*@
+        </tr>
+    </thead>
+    <tbody>
+@*@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BankDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BankName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CompanyID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedBy)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.BankID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.BankID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.BankID">Delete</a>
+            </td>
+        </tr>
+}*@
+    </tbody>
+</table>
+
+
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "ajax": {
+                    "url": "/Company/Banks/LoadBanks",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    //{ "data": "bankID", "autoWidth": true },
+                    { "data": "bankName", "autoWidth": true },
+                    { "data": "bankDescription", "autoWidth": true },                    
+                    {
+                        "data": null,
+                        "mRender": function (data, type, row) {
+                            return $("<div />")
+                                .append($(" <div class='text-center'> <a class='btn btn-sm btn-default modal-link' href='/Company/Banks/Edit?id=" + data.bankID + "'><span class='glyphicon glyphicon-pencil'></span></a>           <a class='btn btn-sm btn-default modal-link' href='/Company/Banks/Delete?id=" + data.bankID + "'><span class='glyphicon glyphicon-trash'></span></a> </div> "))
+                                .html();
+                        }
+                    }
+                   
+                ]
+            });
+        });
+        $('#MyTable').on('page', function () { alert("asas") });
+    </script>
+}

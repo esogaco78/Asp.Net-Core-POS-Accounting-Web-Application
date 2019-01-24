@@ -1,0 +1,20 @@
+﻿
+
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+       
+        @{
+            if (User.IsInRole("CompanyAdmin"))
+            {
+                <a asp-area="CompanyAdmin" asp-controller="Home" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+            }
+            else
+            {
+                <a asp-area="CompanyUser" asp-controller="Home" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+            }
+        }
+        
+        <a asp-action="Create" class="btn btn-primary pull-right" style="margin-right:20px">Add New <span class="glyphicon glyphicon-plus"></span></a>
+    </div>
+</div>

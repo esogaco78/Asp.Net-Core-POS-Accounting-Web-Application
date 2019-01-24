@@ -1,0 +1,21 @@
+﻿@model Invento.Areas.SiteAdmin.Models.SiteManageVM
+@{
+    ViewData["Title"] = "Site Admin";
+    Layout = "~/Views/Shared/_LayoutSiteAdmin.cshtml";
+}
+
+<h2>Delete All Data of Specific Company from Database all tables.</h2>
+
+<form asp-area="SiteAdmin" asp-controller="SiteManage" asp-action="DeleteAllCompanyData" method="post">
+    <div class="row">
+        <div class="col-lg-3">
+            <label>Enter Company ID: </label>
+        </div>
+        <div class="col-lg-6">
+            <input asp-for="CompanyID" class="form-control" required />
+        </div>
+    </div>
+    <div class="row">
+        <input class="form-control btn btn-primary" type="submit" value="Delete" />
+    </div>
+</form>

@@ -1,0 +1,66 @@
+﻿ 
+<ul class="nav navbar-nav" style="padding-bottom:0px">    
+    <li style="padding-top:8px">
+        @{
+            byte[] Logo;
+            Context.Session.TryGetValue("CompanyLogo", out Logo);
+
+            if (Logo == null)
+            {
+                <a class="navbar-brand" style="font-size:small;padding-right:0px;padding-left:0px">Biznsbook</a>
+            }
+            else
+            {
+
+                string imageBase64 = Convert.ToBase64String(Logo);
+                string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                <img src="@imageSrc" class="" width="55" height="30" />
+            }
+        }
+    </li>
+    <li style="padding-top:7px"><a asp-area="CompanyAdmin" asp-controller="Home" asp-action="Index" style="color:azure;font-size:15px;padding-right:0px;font-weight:bolder">@Localizer["Dashboard"]</a></li>     
+   
+    <li style="padding-top:7px">
+        <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="" style="color:azure;font-size:15px;padding-right:0px;font-weight:bolder">@Localizer["Purchase"] <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+        <ul class="dropdown-menu">
+            <li><a asp-area="Purchase" asp-controller="Purchase" asp-action="Create"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> @Localizer["Purchase Invoice"]</a></li>
+            <li><a asp-area="Purchase" asp-controller="Purchase" asp-action="Index"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> @Localizer["Purchase Invoices"]</a></li>
+        </ul>
+    </li>
+     
+    <li style="padding-top:7px">
+        <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="" style="color:azure;font-size:15px;padding-right:0px;font-weight:bolder">@Localizer["Sale"] <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+        <ul class="dropdown-menu">
+            <li><a asp-area="Sale" asp-controller="Sale" asp-action="Create"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> @Localizer["Sale Invoice"]</a></li>
+            <li><a asp-area="Sale" asp-controller="Sale" asp-action="Index"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> @Localizer["Sale Invoices"]</a></li>    
+        </ul>
+    </li>
+
+    <li style="padding-top:7px">
+        <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="" style="color:azure;font-size:15px;padding-right:0px;font-weight:bolder">@Localizer["Payment"] <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+        <ul class="dropdown-menu">
+            <li><a asp-area="Payment" asp-controller="Payment" asp-action="StatementOfReceivable">@Localizer["Statement Of Receviable"]</a></li>
+            <li><a asp-area="Payment" asp-controller="Payment" asp-action="StatementOfPayable">@Localizer["Statement Of Payable"]</a></li>
+                <li role="separator" class="divider"></li>
+            <li><a asp-area="Payment" asp-controller="CashReceipts" asp-action="Create">@Localizer["Cash Receipt"]</a></li>
+            <li><a asp-area="Payment" asp-controller="CashPayments" asp-action="Create">@Localizer["Cash Payment"]</a></li>
+            <li><a asp-area="Payment" asp-controller="CashInBanks" asp-action="Create">@Localizer["Cash Deposited in Bank or Transfer"]</a></li>
+               
+            <li><a asp-area="Payment" asp-controller="ChequeReceipts" asp-action="Create">@Localizer["Cheque Receipt"]</a></li>
+            <li><a asp-area="Payment" asp-controller="ChequePayments" asp-action="Create">@Localizer["Cheque Payment"]</a></li>
+            
+            <li><a asp-area="Payment" asp-controller="Vouchers" asp-action="Create">@Localizer["Voucher"]</a></li>
+        </ul>
+    </li>
+
+    <li style="padding-top:7px">
+        <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="" style="color:azure;font-size:15px;padding-right:0px;font-weight:bolder">@Localizer["Inventory"] <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+        <ul class="dropdown-menu">
+            <li><a asp-area="Product" asp-controller="Items" asp-action="Index">@Localizer["Price List"]</a></li>
+            <li><a asp-area="Product" asp-controller="Items" asp-action="StockCard">@Localizer["Stock Card"]</a></li>
+            <li><a asp-area="Product" asp-controller="GRN" asp-action="Create">@Localizer["GRN"]</a></li>
+        </ul>
+    </li>
+    <li style="padding-top:7px"><a asp-area="Reports" asp-controller="Home" asp-action="Index" style="color:azure;font-size:15px;padding-right:0px;font-weight:bolder">@Localizer["Reporting"]</a></li>
+    <li style="padding-top:7px"><a asp-area="Reports" asp-controller="Analysis" asp-action="Index" style="color:azure;font-size:15px;padding-right:0px;font-weight:bolder">@Localizer["Analysis"]</a></li>
+</ul> 

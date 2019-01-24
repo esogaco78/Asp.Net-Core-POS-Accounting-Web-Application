@@ -1,0 +1,408 @@
+﻿@model Invento.Areas.Finance.Models.GeneralLedgerVM
+
+@{
+    ViewData["Title"] = "Statement Of Account";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:0px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+        <span class="pull-right" style="margin-right:10px ;font-weight:bold">A/c. #: <span style="font-family:'Times New Roman', Times, serif ; font-weight:bold ; font-size:small ;margin-right:10px">@Model.AccountNumber</span> A/c. Name: <span style="font-family:'Times New Roman', Times, serif ; font-weight:bold ; font-size:medium">@Model.AccountName </span></span>
+        <div class="row ShowItems pull-right" style="display:none;padding-top:10px">
+            <span class="col-md-2">From <input type="date" class="col-md-1" asp-for="DateFrom" /></span>
+            <span class="col-md-2">To <input type="date" class="col-md-1" asp-for="DateTo" /></span>
+        </div>
+        <div class="row">
+            <form asp-action="StatementOfAccount" method="get">
+                <div class="form-group">
+                    <div class="col-md-2 HideItems">
+                        <select class="form-control" asp-items="@Model.tranAccList" id="TranAccount" name="TranAccount" required>
+                            <option selected value="">Transaction Account...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 HideItems">
+                        <input type="date" class="form-control" name="DateFrom" id="DateFrom" asp-for="DateFrom" required />
+                    </div>
+                    <div class="col-md-2 HideItems">
+                        <input type="date" class="form-control" name="DateTo" id="DateTo" asp-for="DateTo" required />
+                    </div>
+                    <div class="col-md-2 HideItems">
+                        <button type="submit" class="btn-sm btn-default" id="Search" value="Search" title="Search" style="font-weight:bolder"><span class="glyphicon glyphicon-search"></span></button>
+                        <button type="button" class="btn-sm btn-default" title="Print Statement Of Account" onclick="Print();"><span class="glyphicon glyphicon-print"></span></button>
+                        <a id="dlink" style="display:none;"></a>
+                        <button class="btn-sm btn-default" onclick="tableToExcel('MyTable', 'Statement Of Account', 'StatementOfAccount-BiznsBook.xls')" title="Export to Excel">
+                            <span class="glyphicon glyphicon-export"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-condensed" style="width:100%" id="MyTable">
+        <thead>
+            <tr class="active">
+                <th style="width:10%">Voucher #</th>
+                <th style="width:10%">Date</th>
+                <th style="width:65%">
+                    Narration
+                </th>
+                <th style="padding-right:30px;text-align:right;width:5%">
+                    Debit
+                </th>
+                <th style="width:5%">
+                    Credit
+                </th>
+                <th style="width:5%">
+                    Balance
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="dataRows">
+                <td style="font-weight:bolder ; font-size:small">Opening Balance</td>
+                @if (Model.Check_GL_Level == true)
+                {
+                    <td></td>
+                }
+                <td style="width:10%"></td>
+                <td style="width:10%"></td>
+                <td style="width:10%"></td>
+                <td style="text-align:right;padding-right:20px; width:25%">@Model.OpeningBalance</td>
+            </tr>
+            @if (Model.LedgerList != null)
+            {
+                @for (int i = 0; i < Model.LedgerList.Count; i++)
+                {
+                    <tr id="tblData" class="dataRows">
+                        @{
+                            if (Model.Check_GL_Level == false)
+                            {
+                                <td style="font-size:small;width:20%">
+                                    <span>@Html.DisplayFor(modelItem => Model.LedgerList[i].MainAccountNumber)</span><span>-</span><span>@Html.DisplayFor(modelItem => Model.LedgerList[i].SubAccountNumber)</span><span>-</span> <span>@Html.DisplayFor(modelItem => Model.LedgerList[i].TransactionAccountNumber)</span><span> , </span> <span style="font-weight:bold">@Html.DisplayFor(modelItem => Model.LedgerList[i].TransactionAccountName)</span>
+                                </td>
+                            }
+                            else
+                            {
+                                <td style="font-size:small;width:10%">
+                                    @{
+                                        if (Model.LedgerList[i].Voucher_1 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">CBV-@Html.DisplayFor(modelItem => Model.LedgerList[i].Voucher_1)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (Model.LedgerList[i].Voucher_2 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">CPV-@Html.DisplayFor(modelItem => Model.LedgerList[i].Voucher_2)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (Model.LedgerList[i].Voucher_3 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">CRV-@Html.DisplayFor(modelItem => Model.LedgerList[i].Voucher_3)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (Model.LedgerList[i].Voucher_4 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">BPV-@Html.DisplayFor(modelItem => Model.LedgerList[i].Voucher_4)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (Model.LedgerList[i].Voucher_5 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">BRV-@Html.DisplayFor(modelItem => Model.LedgerList[i].Voucher_5)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (Model.LedgerList[i].Voucher_6 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">PBV-@Html.DisplayFor(modelItem => Model.LedgerList[i].Voucher_6)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (Model.LedgerList[i].Voucher_7 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">PRV-@Html.DisplayFor(modelItem => Model.LedgerList[i].Voucher_7)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (Model.LedgerList[i].Voucher_8 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">SBV-@Html.DisplayFor(modelItem => Model.LedgerList[i].Voucher_8)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (Model.LedgerList[i].Voucher_9 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">SRV-@Html.DisplayFor(modelItem => Model.LedgerList[i].Voucher_9)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (Model.LedgerList[i].Voucher_10 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">JV-@Html.DisplayFor(modelItem => Model.LedgerList[i].Voucher_10)</span>
+                                        }
+                                    }
+                                </td>
+                                <td style="font-size:small;width:10%">
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (Model.LedgerList[i].Date_1 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => Model.LedgerList[i].Date_1.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_1.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_1.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (Model.LedgerList[i].Date_2 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => Model.LedgerList[i].Date_2.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_2.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_2.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (Model.LedgerList[i].Date_3 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => Model.LedgerList[i].Date_3.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_3.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_3.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (Model.LedgerList[i].Date_4 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => Model.LedgerList[i].Date_4.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_4.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_4.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (Model.LedgerList[i].Date_5 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => Model.LedgerList[i].Date_5.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_5.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_5.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (Model.LedgerList[i].Date_6 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => Model.LedgerList[i].Date_6.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_6.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_6.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (Model.LedgerList[i].Date_7 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => Model.LedgerList[i].Date_7.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_7.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_7.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (Model.LedgerList[i].Date_8 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => Model.LedgerList[i].Date_8.Value.Day)<span>/</span> @Html.DisplayFor(modelItem => Model.LedgerList[i].Date_8.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_8.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (Model.LedgerList[i].Date_9 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => Model.LedgerList[i].Date_9.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_9.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_9.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (Model.LedgerList[i].Date_10 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => Model.LedgerList[i].Date_10.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_10.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Date_10.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                </td>
+                                            }
+                        }
+                        <td style="font-size:small;width:65%">
+                            <span style="font-weight:lighter">@Html.DisplayFor(modelItem => Model.LedgerList[i].Narration_1)</span>
+                            <span style="font-weight:lighter">@Html.DisplayFor(modelItem => Model.LedgerList[i].Narration_2)</span>
+                            <span style="font-weight:lighter">@Html.DisplayFor(modelItem => Model.LedgerList[i].Narration_3)</span>
+                            <span style="font-weight:lighter">@Html.DisplayFor(modelItem => Model.LedgerList[i].Narration_4)</span>
+                            <span style="font-weight:lighter">@Html.DisplayFor(modelItem => Model.LedgerList[i].Narration_5)</span>
+                            <span style="font-weight:lighter">@Html.DisplayFor(modelItem => Model.LedgerList[i].Narration_6)</span>
+                            <span style="font-weight:lighter">@Html.DisplayFor(modelItem => Model.LedgerList[i].Narration_7)</span>
+                            <span style="font-weight:lighter">@Html.DisplayFor(modelItem => Model.LedgerList[i].Narration_8)</span>
+                            <span style="font-weight:lighter">@Html.DisplayFor(modelItem => Model.LedgerList[i].Narration_9)</span>
+                            <span style="font-weight:lighter">@Html.DisplayFor(modelItem => Model.LedgerList[i].Narration_10)</span>
+                        </td>
+                        <td class="DebitAmount" style="text-align:right;padding-right:20px;width:5%">
+                            @{
+                                if (Model.LedgerList[i].Debit == 0)
+                                {
+                                    <span style="display:none">0</span>
+                                }
+                                else
+                                {
+                                    string A = String.Format("{0:#,##0.##}", Model.LedgerList[i].Debit);
+                                    <span>@A</span>
+                                }
+                            }
+                        </td>
+                        <td class="CreditAmount" style="text-align:right;padding-right:20px;width:5%">
+                            @{
+                                if (Model.LedgerList[i].Credit == 0)
+                                {
+                                    <span style="display:none">0</span>
+                                }
+                                else
+                                {
+                                    string B = String.Format("{0:#,##0.##}", Model.LedgerList[i].Credit);
+                                    <span>@B</span>
+                                }
+                            }
+                        </td>
+                        <td style="text-align:right;padding-right:20px;width:5%">
+                            @{
+                                decimal j = 0;
+                                if (i == 0)
+                                {
+                                    j = Model.OpeningBalance + Model.LedgerList[i].Debit - Model.LedgerList[i].Credit;
+                                    Model.LedgerList[i].Balance = j;
+                                    string D = String.Format("{0:#,##0.##}", Model.LedgerList[i].Balance);
+                                    @D
+                                    //@Html.DisplayFor(modelItem => Model.LedgerList[i].Balance)
+                                }
+                                else if (i != 0)
+                                {
+                                    j = Model.LedgerList[i - 1].Balance + Model.LedgerList[i].Debit - Model.LedgerList[i].Credit;
+                                    Model.LedgerList[i].Balance = j;
+                                    string E = String.Format("{0:#,##0.##}", Model.LedgerList[i].Balance);
+                                    @E
+                                    //@Html.DisplayFor(modelItem => Model.LedgerList[i].Balance)
+                                }
+                            }
+                            <span id="BalanceAmount"></span>
+                        </td>
+                    </tr>
+                                }
+                                }
+        </tbody>
+        <tfoot style="border-top:2px solid rgb(0,0,0) ;border-bottom-style:double solid ;border-bottom-width:5px ">
+            <tr class="active">
+                @{
+                    if (Model.Check_GL_Level == false)
+                    {
+                        <td style="width:20%"></td>
+                        <td style="width:25%"></td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td width="45"></td>
+                        <td></td>
+                    }
+                }
+                <td width="5"><p style="text-align:right;padding-right:20px; font-weight:bold ; border-bottom:1px solid rgb(0,0,0); border-top:1px solid rgb(0,0,0);" id="TotalDebit"></p></td>
+                <td width="5"><p style="text-align:right;padding-right:20px; font-weight:bold ; border-bottom:1px solid rgb(0,0,0); border-top:1px solid rgb(0,0,0);" id="TotalCredit"></p></td>
+                <td width="5"><p style="text-align:right;padding-right:20px; font-weight:bold ; border-bottom:1px solid rgb(0,0,0); border-top:1px solid rgb(0,0,0);" id="TotalBalance"></p></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        TotalDebitCalculate();
+        TotalCreditCalculate();
+        TotalBalanceCalculate();
+    });
+
+    var tableToExcel = (function () {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+        , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+        , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+        , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+        return function (table, name, filename) {
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+
+            document.getElementById("dlink").href = uri + base64(format(template, ctx));
+            document.getElementById("dlink").download = filename;
+            document.getElementById("dlink").click();
+
+        }
+    })()
+
+    function Print()
+    {
+        $('.HideItems').hide();
+        $('.ShowItems').show();
+        window.print();
+        $('.ShowItems').hide();
+        $('.HideItems').show();
+    }
+
+    function TotalDebitCalculate() {
+        var debit = 0;
+        $('.DebitAmount').each(function() {
+            var aa = $(this).text().replace(",", "");
+            debit += parseFloat(aa);
+        });
+        debit = numberWithCommas(debit);
+        $('#TotalDebit').text(debit);
+    }
+    function TotalCreditCalculate() {
+        var credit = 0;
+        $('.CreditAmount').each(function () {
+            var aa = $(this).text().replace(",", "");
+            credit += parseFloat(aa);
+        });
+        credit = numberWithCommas(credit);
+        $('#TotalCredit').text(credit);
+    }
+    function TotalBalanceCalculate() {
+
+        debugger;
+        //$('#FirstOpenBalance').text()
+        var Openbalance = @Model.OpeningBalance;
+
+        var debit = 0;
+        $('.DebitAmount').each(function() {
+            var aa = $(this).text().replace(",", "");
+            debit += parseFloat(aa);
+        });
+
+        var credit = 0;
+        $('.CreditAmount').each(function () {
+            var aa = $(this).text().replace(",", "");
+            credit += parseFloat(aa);
+        });
+
+
+        var Result_WithoutCommas = parseFloat(Openbalance) + debit - credit;
+
+        var Result_WithCommas = numberWithCommas(Result_WithoutCommas);
+        $('#TotalBalance').text(Result_WithCommas);
+    }
+      
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+</script>    

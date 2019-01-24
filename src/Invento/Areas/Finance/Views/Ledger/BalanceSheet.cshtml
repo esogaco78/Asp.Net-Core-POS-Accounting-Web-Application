@@ -1,0 +1,193 @@
+﻿@model Invento.Areas.Finance.Models.GeneralLedgerVM
+ 
+@{
+    ViewData["Title"] = "Balance Sheet";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:0px">
+    <div class="row">
+        <div class="col-md-3">
+            <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+        </div>
+        <div class="row ShowItems pull-right" style="display:none;padding-top:10px">
+            @{
+                if (Model.DateFrom != null)
+                {
+                    <span class="col-md-2">From <input type="date" class="col-md-1" asp-for="DateFrom" /></span>
+                }
+            }            
+            <span class="col-md-2">To <input type="date" class="col-md-1" asp-for="DateTo" /></span>
+        </div>
+        <form asp-action="BalanceSheet" method="get">            
+            <div class="col-md-1 col-md-offset-2 HideItems"><label class="pull-right">From</label></div>
+            <div class="col-md-2 HideItems" style="padding-left:0px">
+                <input type="date" class="form-control" name="DateFrom" id="DateFrom" asp-for="DateFrom"/>
+            </div>
+            <div class="col-md-1 HideItems"><label class="pull-right">To</label></div>
+            <div class="col-md-2 HideItems" style="padding-left:0px">
+                <input type="date" class="form-control" name="DateTo" id="DateTo" asp-for="DateTo" required/>
+            </div>
+            <div class="col-md-1 HideItems">
+                <button type="submit" class="btn-sm btn-default" id="Search" value="Search" title="Search" style="font-weight:bolder"><span class="glyphicon glyphicon-search"></span></button>
+                <button type="button" class="btn-sm btn-default" title="Print Balance Sheet" onclick="Print();"><span class="glyphicon glyphicon-print"></span></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive">   
+    <table class="table">
+        <thead style="border-bottom:3px solid rgb(0,0,0)">
+            <tr class="active text-center">
+                <th class="text-center" style="font-weight:bolder;font-size:x-large">Liabilities</th>
+                <th></th>
+                <th class="text-center" style="font-weight:bolder;font-size:x-large">Assets</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="font-weight:bold;font-size:medium">Liabilities</td>
+                <td>
+                    <span id="LiabilityVal">
+                    @{
+                        string B = String.Format("{0:#,##0.##}", Model.LiabilityVal);
+                    }
+                    @B</span>
+                </td>
+                <td style="font-weight:bold;font-size:medium; border-left:3px solid rgb(0,0,0)">Assets</td>
+                <td>
+                    <span id="AssetVal">
+                        @{
+                            string C = String.Format("{0:#,##0.##}", Model.AssetVal);
+                        }
+                        @C</span>
+                </td>
+            </tr>
+            <tr>
+                @*@if (Model.PartyCreditors != 0)
+                {*@
+                    <td style="font-weight:bold;font-size:medium "><span id="PartyHeadingCre">Creditors</span></td>
+                    <td style="border-right:3px solid rgb(0,0,0)">
+                        <span id="PartyCre" style="padding-right:45px;">
+                        @{
+                            string D = String.Format("{0:#,##0.##}", Model.PartyCreditors);
+                        }
+                        @D</span>
+                    </td>
+                @*}
+                @if (Model.PartyDebitors != 0)
+                {*@
+                    <td style="font-weight:bold;font-size:medium "><span id="PartyHeadingDeb">Debtors</span></td>
+                    <td>
+                        <span id="PartyDeb" style="padding-right:45px;">
+                        @{
+                            string E = String.Format("{0:#,##0.##}", Model.PartyDebitors);
+                        }
+                        @E</span>
+                    </td>
+                @*}*@                            
+            </tr>
+            <tr>                                
+                <td style="font-weight:bold;font-size:medium ;">
+                    @if (Model.Profit != 0)
+                    {
+                        <span id="ProfitHeading">Profit</span>
+                    }                    
+                </td>
+                <td style="border-right:3px solid rgb(0,0,0)">
+                    @if (Model.Profit != 0)
+                    {
+                        <span id="ProfitLossVal_Profit" style="padding-right:45px">
+                    @{
+                        string F = String.Format("{0:#,##0.##}", Model.Profit);
+                    }
+                    @F</span>
+                    }
+                </td>
+                <td style="font-weight:bold;font-size:medium ">
+                    @if (Model.Loss != 0)
+                    {
+                        <span id="LossHeading">Loss</span>
+                    }                    
+                </td>
+                <td>
+                    @if (Model.Loss != 0)
+                    {
+                        <span id="ProfitLossVal_Loss" style="padding-right:45px">
+                    @{
+                        string G = String.Format("{0:#,##0.##}", Model.Loss);
+                    }
+                    @G</span>
+                    }                    
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td style="border-right:3px solid rgb(0,0,0)"><span id="LiabilityFinalBalance" style="padding-right:45px; font-weight:bold ; border-top:1px solid rgb(0,0,0); border-bottom:1px solid rgb(0,0,0);"></span></td>
+                <td></td>
+                <td><span id="AssetsFinalBalance" style="padding-right:45px; font-weight:bold ; border-top:1px solid rgb(0,0,0); border-bottom:1px solid rgb(0,0,0);"></span></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        ProfitLossCalculate();
+    });
+
+    function Print()
+    {
+        $('.HideItems').hide();  
+        $('.ShowItems').show();
+        window.print();
+        $('.ShowItems').hide();
+        $('.HideItems').show();     
+    }
+
+    function ProfitLossCalculate() {
+        debugger;
+
+        var FinalResultLiability = 0;
+
+        var liability = @Model.LiabilityVal;
+        var PartyCre = @Model.PartyCreditors;
+        var Profit = @Model.Profit;
+
+        FinalResultLiability = FinalResultLiability + liability;
+        FinalResultLiability = FinalResultLiability + PartyCre;
+        FinalResultLiability = FinalResultLiability + Profit;
+
+        FinalResultLiability = numberWithCommas(FinalResultLiability);
+        $('#LiabilityFinalBalance').text(FinalResultLiability);
+
+        var FinalResultAsset = 0;
+
+        var Asset = @Model.AssetVal;
+        var PartyDeb = @Model.PartyDebitors;
+        var Loss = @Model.Loss;
+
+        FinalResultAsset = FinalResultAsset + Asset;
+        FinalResultAsset = FinalResultAsset + PartyDeb;
+        FinalResultAsset = FinalResultAsset + Loss;
+
+        FinalResultAsset = numberWithCommas(FinalResultAsset);
+        $('#AssetsFinalBalance').text(FinalResultAsset);
+    }
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+</script>    

@@ -1,0 +1,125 @@
+﻿@model Invento.Areas.Reports.Models.AnalysisVM
+@{
+    ViewData["Title"] = "Analysis-Purchase Sale View Monthly";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div>
+    <div class="well" style="padding-bottom:5px">
+        <div class="row">
+            <span class="glyphicon glyphicon-stats glyphicon-bold " style="font-size: 1.5em; padding-left:10px;color:darkblue" aria-hidden="true"></span>
+            <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Purchase Sale Analysis</span>
+      </div>
+    </div>
+         
+    <div class="row" id="secondChart">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div>
+                        <form asp-action="PurchaseSaleViewMonthly" asp-controller="Analysis" method="get" style="padding-top:0px">
+                            <div class="input-group">
+                                <span class="panel-title">
+                                    Purchase Sale Monthly Analysis
+                                </span>
+                                <input type="hidden" asp-for="LineChartType" value="1" />                                
+                                <div class="col-md-2 pull-right">
+                                    <select asp-for="Period" class="form-control">
+                                        <option value="@DateTime.Now.Year">@DateTime.Now.Year</option>
+                                        <option value="@DateTime.Now.AddYears(-1).Year">@DateTime.Now.AddYears(-1).Year</option>
+                                        <option value="@DateTime.Now.AddYears(-2).Year">@DateTime.Now.AddYears(-2).Year</option>
+                                        <option value="@DateTime.Now.AddYears(-3).Year">@DateTime.Now.AddYears(-3).Year</option>
+                                        <option value="@DateTime.Now.AddYears(-4).Year">@DateTime.Now.AddYears(-4).Year</option>
+                                        <option value="@DateTime.Now.AddYears(-5).Year">@DateTime.Now.AddYears(-5).Year</option>
+                                        <option value="@DateTime.Now.AddYears(-6).Year">@DateTime.Now.AddYears(-6).Year</option>
+                                        <option value="@DateTime.Now.AddYears(-7).Year">@DateTime.Now.AddYears(-7).Year</option>
+                                        <option value="@DateTime.Now.AddYears(-8).Year">@DateTime.Now.AddYears(-8).Year</option>
+                                        <option value="@DateTime.Now.AddYears(-9).Year">@DateTime.Now.AddYears(-9).Year</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2 pull-right">
+                                    <select asp-for="Period_1" class="form-control">
+                                        <option value="1">January</option>
+                                        <option value="2">Feburary</option>
+                                        <option value="3">March</option>
+                                        <option value="4">April</option>
+                                        <option value="5">May</option>
+                                        <option value="6">June</option>
+                                        <option value="7">July</option>
+                                        <option value="8">August</option>
+                                        <option value="9">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>                                        
+                                    </select>
+                                </div>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="submit" style="margin-right:50px"><span class="glyphicon glyphicon-search"></span></button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div> 
+                <div class="panel-body">
+                    <div class="row">                        
+                        <canvas id="myChart_1" width="1260" height="380"></canvas>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="padding-top:0px">
+        <div class="col-lg-offset-4 col-lg-2">
+            <div style="background-color:#b7bdff" title="Purchase"><p style="font-weight:bolder;text-align:center">Purchase</p></div>
+        </div>
+        <div class="col-lg-2">
+            <div style="background-color:#f9cfe1" title="Sale"><p style="font-weight:bolder;text-align:center">Sale</p></div>
+        </div>                
+    </div>
+</div>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+ 
+    <script> 
+        $(document).ready(function () {            
+              drawLineChart_1();
+         });
+ 
+        function drawLineChart_1() {
+            var ctx = document.getElementById("myChart_1").getContext("2d");
+            var myChart = new Chart(ctx).Line(data1_1);
+        }
+
+        var data1_1 = {
+            labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+            datasets: [
+               {
+                   label: "Purchase View",
+                   fillColor: "#b7bdff",
+                   strokeColor: "darkblue",
+                   pointColor: "darkblue",
+                   pointStrokeColor: "#fff",
+                   pointHighlightFill: "#fff",
+                   pointHighlightStroke: "rgba(220,220,220,1)",
+                   data:[@Model.Data]
+               },
+               {
+                   label: "Sale View",
+                   fillColor: "#f9cfe1",
+                   strokeColor: "red",
+                   pointColor: "red",
+                   pointStrokeColor: "#e4cdf4",
+                   pointHighlightFill: "#d8565d",                  
+                   pointHighlightStroke: "rgba(220,220,220,1)",
+                   data:[@Model.Data_1]
+               }
+            ]
+        };
+    </script>

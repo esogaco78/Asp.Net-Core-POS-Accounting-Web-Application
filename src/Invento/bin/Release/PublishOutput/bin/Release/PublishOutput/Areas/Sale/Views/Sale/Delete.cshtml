@@ -1,0 +1,179 @@
+@model Invento.Areas.Sale.Models.SaleBill
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>SaleBill</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Advance)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Advance)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Balance)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Balance)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BillDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BillDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CashPaid)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CashPaid)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CompanyID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactPerson)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactPerson)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreditDays)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreditDays)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExchangeRate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExchangeRate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExternalRef)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExternalRef)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.GrossTotal)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GrossTotal)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NetAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NetAmount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PayTerms)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PayTerms)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RefDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RefDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Remarks)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SB_1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SB_1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SB_2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SB_2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SB_B_1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SB_B_1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SB_D_1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SB_D_1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SB_D_2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SB_D_2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SB_S_1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SB_S_1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SB_S_2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SB_S_2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SaleBillNo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SaleBillNo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TDiscount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TDiscount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalQuantity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TotalQuantity)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

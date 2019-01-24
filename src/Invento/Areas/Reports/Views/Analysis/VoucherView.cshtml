@@ -1,0 +1,124 @@
+﻿@model Invento.Areas.Reports.Models.AnalysisVM
+@{
+    ViewData["Title"] = "Analysis - Voucher View";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="">
+    <div class="well" style="padding-bottom:5px">
+        <div class="row">
+            <form asp-action="VoucherView" asp-controller="Analysis" method="get">
+                <div class="input-group">
+                    <span class="glyphicon glyphicon-stats glyphicon-bold " style="font-size: 1.5em; padding-left:10px;color:darkblue" aria-hidden="true"></span>
+                    <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Analysis</span>
+                    <div class="col-md-2 pull-right">
+                        <select asp-for="Period" class="form-control" >
+                            <option value="0">Year</option>
+                            <option value="1">Month</option>
+                            <option value="2">Day</option>
+                        </select>
+                    </div>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit" style="margin-right:50px"><span class="glyphicon glyphicon-search"></span></button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h1 class="panel-title">
+                        Voucher Payments View
+                    </h1>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-8">
+                             <canvas id="mycanvas" width="700" height="400"></canvas>
+                        </div>
+                        <div class="col-lg-3 pull-right">
+                            <div class="row">
+                                <br /><br /><br />
+                                <div style="background-color:cornflowerblue" title="Cash Deposited In Bank Voucher"><p style="font-weight:bolder;padding-left:5px">Cash Deposited In Bank - CBV</p></div>
+                                <div style="background-color:lightgreen" title="Cash Payments Voucher"><p style="font-weight:bolder;padding-left:5px">Cash Payments Voucher - CPV</p></div>
+                                <div style="background-color:orange" title="Cash Receipts Voucher"><p style="font-weight:bolder;padding-left:5px">Cash Receipts Voucher - CRV</p></div>
+                                <div style="background-color:#b7cff4" title="Cheque Payments Voucher"><p style="font-weight:bolder;padding-left:4px">Cheque Payments Voucher - BPV</p></div>
+                                <div style="background-color:darkgrey" title="Cheque Receipts Voucher"><p style="font-weight:bolder;padding-left:5px">Cheque Receipts Voucher - BRV</p></div>
+                                <div style="background-color:#e8eef7" title="JV (Cr.) Voucher"><p style="font-weight:bolder;padding-left:1px">Journal Voucher Credit - JV(Cr)</p></div>
+                                <div style="background-color:#9befb6" title="JV (Dr.) Voucher"><p style="font-weight:bolder;padding-left:1px">Journal Voucher Debit - JV(Dr)</p></div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>         
+    </div>    
+       
+</div>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+ 
+    <script>
+
+        $(document).ready(function () {
+            var ctx = $("#mycanvas").get(0).getContext("2d");
+            var data = [
+                {
+                    value: @Model.Deci1,
+                    color: "cornflowerblue",
+                    highlight: "#f76a5d",
+                    label: "Cash Deposited In Bank"
+                },
+                {
+                    value: @Model.Deci2,
+                    color: "lightgreen",
+                    highlight: "#f76a5d",
+                    label: "Cash Payments"
+                },
+                {
+                    value: @Model.Deci3,
+                    color: "orange",
+                    highlight: "#f76a5d",
+                    label: "Cash Receipts"
+                },
+                {
+                    value: @Model.Deci4,
+                    color: "#b7cff4",
+                    highlight: "#f76a5d",
+                    label: "Cheque Payments"
+                },
+                {
+                    value: @Model.Deci5,
+                    color: "darkgrey",
+                    highlight: "#f76a5d",
+                    label: "Cheque Receipts"
+                },
+                {
+                    value: @Model.Deci6,
+                    color: "#e8eef7",
+                    highlight: "#f76a5d",
+                    label: "Journal Voucher (Credit)"
+                },
+                {
+                    value: @Model.Deci7,
+                    color: "#9befb6",
+                    highlight: "#f76a5d",
+                    label: "Journal Voucher (Debit)"
+                }
+            ];
+            var piechart = new Chart(ctx).Pie(data);
+             
+        });
+
+     
+    </script>

@@ -1,0 +1,73 @@
+﻿@model Invento.Areas.Finance.Models.CashFlowDetailsVM
+  
+<div class="modal-content ">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-weight:bolder">Purchase Bill Voucher - @Model.Id</h4>
+
+    </div>
+    <div class="modal-body">
+        <div>
+            <table>
+                <thead width="100%">
+                    <tr>
+                        <td width="30%"></td>
+                        <td width="10%"></td>
+                        <td width="60%"></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td style="font-weight:bolder">Gross Total</td>
+                        <td></td>
+                        <td>@Model.Decimal_1</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bolder">Total Discount</td>
+                        <td></td>
+                        <td>@Model.Name_1</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bolder">Net Amount</td>
+                        <td></td>
+                        <td>@Model.Amount</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bolder">Party</td>
+                        <td></td>
+                        <td>@Model.Title</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bolder">Date</td>
+                        <td></td>
+                        <td>@Model.date</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bolder">Remarks</td>
+                        <td></td>
+                        <td>@Model.Name_2</td>
+                    </tr>                    
+                    <tr>
+                        <td style="font-weight:bolder">CreatedBy</td>
+                        <td></td>
+                        <td>@Model.Name_3</td>
+                    </tr>
+                   
+                    <tr>
+                        <td style="font-weight:bolder">Contact Person</td>
+                        <td></td>
+                        <td>@Model.Name_5</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

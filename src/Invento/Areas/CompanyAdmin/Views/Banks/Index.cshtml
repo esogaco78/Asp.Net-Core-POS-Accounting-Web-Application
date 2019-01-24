@@ -1,0 +1,113 @@
+@model IEnumerable<Invento.Areas.CompanyAdmin.Models.Company.Bank>
+ 
+@{
+    ViewData["Title"] = Localizer["Bank"];
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+     
+        @if (User.IsInRole("CompanyAdmin") || User.IsInRole("Add Banks"))
+        {
+            <a asp-action="Create" class="btn btn-default pull-right modal-link" style="margin-right:20px"><span class="glyphicon glyphicon-plus"></span> @Localizer["Add New"] </a>
+        }                
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover " id="MyTable">
+        <thead>
+            <tr class="active">
+                <th>
+                    @Localizer["Bank Name"]
+                    @*@Html.DisplayNameFor(model => model.BankName)*@
+                </th>
+                <th>
+                    @Localizer["Description"]
+                    @*@Html.DisplayNameFor(model => model.BankDescription)*@
+                </th>
+                @if (User.IsInRole("Edit Banks") || User.IsInRole("CompanyAdmin"))
+            {
+                    <th>@Localizer["Edit"]</th>
+            }
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+
+                dom: 'lBfrtip', 
+                buttons:
+                    [
+                        {
+                            "extend": 'print', 
+                            "title": 'Banks', 
+                            "text": "Print",
+                            "autoPrint": true,
+                            exportOptions: {
+                                "columns": ':visible',
+                            },
+                        },
+                        {
+                            "extend": 'excel', 
+                            "title": 'Banks',
+                            "text": "Excel",
+                            "autoPrint": true,
+                            exportOptions: {
+                                "columns": ':visible',
+                            },
+                        },
+                         {
+                             "extend": 'pdfHtml5', 
+                             "title": 'Banks',
+                             "text": "PDF", 
+                             exportOptions: {
+                                 "columns": ':visible',
+                             },
+                         },
+                         {
+                             extend: 'colvis',
+                         } 
+                    ],
+
+                "ajax": {
+                    "url": "/Company/Banks/LoadBanks",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    //{ "data": "bankID", "autoWidth": true },
+                    { "data": "bankName", "autoWidth": true },
+                    { "data": "bankDescription", "autoWidth": true },                     
+                    @if(User.IsInRole("Edit Banks") || User.IsInRole("CompanyAdmin"))
+                    {
+                        <text>
+                            {
+                                "data": null,
+                                "mRender": function (data, type, row) {
+                                    return $("<div />")
+                                        .append($(" <div class='text-center'> <a class='btn btn-sm btn-default modal-link' href='/Company/Banks/Edit?id=" + data.bankID + "'><span class='glyphicon glyphicon-pencil'></span></a>  </div> "))
+                                        .html();
+                                }
+                            }
+                        </text>
+                    }                                        
+                ]
+            });
+        });
+        $('#MyTable').on('page', function () { alert("asas") });
+    </script>
+}

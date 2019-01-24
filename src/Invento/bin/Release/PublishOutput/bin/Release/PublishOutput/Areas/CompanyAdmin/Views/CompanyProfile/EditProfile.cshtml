@@ -1,0 +1,145 @@
+@model Invento.Areas.CompanyAdmin.Models.Company.CompanyProfile
+
+@{
+    ViewData["Title"] = "Edit Profile";
+    Layout = "_LayoutCompanyAdmin";
+} 
+
+
+
+
+<form asp-controller="CompanyProfile" asp-action="EditProfile" method="post" enctype="multipart/form-data">
+    <div class="form-horizontal">
+       
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="well">
+            <div class="row">
+                <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Edit Company Profile</span>
+                <a asp-area="CompanyAdmin" asp-controller="Home" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+                
+                 <input type="submit" value="Save" class="btn btn-primary pull-right" style="margin-right:10px"/>
+            </div>
+        </div>
+
+        
+        <input type="hidden" asp-for="CompanyProfileID" />
+        <input type="hidden" asp-for="FileData" />
+        <input type="hidden" asp-for="FileName" />
+
+      
+        <div class="row">
+            <div class="col-md-3">
+                @{
+                    if (Model.FileData == null)
+                    {
+                        <img src="~/images/NoLogo.png" class="img-thumbnail" width="200" height="200" />
+                    }
+                    else
+                    {
+                        string imageBase64 = Convert.ToBase64String(Model.FileData);
+                        string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                        <img src="@imageSrc" class="img-thumbnail" width="200" height="200" />
+                    }
+                }
+                <div class="form-group">
+                    
+                    <div class="col-md-9">
+                        <input type="file" id="File" name="File" accept="image/jpg, image/jpeg, image/png, image/tif" />
+                        <p>Only .jpg , .jepg , .png , .TIF</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label asp-for="CompanyName" class="col-md-3 control-label"></label>
+                    <div class="col-md-9">
+                        <input asp-for="CompanyName" class="form-control" required/>
+                        <span asp-validation-for="CompanyName" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ContactNumber" class="col-md-3 control-label"></label>
+                    <div class="col-md-9">
+                        <input asp-for="ContactNumber" class="form-control" required />
+                        <span asp-validation-for="ContactNumber" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AlternativeContact" class="col-md-3 control-label"></label>
+                    <div class="col-md-9">
+                        <input asp-for="AlternativeContact" class="form-control" />
+                        <span asp-validation-for="AlternativeContact" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CompanyWebsite" class="col-md-3 control-label"></label>
+                    <div class="col-md-9">
+                        <input asp-for="CompanyWebsite" class="form-control"  />
+                        <span asp-validation-for="CompanyWebsite" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="OfficeContact" class="col-md-3 control-label"></label>
+                    <div class="col-md-9">
+                        <input asp-for="OfficeContact" class="form-control" />
+                        <span asp-validation-for="OfficeContact" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Fax" class="col-md-3 control-label"></label>
+                    <div class="col-md-9">
+                        <input asp-for="Fax" class="form-control" />
+                        <span asp-validation-for="Fax" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <br />
+       
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Address" class="col-md-3 control-label"></label>
+                    <div class="col-md-9">
+                        <textarea asp-for="Address" class="form-control" required ></textarea>
+                        <span asp-validation-for="Address" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="City" class="col-md-3 control-label"></label>
+                    <div class="col-md-9">
+                        <input asp-for="City" class="form-control" required />
+                        <span asp-validation-for="City" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="CountryID" class="col-md-3 control-label"></label>
+                    <div class="col-md-9">
+                        <select asp-for="CountryID" class="form-control" asp-items="ViewBag.CountryID" required ></select>
+                        <span asp-validation-for="CountryID" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+        </div>
+         
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+               
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

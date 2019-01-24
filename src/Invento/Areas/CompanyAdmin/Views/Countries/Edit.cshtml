@@ -1,0 +1,97 @@
+@model Invento.Areas.CompanyAdmin.Models.Company.Country
+ 
+<div class="modal-content ">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-weight:bolder">Add New Country</h4>
+    </div>
+    <div class="modal-body">
+
+        <form asp-action="Edit" id="MyForm">
+            <div class="form-horizontal">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        <input asp-for="Name" class="form-control" required />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <input type="hidden" asp-for="CountryID" />
+                <div class="form-group">
+                    <label asp-for="ISO" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        <input asp-for="ISO" class="form-control" />
+                        <span asp-validation-for="ISO" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">ISO 3</label>
+                    <div class="col-md-8">
+                        <input asp-for="Iso3" class="form-control" />
+                        <span asp-validation-for="Iso3" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Nice Name</label>
+                    <div class="col-md-8">
+                        <input asp-for="NiceName" class="form-control" />
+                        <span asp-validation-for="NiceName" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Num Code</label>
+                    <div class="col-md-8">
+                        <input asp-for="NumCode" class="form-control" />
+                        <span asp-validation-for="NumCode" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Phone Code</label>
+                    <div class="col-md-8">
+                        <input asp-for="PhoneCode" class="form-control" />
+                        <span asp-validation-for="PhoneCode" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>                    
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $().ready(function () {
+
+        jQuery.validator.addMethod("lettersonly", function (value, element) {
+            return this.optional(element) || /^[a-z]+$/i.test(value);
+        }, "Letters Only Allowed.");
+
+        $("#MyForm").validate({
+            rules: {
+                Name: {
+                    required: true,
+                    minlength: 5,
+                    //lettersonly: true
+                }
+            },
+            messages:
+                {
+                    required: "Please Enter Country Name.",
+                    minlength: "Please Enter Min 5 characters."
+                }
+        })
+    })
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  invento:
+    image: user/invento${TAG}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80"

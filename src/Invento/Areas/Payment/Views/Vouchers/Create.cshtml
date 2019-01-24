@@ -1,0 +1,279 @@
+  @model Invento.Areas.Payment.Models.VoucherVM
+
+@{
+    ViewData["Title"] = "Journal Voucher";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<form asp-action="Create" id="MyForm">
+    <div class="form-horizontal">       
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        <div class="well" style="padding-bottom:5px">
+            <div class="row">
+                <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Journal Voucher - JV</span>
+                <button type="submit" class="btn btn-default pull-right" style="margin-right:50px ; font-weight:bolder" title="Save Voucher">
+                    <i class="glyphicon glyphicon-save"></i> Save
+                </button>
+            </div>
+        </div>
+
+        <div class="row col-md-offset-1">
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="form-group">
+                        <label asp-for="CurrencyID" class="col-md-3 control-label"></label>
+                        <div class="col-md-9">
+                            <select asp-for="CurrencyID" class="form-control" asp-items="ViewBag.CurrencyID"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label asp-for="Date" class="col-md-3 control-label"></label>
+                        <div class="col-md-9">
+                            <input asp-for="Date" class="form-control" required />
+                            <span asp-validation-for="Date" class="text-danger" />
+                        </div>
+                    </div>
+                </div>                
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="Particulars" class="col-md-3 control-label"></label>
+                    <div class="col-md-9">
+                        <textarea asp-for="Particulars" class="form-control" rows="3" cols="8"></textarea>
+                        <span asp-validation-for="Particulars" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="form-group">
+                        <label asp-for="ExternalRef" class="col-md-5 control-label"></label>
+                        <div class="col-md-7">
+                            <input asp-for="ExternalRef" class="form-control" />
+                            <span asp-validation-for="ExternalRef" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label asp-for="ImportExportID" class="col-md-5 control-label"></label>
+                        <div class="col-md-7">
+                            <input asp-for="ImportExportID" class="form-control" />
+                            <span asp-validation-for="ImportExportID" class="text-danger" />
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        </div>
+
+       <div class="row">
+
+           <div class="col-lg-9 col-lg-offset-1">
+               <div class="table-responsive">
+                   <table class="table table-condensed" id="ItemTbl">
+                       <thead>
+                           <tr class="active">
+                               <th width="15%">
+                                   Account Name
+                               </th>
+                               <th width="30%">
+                                   Narration
+                               </th>
+                               <th width="15%">
+                                   Debit
+                               </th>
+                               <th width="15%">
+                                   Credit
+                               </th>
+                               <th width="2%">
+                                   <button type="button" class="btn btn-default btn-sm pull-right" id="insertRow">
+                                       Add Item
+                                       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                   </button>
+                               </th>
+                           </tr>
+                       </thead>
+                       <tbody class="active">
+                           @for (int i = 0; i < 2; i++)
+                      {
+                               <tr>
+                                   <td>
+                                       <select asp-for="@Model.VIList[i].TransactionAccountID" asp-items="@ViewBag.TransactionAccountID" class="form-control TransactionAccountID" required>
+                                           <option disabled selected>Select Account...</option>
+                                       </select>
+                                   </td>
+                                   <td>
+                                       <textarea asp-for="@Model.VIList[i].Narration" class="form-control Narration" rows="1" cols="8"></textarea>
+                                   </td>
+                                   <td>
+                                       <input asp-for="@Model.VIList[i].Debit" type="number" class="form-control Debit" oninput="debitCalculate(this);" onchange="debitChange(this);" />
+                                   </td>
+                                   <td>
+                                       <input asp-for="@Model.VIList[i].Credit" type="number" class="form-control Credit" oninput="creditCalculate(this);" onchange="creditChange(this);" />
+                                   </td>
+                                   <td>
+                                       @*<button type="button" class="form-control RemoveRow btn-sm btn btn-default" onclick="RemoveRow(this)">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </button>*@
+                                   </td>
+                               </tr>
+                     }
+                       </tbody>
+                       <tfoot>
+                           <tr>
+                               <td></td>
+                               <td></td>
+                               <td><p style="font-weight:bold ; border-top:1px solid rgb(0,0,0);" id="TotalDebit"></p></td>
+                               <td><p style="font-weight:bold ; border-top:1px solid rgb(0,0,0);" id="TotalCredit"></p></td>
+                           </tr>
+                       </tfoot>
+                   </table>
+               </div>
+           </div>
+
+       </div>
+
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    $('#MyForm').submit(function () 
+    {
+        debugger;
+        var totalDebit_text = $("#TotalDebit").text();
+        var totalCredit_text = $("#TotalCredit").text();
+    
+        var totalDebit = parseFloat(totalDebit_text);
+        var totalCredit = parseFloat(totalCredit_text);
+
+        if(totalDebit != totalCredit)
+        {           
+            
+            var mytitle = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Error";                  
+            $('.modal-title').html(mytitle);
+            var myHeading = "<b>Total Debit and Total Credit Amount Must be Equal.</b>";
+            $(".modal-body").html(myHeading);
+            $('#modal-error').modal('show');
+            
+            return false;
+        }      
+        
+    });
+
+    $(document).ready(function () {
+        $("#MyForm").validate();
+
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+
+        var output = d.getFullYear() + '-' +
+            (month < 10 ? '0' : '') + month + '-' +
+            (day < 10 ? '0' : '') + day;
+        $('#Date').val(output);
+    });    
+
+    function debitChange(val)
+    {                       
+        debugger;
+        var index = $(val).parent().parent().index();
+        var DebitValue = $('#VIList_' + index + '__Debit').val();
+        if(DebitValue != '')
+        {            
+            $('#VIList_' + index + '__Credit').prop('readonly', true);      
+            $('#VIList_' + index + '__Credit').val(0);
+        }
+        else
+        {            
+            $('#VIList_' + index + '__Credit').prop('readonly', false);  
+        }        
+    }
+    function creditChange(val)
+    {        
+        debugger;
+        var index = $(val).parent().parent().index();
+        var CreditValue = $('#VIList_' + index + '__Credit').val();
+        if(CreditValue != '')
+        {            
+            $('#VIList_' + index + '__Debit').prop('readonly', true);      
+            $('#VIList_' + index + '__Debit').val(0);
+        }
+        else
+        {            
+            $('#VIList_' + index + '__Debit').prop('readonly', false);  
+        }    
+    }
+
+    function debitCalculate() {        
+        var debit = 0;
+        $('#TotalDebit').val('');
+        $('.Debit').each(function () {
+            var q = $(this).val();
+            if(q == '')
+            {q= 0}
+            debit += parseFloat(q);
+        });
+        $('#TotalDebit').text(debit);
+    }
+
+    function creditCalculate() {        
+        var credit = 0;
+        $('#TotalCredit').val('');
+        $('.Credit').each(function () {
+            var q = $(this).val();
+            if(q == '')
+                {q= 0}
+            credit += parseFloat(q);
+        });
+        $('#TotalCredit').text(credit);
+    }
+
+    window.onload = function () {
+        $("#insertRow").click(function () {
+            var tblRows = $("#ItemTbl tbody tr").length;
+            $('#ItemTbl tbody').append('<tr class="child">  <td  >  <select class="form-control TransactionAccountID" required id="VIList_' + tblRows + '__TransactionAccountID" required name="VIList[' + tblRows + '].TransactionAccountID" aria-required="true" ><option disabled selected>Select Account... </option> </select> </td>    <td>  <textarea class="form-control Narration"  type="text"  id="VIList_' + tblRows + '__Narration" name="VIList[' + tblRows + '].Narration" rows="1" cols="8" ></textarea>  </td> <td> <input class="form-control Debit"  type="number"  id="VIList_' + tblRows + '__Debit" name="VIList[' + tblRows + '].Debit" value="" data-val="true" data-val-number="The field Debit must be a number." oninput="debitCalculate(this);" onchange="debitChange(this);"  > </td> <td>  <input class="form-control Credit" type="number" id="VIList_' + tblRows + '__Credit" name="VIList[' + tblRows + '].Credit" value="" data-val="true" data-val-required="The Credit field is required." oninput="creditCalculate(this);" onchange="creditChange(this);"  > </td>    <td> <button type="button" class="form-control btn btn-default" onclick="RemoveRow(this)"><span class="glyphicon glyphicon-trash" ></span></button> </td> </tr>');
+
+            var Ids = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Ids) as String);
+            var Name = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Name) as String);
+            
+            var sel = document.getElementById('VIList_'+ tblRows +'__TransactionAccountID');
+            for (var i = 0; i < Name.length; i++)
+            {
+                var opt = document.createElement('option');
+                opt.innerHTML = Name[i];
+                opt.value = Ids[i];
+                sel.appendChild(opt);
+            }
+
+        });
+    }
+
+    function RemoveRow(val) {
+        debugger;
+        $(val).parent().parent().hide();
+        var index = $(val).parent().parent().index();
+        $('#VIList_' + index + '__TransactionAccountID').val(000000);
+        $('#VIList_' + index + '__Narration').val('');
+        $('#VIList_' + index + '__Debit').val(0);
+        $('#VIList_' + index + '__Credit').val(0); 
+        debitCalculate();
+        creditCalculate();
+    }
+
+</script>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

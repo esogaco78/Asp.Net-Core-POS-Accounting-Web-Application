@@ -1,0 +1,338 @@
+﻿@model Invento.Areas.CompanyAdmin.Models.Company.DashBoardVM
+ 
+@{
+    ViewData["Title"] = Localizer["Dashboard"];
+    Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="well" style="padding-bottom:5px">
+        <div class="row">
+            <span class="glyphicon glyphicon-dashboard glyphicon-bold " style="font-size: 1.5em; padding-left:10px;color:darkblue" aria-hidden="true"></span>
+            <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6" title="Quick View Of Product Having Quantity less then 10">
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;font-weight:bolder ; font-stretch:expanded ;color:white">@Localizer["Item Quantity View"]</div>
+                <div class="panel-body" style="padding:0px">
+                    <table class="table table-hover table-condensed">
+                        <thead style="text-align:center ; font-size:small ;padding-bottom:0px">
+                            <tr class="active">
+                                <th style="text-align:center;">
+                                    @Localizer["Item Name"]
+                                </th>
+                                <th style="text-align:center;">
+                                    @Localizer["Item Reference"]
+                                </th>
+                                <th style="text-align:center;">
+                                    @Localizer["Quantity"]
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ItemQuantiyList)
+                            {
+                                <tr style="text-align:center">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OEMNo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CrossRef)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Quantity)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row"  title="Amount Receivables From Parites">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><a style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;font-weight:bolder ; font-stretch:expanded ;color:white" asp-area="Payment" asp-controller="Payment" asp-action="StatementOfReceivable">@Localizer["Receivables"]</a></div>
+                    <div class="panel-body" style="padding:0px">
+                        <table class="table table-hover table-condensed">
+                            <thead style="text-align:center ; font-size:small ;padding-bottom:0px">
+                                <tr class="active">
+                                    <th style="text-align:center;">
+                                        @Localizer["Party"]
+                                    </th>
+                                    <th style="text-align:center;">
+                                        @Localizer["Amount"]
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{int i = 0;}
+                                @foreach (var item in Model.StatementListReceive)
+                                {
+                                    decimal XYZ = item.OpeningBalance + item.debit - item.credit;
+                                    if (XYZ > 0 && i < 4)
+                                    {
+                                        <tr id="tblData" style="text-align:center;">
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.PartyName)
+                                            </td>
+                                            <td class="Amount">
+                                                <span>@XYZ</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row" title="Amount Payables To Parites">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><a style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;font-weight:bolder ; font-stretch:expanded ;color:white" asp-area="Payment" asp-controller="Payment" asp-action="StatementOfPayable">@Localizer["Payables"]</a></div>
+                    <div class="panel-body" style="padding:0px">
+                        <table class="table table-hover table-condensed">
+                            <thead style="text-align:center ; font-size:small ;padding-bottom:0px">
+                                <tr class="active">
+                                    <th style="text-align:center;">
+                                        @Localizer["Party"]
+                                    </th>
+                                    <th style="text-align:center;">
+                                        @Localizer["Amount"]
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{int j = 0;}
+                                @foreach (var item in Model.StatementListPay)
+                                {
+                                    decimal XYZ = item.OpeningBalance - item.credit + item.debit;
+                                    if (XYZ < 0 && j < 4)
+                                    {
+                                        j++;
+                                        <tr id="tblData" style="text-align:center;">
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.PartyName)
+                                            </td>
+                                            <td class="Amount">
+                                                @{
+                                                    decimal AAA = XYZ * -1;
+                                                }
+                                                <span>@AAA</span>
+                                            </td>
+                                        </tr>
+                                                        }
+                                                    }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6" title="Todays Amount To Pay for Purchases">
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;font-weight:bolder ; font-stretch:expanded ;color:white">@Localizer["Purchase Invoice Payments Alert"] <span class="pull-right">
+                    @{ string date = @DateTime.Now.ToString("MMMM dd,yyyy");
+                        <span>@date</span>    }
+                    </span></div>
+                <div class="panel-body" style="padding:0px">
+                    <table class="table table-hover table-condensed">
+                        <thead style="text-align:center ; font-size:small ;padding-bottom:0px">
+                            <tr class="active">
+                                <th style="text-align:center;">
+                                    @Localizer["Party"]
+                                </th>
+                                <th style="text-align:center;">
+                                    @Localizer["Amount"]
+                                </th>
+                                <th style="text-align:center;">
+                                    @Localizer["Bank"]
+                                </th>
+                                <th style="text-align:center;">
+                                    @Localizer["Cheque"]
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>                           
+                            @foreach (var item in Model.PurTransactionList)
+                            {
+                                <tr style="text-align:center">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PartyName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Bank)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Cheque)
+                                    </td>
+                                </tr>
+                            }
+                            @foreach (var item in Model.PurReturnTransactionList)
+                            {
+                                <tr style="text-align:center">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PartyName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Bank)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Cheque)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>        
+        <div class="col-md-6" style="padding-right:0px ; padding-left:0px"  title="Todays Amount To Receive for Sales">
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;font-weight:bolder ; font-stretch:expanded ;color:white">@Localizer["Sale Invoice Payments Alert"] <span class="pull-right">                    
+                        <span>@date</span>
+                    </span></div>
+                <div class="panel-body" style="padding:0px">
+                    <table class="table table-hover table-condensed">
+                        <thead style="text-align:center ; font-size:small ;padding-bottom:0px">
+                            <tr class="active">
+                                <th style="text-align:center;">
+                                    @Localizer["Party"]
+                                </th>
+                                <th style="text-align:center;">
+                                    @Localizer["Amount"]
+                                </th>
+                                <th style="text-align:center;">
+                                    @Localizer["Bank"]
+                                </th>
+                                <th style="text-align:center;">
+                                    @Localizer["Cheque"]
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>                            
+                            @foreach (var item in Model.SaleTransactionList)
+                            {
+                                <tr style="text-align:center">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PartyName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Bank)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Cheque)
+                                    </td>
+                                </tr>
+                            }
+                            @foreach (var item in Model.SeleReturnTransactionList)
+                            {
+                                <tr style="text-align:center">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PartyName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Bank)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Cheque)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>        
+    </div>
+
+    <div class="row BoxStyle">
+        <div class="col-lg-4" data-toggle="tooltip" data-placement="bottom" title="View your Products Profit Report">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <p class="panel-title" style="font-size:large">
+                        <a asp-action="ProductProfitLedger" asp-controller="Home" asp-area="Reports" target="_blank">@Localizer["Product Profit Report"]</a>
+                        <span class="pull-right">
+                            <i class="glyphicon glyphicon-signal"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="panel-body">
+                    <a asp-action="ProductProfitLedger" asp-controller="Home" asp-area="Reports" target="_blank">
+                        <div class="feature-icon col-lg-4">
+                            <i class="glyphicon glyphicon-signal"></i>
+                        </div>
+                        <div class="col-lg-6" style="color:black">
+                            <h3>@Localizer["Item"] No. A 7500$/@Localizer["Year"]</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4"  data-toggle="tooltip" data-placement="bottom" title="View your Products Purchase Report">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <p class="panel-title" style="font-size:large">
+                        <a asp-action="ProductPurchaseLedger" asp-controller="Home" asp-area="Reports" target="_blank">@Localizer["Product Purchase Report"]</a>
+                        <span class="pull-right">
+                            <i class="glyphicon glyphicon-indent-right"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="panel-body">
+                    <a asp-action="ProductPurchaseLedger" asp-controller="Home" asp-area="Reports" target="_blank">
+                        <div class="feature-icon col-lg-4">
+                            <i class="glyphicon glyphicon-indent-right"></i>
+                        </div>
+                        <div class="col-lg-6" style="color:black">
+                            <h3>@Localizer["Item"] No. B 1200$/@Localizer["Month"]</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4" data-toggle="tooltip" data-placement="bottom" title="View your Products Sale Report">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <p class="panel-title" style="font-size:large">
+                        <a asp-action="ProductSaleLedger" asp-controller="Home" asp-area="Reports" target="_blank">@Localizer["Product Sale Report"]</a>
+                        <span class="pull-right">
+                            <i class="glyphicon glyphicon-random"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="panel-body">
+                    <a asp-action="ProductSaleLedger" asp-controller="Home" asp-area="Reports" target="_blank">
+                        <div class="feature-icon col-lg-4">
+                            <i class="glyphicon glyphicon-random"></i>
+                        </div>
+                        <div class="col-lg-6" style="color:black">
+                            <h3>@Localizer["Item"] No. C 110$/@Localizer["Day"]</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

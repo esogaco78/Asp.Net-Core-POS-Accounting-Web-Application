@@ -1,0 +1,152 @@
+﻿  @model Invento.Areas.Finance.Models.GeneralLedgerVM
+
+@{
+    ViewData["Title"] = "Profit and Loss Statement";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:0px">
+    <div class="row">
+        <div class="col-md-4">
+            <h2 class="SizeChange" style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; margin-left:15px">@ViewData["Title"]</h2>
+        </div>
+        <div class="row ShowItems pull-right SizeChange" style="display:none;padding-top:10px">
+            <span class="col-md-2 SizeChange">From<input type="date" class="col-md-2" asp-for="DateFrom" /></span>
+            <span class="col-md-2 SizeChange">To<input type="date" class="col-md-2" asp-for="DateTo" /></span>
+        </div>
+        <form asp-action="ProfitLoss" method="get">           
+            <div class="col-md-1 col-md-offset-1 HideItems"><label class="pull-right">From</label></div>
+            <div class="col-md-2 HideItems" style="padding-left:0px">
+                <input type="date" class="form-control" name="DateFrom" id="DateFrom" asp-for="DateFrom" required />
+            </div>
+            <div class="col-md-1 HideItems"><label class="pull-right">To</label></div>
+            <div class="col-md-2 HideItems" style="padding-left:0px">
+                <input type="date" class="form-control" name="DateTo" id="DateTo" asp-for="DateTo" required />
+            </div>            
+            <div class="col-md-1 HideItems">
+                <button type="submit" class="btn-sm btn-default" id="Search" value="Search" title="Search" style="font-weight:bolder"><span class="glyphicon glyphicon-search"></span></button>
+                <button type="button" class="btn-sm btn-default" title="Print Profit & Loss Statement" onclick="Print();"><span class="glyphicon glyphicon-print"></span></button>
+            </div>            
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="row" style="background-color:lavender;padding-left:20px"><h4 style="font-weight:bolder" class="SizeChange">Operating Revenue</h4></div>
+        <div class="row" style="background-color:azure;padding-left:30px">
+            <div class="col-md-7">
+                <h5 style="font-weight:bolder" class="SizeChange">Revenue Receipts</h5>
+            </div>
+            <div class="col-md-5">              
+                <span id="IncomeVal" class="SizeChange AmountToRight">
+                    @{
+                        string B = String.Format("{0:#,##0.##}", Model.IncomeVal);
+                    }
+                    @B</span>
+            </div>                
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="row" style="background-color:lavender;padding-left:20px"><h4 style="font-weight:bolder" class="SizeChange">Expenses</h4></div>
+        <div class="row" style="background-color:azure;padding-left:30px">
+            <div class="col-lg-7">
+                <h5 style="font-weight:bolder" class="SizeChange">Expenses</h5>
+            </div>
+            <div class="col-lg-5">                
+                <span id="ExpenseVal" class="SizeChange AmountToRight">
+                    @{
+                        string C = String.Format("{0:#,##0.##}", Model.ExpenseVal);
+                    }
+                    @C</span>                        
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="row" style="background-color:lavender;padding-left:20px"><h4 style="font-weight:bolder" class="SizeChange">Profit / Loss</h4></div>
+        <div class="row" style="background-color:azure;padding-left:30px">
+            <div class="col-lg-7">
+                @{
+                    <h5 style="font-weight:bolder;display:none" id="Profit" class="SizeChange">Profit</h5>
+                    <h5 style="font-weight:bolder;display:none" id="Loss" class="SizeChange">Loss</h5>
+                }
+                
+            </div>
+            <div class="col-lg-5">
+                <h5 style="font-weight:bolder" id="ProfitValue" class="SizeChange AmountToRight"></h5>
+                <h5 style="font-weight:bolder" id="LossValue" class="SizeChange AmountToRight"></h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        Calculate();        
+    });
+
+    function Print() {
+        $('.HideItems').hide();
+        $('.ShowItems').show();
+        $(".SizeChange").css("font-size", "35px");
+        $(".AmountToRight").css("margin-left", "700px");
+        
+        window.print();
+        $(".SizeChange").css("font-size", "large");
+        $(".AmountToRight").css("margin-left", "0px");
+        $('.ShowItems').hide();
+        $('.HideItems').show();
+    }
+
+    function Calculate() {
+        debugger;
+        var profitloss = 0;
+        var bb_exp = $('#ExpenseVal').text();
+        var cc_inc = $('#IncomeVal').text();
+
+        var exp = bb_exp.replace(",", "");
+        var inc = cc_inc.replace(",", "");
+
+        var expense = parseFloat(exp);
+        if (exp == "")
+        {
+            expense = 0;
+        }
+        
+        var income = parseFloat(inc);
+        if (inc == "") {
+            income = 0;
+        }
+
+        profitloss = income - expense;
+        profitloss = numberWithCommas(profitloss);
+        if(profitloss > 0)
+        {
+            $('#Profit').show();
+            $('#ProfitValue').text(profitloss);
+        }
+        else if (profitloss < 0)
+        {            
+            $('#Loss').show();
+            $('#LossValue').text(profitloss);
+        }
+        else
+        {
+            $('#LossValue').text(profitloss);
+        }
+    }
+
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+</script>    

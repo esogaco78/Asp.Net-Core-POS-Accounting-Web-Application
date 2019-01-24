@@ -1,0 +1,195 @@
+﻿ @model Invento.Areas.Finance.Models.CashFlowVM
+
+@{
+    ViewData["Title"] = "Cash Flow Statement";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:0px">
+    <div class="row">
+        <div class="col-md-3">
+            <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+        </div>
+        <div class="row ShowItems pull-right SizeChange" style="display:none;padding-top:10px">
+            <span class="col-md-2 SizeChange">From<input type="date" class="col-md-2" asp-for="DateFrom" /></span>
+            <span class="col-md-2 SizeChange">To<input type="date" class="col-md-2" asp-for="DateTo" /></span>
+        </div>
+        <form asp-action="CashFlowStatment" method="get" class="HideItems">            
+            <div class="col-md-1 col-md-offset-1"><label class="pull-right">From</label></div>
+            <div class="col-md-2" style="padding-left:0px">
+                <input type="date" class="form-control" name="DateFrom" id="DateFrom" asp-for="DateFrom"/>
+            </div>
+            <div class="col-md-1"><label class="pull-right">To</label></div>
+            <div class="col-md-2" style="padding-left:0px">
+                <input type="date" class="form-control" name="DateTo" id="DateTo" asp-for="DateTo" />
+            </div>            
+            <div class="col-md-2 HideItems">
+                <button type="submit" class="btn-sm btn-default" id="Search" value="Search" title="Search" style="font-weight:bolder"><span class="glyphicon glyphicon-search"></span></button>
+                <button type="button" class="btn-sm btn-default" title="Print Cash Flow Statement" onclick="Print();"><span class="glyphicon glyphicon-print"></span></button>
+                <a id="dlink" style="display:none;"></a>
+                <button class="btn-sm btn-default" onclick="tableToExcel('MyTable', 'Cash Flow Statment', 'Cash Flow Statment-BiznsBook.xls')" title="Export to Excel">
+                    <span class="glyphicon glyphicon-export"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-condensed table-striped" id="MyTable">
+        <thead>
+            <tr class="active">
+                <th>
+                    S/N
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Voucher Type
+                </th>
+                @*<th style="display:none"></th>
+                <th style="display:none"></th>*@
+                <th>
+                    Amount
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CFList)
+        {
+                <tr id="tblData">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CashFlowID)
+                    </td>
+                    <td>
+                        @{string date = @item.DateCreation.Date.ToString("MMMM dd,yyyy");
+                            <span>@date</span>    }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VoucherType)
+                    </td>                
+                    <td class="Amount">
+                        @{
+                        if (item.Debit != 0)
+                        {
+                                @Html.DisplayFor(modelItem => item.Debit)
+                        }
+                        else
+                        {
+                                @Html.DisplayFor(modelItem => item.Credit)
+                        }
+                        }
+                    </td>
+                    <td class="HideItems">
+                        @{
+                       if (item.CashPaymentID != null)
+                       {
+                                <a asp-area="Finance" asp-controller="Ledger" asp-action="CashFlowDetails_CashPayment" asp-route-id="@item.CashPaymentID" class="modal-link"><span class="glyphicon glyphicon-eye-open" title="View Cash Payment Details"></span></a>
+                       }
+                       else if (item.CashReceiptID != null)
+                       {
+                                <a asp-area="Finance" asp-controller="Ledger" asp-action="CashFlowDetails_CashReceipt" asp-route-id="@item.CashReceiptID" class="modal-link"><span class="glyphicon glyphicon-eye-open" title="View Cash Receipt Details"></span></a>
+                       } 
+                       else if (item.PurchaseBillID != null)
+                       {
+                                <a asp-area="Finance" asp-controller="Ledger" asp-action="CashFlowDetails_PurchaseBill" asp-route-id="@item.PurchaseBillID" class="modal-link"><span class="glyphicon glyphicon-eye-open" title="View Purchase Bill Details"></span></a>
+                       }
+                       else if (item.PurchaseReturnID != null)
+                       {
+                                <a asp-area="Finance" asp-controller="Ledger" asp-action="CashFlowDetails_PurchaseReturn" asp-route-id="@item.PurchaseReturnID" class="modal-link"><span class="glyphicon glyphicon-eye-open" title="View Purchase Return Details"></span></a>
+                       }
+                       else if (item.SaleBillID != null)
+                       {
+                                <a asp-area="Finance" asp-controller="Ledger" asp-action="CashFlowDetails_SaleBill" asp-route-id="@item.SaleBillID" class="modal-link"><span class="glyphicon glyphicon-eye-open" title="View Sale Return Details"></span></a>
+                       }
+                       else if (item.SaleReturnID != null)
+                       {
+                                <a asp-area="Finance" asp-controller="Ledger" asp-action="CashFlowDetails_SaleReturn" asp-route-id="@item.SaleReturnID" class="modal-link"><span class="glyphicon glyphicon-eye-open" title="View Sale Return Details"></span></a>
+                       }
+                       else if (item.VoucherItemsID != null)
+                       {
+                                <a asp-area="Finance" asp-controller="Ledger" asp-action="CashFlowDetails_VoucherItems" asp-route-id="@item.VoucherItemsID" class="modal-link"><span class="glyphicon glyphicon-eye-open" title="View Journal Voucher Details"></span></a>
+                       }
+                        }
+                    </td>
+                </tr>
+                       }
+        </tbody>
+        <tfoot>
+            <tr class="active">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><p style="font-weight:bold ; border-top:1px solid rgb(0,0,0);" id="TotalBalance"></p></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script type="text/javascript">
+
+    var tableToExcel = (function () {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+        , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+        , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+        , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+        return function (table, name, filename) {
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+
+            document.getElementById("dlink").href = uri + base64(format(template, ctx));
+            document.getElementById("dlink").download = filename;
+            document.getElementById("dlink").click();
+
+        }
+    })()
+
+    $(document).ready(function () {
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+
+        var output = d.getFullYear() + '-' +
+            (month < 10 ? '0' : '') + month + '-' +
+            (day < 10 ? '0' : '') + day;
+
+        TotalCalculate();
+    });
+
+    function TotalCalculate() {
+        debugger;
+        var amount = 0;
+        $('.Amount').each(function () {
+            amount += parseFloat($(this).text());
+        });
+        var debitSUM = 0;
+        $('.debit').each(function () {
+            debitSUM += parseFloat($(this).text());
+        });
+        var creditSUM = 0;
+        $('.credit').each(function () {
+            creditSUM += parseFloat($(this).text());
+        });
+        
+        $('#TotalBalance').text(amount);        
+    }
+    function Print() {
+        $('.HideItems').hide();
+        $('.ShowItems').show();
+        window.print();
+        $('.ShowItems').hide();
+        $('.HideItems').show();
+    }
+</script>

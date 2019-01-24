@@ -1,0 +1,171 @@
+@model Invento.Areas.Purchase.Models.PurchaseReturn
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+}
+
+<h2>Edit</h2>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>PurchaseReturn</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="PurchaseReturnID" />
+        <div class="form-group">
+            <label asp-for="AmountToReceive" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="AmountToReceive" class="form-control" />
+                <span asp-validation-for="AmountToReceive" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CompanyID" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="CompanyID" class="form-control" />
+                <span asp-validation-for="CompanyID" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ContactNumber" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ContactNumber" class="form-control" />
+                <span asp-validation-for="ContactNumber" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ContactPerson" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ContactPerson" class="form-control" />
+                <span asp-validation-for="ContactPerson" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="CreatedBy" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="CreatedBy" class="form-control" />
+                <span asp-validation-for="CreatedBy" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ItemID" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="ItemID" class="form-control" asp-items="ViewBag.ItemID"></select>
+                <span asp-validation-for="ItemID" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="OldQuantity" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="OldQuantity" class="form-control" />
+                <span asp-validation-for="OldQuantity" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input asp-for="PR_B_1" />
+                    <label asp-for="PR_B_1"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PR_D_1" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PR_D_1" class="form-control" />
+                <span asp-validation-for="PR_D_1" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PR_D_2" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PR_D_2" class="form-control" />
+                <span asp-validation-for="PR_D_2" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PR_I_1" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PR_I_1" class="form-control" />
+                <span asp-validation-for="PR_I_1" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PR_I_2" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PR_I_2" class="form-control" />
+                <span asp-validation-for="PR_I_2" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PR_S_1" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PR_S_1" class="form-control" />
+                <span asp-validation-for="PR_S_1" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PR_S_2" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PR_S_2" class="form-control" />
+                <span asp-validation-for="PR_S_2" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PartiesID" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="PartiesID" class="form-control" asp-items="ViewBag.PartiesID"></select>
+                <span asp-validation-for="PartiesID" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PurBillReturnDate" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PurBillReturnDate" class="form-control" />
+                <span asp-validation-for="PurBillReturnDate" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PurchaseBillID" class="control-label col-md-2"></label>
+            <div class="col-md-10">
+                <select asp-for="PurchaseBillID" class="form-control" asp-items="ViewBag.PurchaseBillID"></select>
+                <span asp-validation-for="PurchaseBillID" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Remarks" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Remarks" class="form-control" />
+                <span asp-validation-for="Remarks" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ReturnQuantity" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ReturnQuantity" class="form-control" />
+                <span asp-validation-for="ReturnQuantity" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="TotalAmount" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="TotalAmount" class="form-control" />
+                <span asp-validation-for="TotalAmount" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

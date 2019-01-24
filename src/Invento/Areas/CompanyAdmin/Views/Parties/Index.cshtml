@@ -1,0 +1,195 @@
+@model IEnumerable<Invento.Areas.CompanyAdmin.Models.Company.Parties>
+ 
+@{
+    ViewData["Title"] = Localizer["Parties"];
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+        @if (User.IsInRole("CompanyAdmin") || User.IsInRole("Add Parties"))
+        {
+            <a asp-action="Create" class="btn btn-default pull-right" style="margin-right:20px"><span class="glyphicon glyphicon-plus"></span> @Localizer["Add New"] </a>
+        }
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover" id="MyTable">
+        <thead>
+            <tr class="active">
+
+                <th>
+                    @Html.DisplayNameFor(model => model.PartyName) 
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Phone1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ContactPerson)
+                </th>                
+                <th>
+                    @Html.DisplayNameFor(model => model.Remarks)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BusinessRelation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th> 
+                <th>
+                    @Html.DisplayNameFor(model => model.Phone2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Fax)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Road)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Area)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.State)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Country)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PartyShortName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OtherDetails)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AdditionalInfo1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AdditionalInfo2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedBy)
+                </th>
+                @if (User.IsInRole("Edit Parties") || User.IsInRole("CompanyAdmin"))
+            {
+                    <th></th>
+            }
+                @if (User.IsInRole("View Parties Details") || User.IsInRole("CompanyAdmin"))
+            {
+                    <th></th>
+            }
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        "extend": 'print',
+                        "title": "Parties",
+                        "text": "Print",
+                        "autoPrint": true,
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    }, 
+                    {
+                        "extend": 'excel',
+                        "title": "Parties",
+                        "text": "Excel",
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    }, 
+                    {
+                        "extend": 'pdf',
+                        "title": "Parties",
+                        "text": "PDF",
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    },
+                      {
+                          extend: 'colvis',
+                          collectionLayout: 'fixed two-column'
+                      } 
+                ],
+                columnDefs: [{
+                    "visible": false, "targets": [4,6,7,8,9, 11, 12,13,14,15,16,17], "searchable": false
+                }],
+
+                "ajax": {
+                    "url": "/Company/Parties/LoadParties",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+
+                    { "data": "partyName", "autoWidth": true },
+                    { "data": "phone1", "autoWidth": true },
+                    { "data": "contactPerson", "autoWidth": true },                    
+                    { "data": "remarks", "autoWidth": true },
+                    { "data": "businessRelation", "autoWidth": true },
+                    { "data": "email", "autoWidth": true },                    
+                    { "data": "phone2", "autoWidth": true },
+                    { "data": "fax", "autoWidth": true },
+                    { "data": "road", "autoWidth": true },
+                    { "data": "area", "autoWidth": true },
+                    { "data": "city", "autoWidth": true },
+                    { "data": "state", "autoWidth": true },
+                    { "data": "country", "autoWidth": true },
+                    { "data": "partyShortName", "autoWidth": true },
+                    { "data": "otherDetails", "autoWidth": true },
+                    { "data": "additionalInfo1", "autoWidth": true },
+                    { "data": "additionalInfo2", "autoWidth": true },
+                    { "data": "createdBy", "autoWidth": true },
+                      @if(User.IsInRole("Edit Parties") || User.IsInRole("CompanyAdmin"))
+                {
+                        <text>
+                    {
+                        "data": null,
+                        "mRender": function (data, type, row) {
+                            return $("<div />")
+                                .append($(" <div class='text-center'> <a class='btn btn-sm btn-default' title='Edit Party Details' href='/Company/Parties/Edit?id=" + data.partiesID + "'><span class='glyphicon glyphicon-pencil'></span></a>  </div> "))
+                                .html();
+                        }
+                    },
+                     </text>
+                }
+
+                      @if(User.IsInRole("View Parties Details") || User.IsInRole("CompanyAdmin"))
+                {
+                        <text>
+                    {
+                        "data": null,
+                        "mRender": function (data, type, row) {
+                            return $("<div />")
+                                .append($(" <div class='text-center'> <a class='btn btn-sm btn-default modal-link' title='View Party Details' href='/Company/Parties/Details?id=" + data.partiesID + "'><span class='glyphicon glyphicon-eye-open'></span></a>    </div> "))
+                                .html();
+                        }
+                    }
+                     </text>
+            }
+
+                ]
+            });
+        });
+    </script>
+}

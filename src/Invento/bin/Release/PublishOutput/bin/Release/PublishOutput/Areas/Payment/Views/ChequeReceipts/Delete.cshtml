@@ -1,0 +1,101 @@
+@model Invento.Areas.Payment.Models.ChequeReceipt
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>ChequeReceipt</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AmountInWords)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AmountInWords)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ChequeNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ChequeNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CompanyID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreationDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentStatus)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CurrentStatus)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfDeposite)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateOfDeposite)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfMature)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateOfMature)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExternalRef)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExternalRef)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.InNameOf)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.InNameOf)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Particulars)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Particulars)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

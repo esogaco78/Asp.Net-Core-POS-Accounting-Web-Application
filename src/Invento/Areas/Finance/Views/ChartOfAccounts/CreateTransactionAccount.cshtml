@@ -1,0 +1,111 @@
+@model Invento.Areas.Finance.Models.TransactionAccount
+ 
+<div class="modal-content ">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-weight:bolder">Add New Transaction Account</h4>
+    </div>
+    <div class="modal-body">
+
+        <form asp-action="CreateTransactionAccount" id="MyForm">
+            <div class="form-horizontal">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <div class="form-group">
+                    <label asp-for="SubAccountID" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        <select asp-for="SubAccountID" class="form-control" asp-items="ViewBag.SubAccount" required onchange="GenerateTranAccountNumber();">
+                            <option disabled selected>Select</option>
+                        </select>
+                        <span asp-validation-for="SubAccountID" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="TransactionAccountNumber" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        <input asp-for="TransactionAccountNumber" class="form-control" required />
+                        <span asp-validation-for="TransactionAccountNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="AccountName" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        <input asp-for="AccountName" class="form-control" required />
+                        <span asp-validation-for="AccountName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="OpeningBalance" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        <input asp-for="OpeningBalance" class="form-control" value="0" required />
+                        <span asp-validation-for="OpeningBalance" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>                    
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $().ready(function () {
+
+        $("#MyForm").validate({
+            rules: {
+                TransactionAccountNumber: {
+                    required: true,
+                    maxlength: 4,
+                    digits: true
+                    //lettersonly: true
+                },
+                OpeningBalance: {
+                    required: true,                    
+                    digits: true
+                },
+                SubAccountNumber: {
+                    required: true,                  
+                }
+            },
+            messages:
+                {
+                    required: "Please Enter Account Number.",
+                    maxlength: "Please Enter Max 4 digits.",
+                    digits: "Please Enter only digits."
+                }
+        })
+    })
+
+    function GenerateTranAccountNumber() {
+        debugger;
+        var subAccNum = $('#SubAccountID').val();
+
+        $URL = '@Url.Action("GenerateTranAccountNumber", "ChartOfAccounts", new { area= "Finance" })';
+        $.ajax({
+            method: "GET",
+            url: $URL,
+            data: { subAccNum: subAccNum },
+            contentType: "application/json;charset=utf-8"
+        })
+            .done(function (data) {
+                debugger;
+                $('#TransactionAccountNumber').val(data);
+            });
+    }
+
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

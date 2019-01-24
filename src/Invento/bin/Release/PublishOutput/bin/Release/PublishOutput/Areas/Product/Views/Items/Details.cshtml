@@ -1,0 +1,100 @@
+@model Invento.Areas.Product.Models.Item
+
+
+
+
+<div class="modal-content ">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-weight:bolder;color:blue;padding-left:20px">@Html.DisplayFor(m => m.ItemName) </h4>
+    </div>
+    <div class="modal-body">
+
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.CrossRef)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.CrossRef)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemMainCompany)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ItemMainCompany)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Quantity)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemType)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ItemType)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.ItemType2)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ItemType2)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.LCPrice)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.LCPrice)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.OEMNo)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.OEMNo)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.ProductDescription)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ProductDescription)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Remark)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Remark)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.SalePrice)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.SalePrice)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Size)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Size)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Value)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Value)
+            </dd>
+        </dl> 
+
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,132 @@
+  @model IEnumerable<Invento.Areas.Payment.Models.Voucher>
+@{
+    ViewData["Title"] = Localizer["Journal Voucher"];
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]s - JV</span>        
+        @if (User.IsInRole("CompanyAdmin") || User.IsInRole("Add Vouchers"))
+        {
+            <a asp-action="Create" class="btn btn-default pull-right" style="margin-right:20px"><span class="glyphicon glyphicon-plus"></span> @Localizer["Add New"] </a>
+        }
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover" id="MyTable">
+        <thead>
+            <tr class="active">
+                <th>
+                    @Localizer["ID"]
+                </th>
+                <th>
+                    @Localizer["Date"]
+                </th>
+                <th>
+                    @Localizer["Particulars"]
+                </th>
+                <th>
+                    @Localizer["Import Export ID"]
+                </th>
+                @if (User.IsInRole("Edit Vouchers") || User.IsInRole("CompanyAdmin"))
+                {
+                    <th></th>
+                }
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            var table = $('#MyTable').DataTable({
+
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        "extend": 'print',
+                        "title": "Journal Voucher",
+                        "text": "Print",
+                        "autoPrint": true,
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    },
+                    //'colvis',
+                    {
+                        "extend": 'excel',
+                        "title": "Journal Voucher",
+                        "text": "Excel",
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    },
+                    //'colvis',
+                    {
+                        "extend": 'pdf',
+                        "title": "Journal Voucher",
+                        "text": "PDF",
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    },
+                    'colvis',
+                ],
+
+                "ajax": {
+                    "url": "/Payment/Vouchers/LoadVouchers",
+                    "type": "GET",
+                    "datatype":"json"
+                },
+                "columns": [
+                     { "data": "voucherID", "autpWidth": true },
+                     { "data": "date", "autpWidth": true, "order": [0, 'desc'] },
+                     { "data": "particulars", "autpWidth": true },
+                     { "data": "importExportID", "autpWidth": true },
+                       @if(User.IsInRole("Edit Banks") || User.IsInRole("CompanyAdmin"))
+                {
+                        <text>
+                      {
+                          "data": null,
+                          "mRender": function (data, type, row) {
+                              return $("<div />")
+                                  .append($(" <div class='text-center'> <a class='btn btn-sm btn-default ' href='/Payment/Vouchers/Details?id=" + data.voucherID + "'><span class='glyphicon glyphicon-eye-open'></span></a>  <a class='btn btn-sm btn-default ' href='/Payment/Vouchers/Edit?id=" + data.voucherID + "'><span class='glyphicon glyphicon-pencil'></span></a>  </div>   "))
+                                  .html();
+                          }
+                      }
+                       </text>
+                }
+                ],
+                "order": [[1, 'desc']]
+            });
+            // Add event listener for opening and closing details
+            $('#MyTable tbody').on('click', 'td', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data()), 'no-padding').show();
+                    tr.addClass('shown');
+                }
+            });
+        });
+    </script>
+}

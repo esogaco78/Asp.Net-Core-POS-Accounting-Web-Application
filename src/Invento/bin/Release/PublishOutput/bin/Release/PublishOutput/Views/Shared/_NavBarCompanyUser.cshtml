@@ -1,0 +1,51 @@
+﻿
+<ul class="nav navbar-nav">
+    <li style="padding-top:8px">
+        @{
+            byte[] Logo;
+            Context.Session.TryGetValue("CompanyLogo", out Logo);
+
+            if (Logo == null)
+            {
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Invento</a>
+            }
+            else
+            {
+
+                string imageBase64 = Convert.ToBase64String(Logo);
+                string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                <img src="@imageSrc" class="" width="55" height="12" />
+            }
+        }
+    </li>
+    <li><a asp-area="CompanyUser" asp-controller="Home" asp-action="Index">Dashboard</a></li>
+    @if (User.IsInRole("Purchase"))
+    {
+        <li>
+            <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Purchase <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+            <ul class="dropdown-menu">
+                <li><a asp-area="Purchase" asp-controller="Purchase" asp-action="Create"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Purchase Invoice</a></li>
+                <li><a asp-area="Purchase" asp-controller="Purchase" asp-action="Index"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Purchase Invoices</a></li>
+                @*<li role="separator" class="divider"></li>*@
+                @*<li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>*@
+            </ul>
+        </li>
+    }
+    @if (User.IsInRole("Sale"))
+    {
+        <li>
+            <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sale <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+            <ul class="dropdown-menu">
+                <li><a asp-area="Sale" asp-controller="Sale" asp-action="Create"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Sale Invoice</a></li>
+                <li><a asp-area="Sale" asp-controller="Sale" asp-action="Index"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Sale Invoices</a></li>
+                @*<li role="separator" class="divider"></li>*@
+
+            </ul>
+        </li>
+    }
+
+   
+
+</ul>

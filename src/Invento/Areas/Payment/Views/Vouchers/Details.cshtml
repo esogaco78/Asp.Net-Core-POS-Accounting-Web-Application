@@ -1,0 +1,148 @@
+ @model Invento.Areas.Payment.Models.VoucherVM
+
+@{
+    ViewData["Title"] = "Journal Voucher";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+
+
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"] </span>
+        <button type="button" class="btn-sm btn-default pull-right HideItems" style="margin-right:40px" title="Print Voucher" onclick="Print();"><span class="glyphicon glyphicon-print"></span></button>
+        <a asp-action="Create" class="btn btn-default pull-right HideItems" style="margin-right:20px"><span class="glyphicon glyphicon-plus"></span> Add New </a>        
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-5">
+        <span style="font-weight:bolder ;font-size:larger; padding-right:20px">Voucher #</span><span style="font-weight:900 ;padding-left:5px">JV - @Model.VoucherID</span>
+    </div>    
+</div>
+<div class="row">
+    <div class="col-lg-6"><span style="font-weight:bolder ;font-size:larger; padding-right:20px">Date</span>@Html.DisplayFor(model => model.Date)</div>
+    <div class="col-lg-3"><span style="font-weight:bolder ;font-size:larger; padding-right:20px">Created By</span>@Html.DisplayFor(model => model.CreatedBy)</div>
+    <div class="col-lg-3"><span style="font-weight:bolder ;font-size:larger; padding-right:20px">Ex-Ref </span>@Html.DisplayFor(model => model.ExternalRef)</div>
+</div>
+<div class="row">
+    <div class="col-lg-12"><span style="font-weight:bolder;font-size:large ; padding-right:25px">Particulars</span>@Html.DisplayFor(model => model.Particulars)</div>
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-lg-10 col-lg-offset-1">
+        <table class="table table-bordered table-hover" id="MyTable">
+            <thead>
+                <tr class="active">
+                    <th>
+                        ID
+                    </th>
+                    <th>
+                        Account
+                    </th>
+                    <th>
+                        Debit
+                    </th>
+                    <th>
+                        Credit
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.VIList)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelitem => item.VoucherItemsID)</td>
+                        <td>
+                            <span>
+                                @Html.DisplayFor(modelitem => item.MainAccount.MainAccountNumber) - @Html.DisplayFor(modelitem => item.SubAccount.SubAccountNumber) - @Html.DisplayFor(modelitem => item.TransactionAccount.TransactionAccountNumber) , @Html.DisplayFor(modelitem => item.TransactionAccount.AccountName)
+                            </span>
+                        </td>
+                        <td>
+                            @{
+                                if (item.Debit == 0)
+                                {
+                                    <span class="Debit"></span>
+                                }
+                                else
+                                {
+                                    <span class="Debit">@Html.DisplayFor(modelitem => item.Debit)</span>                                    
+                                }
+                            }
+
+                        </td>
+                        <td>
+                            @{
+                                if (item.Credit == 0)
+                                {
+                                    <span class="Credit"></span>
+                                }
+                                else
+                                {
+                                    <span class="Credit">@Html.DisplayFor(modelitem => item.Credit)</span>                                    
+                                }
+                            }
+                        </td>
+                    </tr>
+                                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><p style="font-weight:bold ; border-top:1px solid rgb(0,0,0);" id="TotalDebit"></p></td>
+                    <td><p style="font-weight:bold ; border-top:1px solid rgb(0,0,0);" id="TotalCredit"></p></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {       
+        debitCalculate();
+        creditCalculate();
+    });
+
+    function Print() {
+        $('.HideItems').hide();
+        window.print();
+        $('.HideItems').show();
+    }
+
+    function debitCalculate() {
+        debugger;
+        var debit = 0;
+        $('#TotalDebit').val('');
+        $('.Debit').each(function () {
+            debugger;
+            var q = $(this).text();
+            if (q == '')
+            { q = 0 }
+            debit += parseFloat(q);
+        });
+        $('#TotalDebit').text(debit);
+    }
+
+    function creditCalculate() {
+        var credit = 0;
+        $('#TotalCredit').val('');
+        $('.Credit').each(function () {
+            var q = $(this).text();
+            if (q == '')
+            { q = 0 }
+            credit += parseFloat(q);
+        });
+        $('#TotalCredit').text(credit);
+    }
+
+</script>

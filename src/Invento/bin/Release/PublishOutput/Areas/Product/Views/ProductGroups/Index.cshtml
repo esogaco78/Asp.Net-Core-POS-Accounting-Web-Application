@@ -1,0 +1,72 @@
+@model IEnumerable<Invento.Areas.Product.Models.ProductGroup>
+
+@{
+    ViewData["Title"] = "Product Group";
+    if(User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+@await Html.PartialAsync("_PageHeader")
+
+<table class="table table-bordered table-hover" id="MyTable">
+    <thead>
+        <tr class="active">             
+            <th>
+                @Html.DisplayNameFor(model => model.ProductGroupID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductGroupName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "ajax": {
+                    "url": "/Product/ProductGroups/LoadProductGroups",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+
+                    { "data": "productGroupID", "autoWidth": true },
+                    { "data": "productGroupName", "autoWidth": true },
+                    {
+                        "data": null,
+                        "mRender": function (data, type, row) {
+                            return $("<div />")
+                                .append($(" <div class='text-center'> <a class='btn btn-sm btn-default modal-link' href='/Product/ProductGroups/Edit?id=" + data.productGroupID + "'><span class='glyphicon glyphicon-pencil'></span></a>    </div> "))
+                                .html();
+                        }
+                    }
+
+                    // <a class='btn btn-sm btn-default ' href='/Company/Parties/Delete?id=" + data.PartiesID + "'><span class='glyphicon glyphicon-trash'></span></a>
+
+                    //,
+                    // {
+                    //     "data": null,
+                    //     "mRender": function (data, type, row) {
+                    //         return $("<div />")
+                    //             .append($("   <a class='btn btn-sm btn-default' href='/Company/Banks/Delete?id=" + data.bankID + "'><span class='glyphicon glyphicon-trash'></span></a>  "))
+                    //             .html();
+                    //     }
+                    // }
+                ]
+            });
+        });
+    </script>
+}

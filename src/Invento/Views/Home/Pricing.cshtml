@@ -1,0 +1,168 @@
+﻿@{
+    ViewData["Title"] = "Pricing - ";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else if (User.IsInRole("CompanyUser"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+    else if (User.IsInRole("SiteAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutSiteAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+}
+
+<header>
+    <section class="hero">
+        <div class="texture-overlay"></div>
+        <div class="container">
+            <div class="row nav-wrapper">
+                <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                    <a asp-controller="Home" asp-action="Index" style="font-size:xx-large ; font-family:'Nunito'">Biznsbook</a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 text-right navicon">
+                    <p>MENU</p><a id="trigger-overlay" class="nav_slide_button nav-toggle" href="#"><span></span></a>
+                </div>
+            </div>
+            <div class="row hero-content">
+                <div class="col-md-12">
+                    <h1 class="animated fadeInDown">Choose the best plan that suits your business.</h1>
+                    <h2 style="font-weight:bolder">See What Your Purchase &amp; Annual Renewals Include.</h2>
+                    <br />
+                    <a asp-area="" asp-controller="Home" asp-action="Contact" class="use-btn animated fadeInUp" style="font-weight:900;color:red">Contact Us</a>
+                    <a href="#pricing" class="learn-btn animated fadeInUp">Pricing<i class="glyphicon glyphicon-arrow-down"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+</header>
+
+<section class="video" id="about"></section>
+
+<section class="screenshots">
+    <div class="container-fluid">
+        
+    </div>
+</section>
+
+<section class="download">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center wp4">
+                <div class="row"  id="pricing">
+                    <h1 style="color:black;font-weight:900;padding-left:20px ;color:white ;font-stretch:wider">PRICING</h1>
+                    <br />
+                    <div class="col-md-5" style="border:thick solid;border-color:dodgerblue ;border-width:thick; background-color:white">                             
+                    <div class="row">
+                            <h3 class="col-md-8 control-label" style="color:darkblue;font-size:x-large;font-family:'Bookman Old Style'">Payment &amp; Users</h3>
+                    </div>                               
+                            <form class="form-horizontal">                                
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" style="color:black;font-size:larger ;font-family:'Bookman Old Style'">Payment</label>
+                                    <div class="col-md-6">
+                                        <select id="TimePeriod" class="form-control" onchange="CalculatePrice();">                                            
+                                            <option value="700">Monthly</option>
+                                            <option value="600">Quaterly</option>
+                                            <option value="550">Semiannually</option>
+                                            <option value="500" selected="selected">Annually</option>
+                                        </select>                                        
+                                    </div>
+                                </div><br />
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label" style="color:black ;font-size:larger ;font-family:'Bookman Old Style'">Extra Users</label>
+                                    <div class="col-md-6">
+                                        <select id="NoOfUsers" class="form-control" onchange="CalculatePrice();">  
+                                            <option value="0" selected="selected">Zero</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                            <option value="4">Four</option>
+                                            <option value="5">Five</option>
+                                            <option value="6">Six</option>
+                                            <option value="7">Seven</option>
+                                            <option value="8">Eight</option>
+                                            <option value="9">Nine</option>
+                                            <option value="10">Ten</option>
+                                            <option value="15">More Than Ten</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        <br /><br /><br />
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-5" style="border:thick solid;border-color:dodgerblue ;border-width:thick; background-color:white">                             
+                        <div class="row">
+                            <h2 class="col-md-8 control-label" style="color:darkblue;font-size:x-large;font-family:'Bookman Old Style'">Price Calculator</h2>    
+                        </div>                                                                        
+                        <div class="row">                            
+                            <h2 class="control-label" style="color:black ;font-weight:900;font-family:'Bookman Old Style'"><span>$</span><span id="Amount" style="color:red">500</span><span id="PeriodType"> Annual Subcription.</span></h2>
+                            <p class="control-label" style="color:black ;font-weight:500;font-size:small;font-family:'Bookman Old Style'"><span>Approx. $ </span><span id="Monthly">41</span> Monthly.</p>
+                        </div>
+                        <div class="row">
+                            <h3 class="control-label" style="color:black ;font-weight:700;font-family:'Bookman Old Style'"><span style="color:red">1</span><span> Main User and </span><span style="color:red">2 Free</span><span> Sub Users Included</span></h3>
+                        </div>
+                        <div class="row">
+                            <h3 class="control-label" style="color:black ;font-weight:700;font-family:'Bookman Old Style'"><span>And </span><span id="Users" style="color:red">0</span><span> Extra Users.</span></h3>
+                        </div>
+
+                    </div>
+                </div>
+                <br />
+                <h2 style="font-weight:bolder ;font-size:x-large;color:white">Try Our Product</h2>
+                <h3 style="font-weight:bold ;color:white">One Time Subscripton, All Features Included, Non-expiring licenses and Include unlimited support period. Software starts at only $500 Per Year and more profitable more users you add. For more details, and to order, please contact a BiznsBook Software representative at <a asp-controller="Home" asp-action="Contact">Contact Us.</a> </h3>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+
+    function CalculatePrice()
+    {
+        debugger;
+        var timeperiod = $('#TimePeriod').val();
+        var noofusers = $('#NoOfUsers').val();
+
+        if (timeperiod == 700)
+        {
+            var UserAmount = noofusers * 18;
+            UserAmount = parseInt(UserAmount);
+            timeperiod = parseInt(timeperiod);
+            var final = UserAmount + timeperiod;
+        }
+        if (timeperiod == 600)
+        {
+            var UserAmount = noofusers * 16;
+            UserAmount = parseInt(UserAmount);
+            timeperiod = parseInt(timeperiod);
+            var final = UserAmount + timeperiod;
+        }
+        if (timeperiod == 550)
+        {
+            var UserAmount = noofusers * 14;
+            UserAmount = parseInt(UserAmount);
+            timeperiod = parseInt(timeperiod);
+            var final = UserAmount + timeperiod;
+        }
+        if (timeperiod == 500)
+        {
+            var UserAmount = noofusers * 12;
+            UserAmount = parseInt(UserAmount);
+            timeperiod = parseInt(timeperiod);
+            var final = UserAmount + timeperiod;
+        }        
+        $('#Amount').text(final);       
+        $('#Users').text(noofusers);
+        var month = final / 12;
+        month = parseFloat(month).toFixed(0)
+        $('#Monthly').text(month);
+    }
+
+</script>

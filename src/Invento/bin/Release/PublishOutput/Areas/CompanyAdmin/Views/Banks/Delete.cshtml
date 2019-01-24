@@ -1,0 +1,25 @@
+@model Invento.Areas.CompanyAdmin.Models.Company.Bank
+
+<div class="modal-content ">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-weight:bolder">Delete Bank</h4>
+    </div>
+    <div class="modal-body">
+        <h4 style="padding-bottom:10px">Are you sure you want to delete <span style="font-weight:bolder;color:blue"> @Html.DisplayFor(model => model.BankName) </span>  ?</h4>
+        <form asp-area="CompanyAdmin" asp-action="Delete" asp-controller="Banks" method="post" role="form">
+              
+                <input type="hidden" asp-for="BankID" />
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <input type="submit" value="Delete" class="btn btn-primary" />
+                </div>            
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

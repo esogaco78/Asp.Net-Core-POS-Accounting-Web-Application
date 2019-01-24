@@ -1,0 +1,249 @@
+@model Invento.Areas.Purchase.Models.PurchaseBillVM
+@using Invento.Areas.Purchase.Models
+
+@{
+    ViewData["Title"] = "Purchase Bill";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+ <div id="detailDIV"></div>
+        <div class="well" style="padding-bottom:5px">
+            <div class="row">
+                <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Purchase Bill</span>
+                <a asp-controller="Purchase" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+               
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <label >Purchase Bill No. <span style="padding-left:7px">@Model.PurchaseBillID</span></label>
+            </div>
+            <div class="col-md-2 pull-left">
+                <label >Date: <span style="padding-left:10px" >@Model.PB_S_1</span></label>
+            </div>
+           
+            <div class="col-md-4 pull-left">
+                <label>Contact Person <span style="padding-left:10px">@Model.ContactPerson</span></label>
+            </div>
+            <div class="col-md-4 pull-left">
+                <label>Contact Number<span style="padding-left:10px">@Model.ContactNumber</span></label>
+            </div>
+           
+        </div>
+        
+
+        <br />
+
+        <div class="row">
+            
+            <div class="col-md-2 pull-left">
+                <label>Exchange Rate<span style="padding-left:10px">@Model.ExchangeRate</span></label>
+            </div>
+            <div class="col-md-2 pull-left">
+                <label>External Ref.<span style="padding-left:10px">@Model.PurchaseBillID</span></label>
+            </div>
+            <div class="col-md-2 pull-left">
+                <label>Ref. Date<span style="padding-left:10px">@Model.PB_S_2</span></label>
+            </div>           
+            <div class="col-md-2 pull-left">
+                <label>Credit Days<span style="padding-left:10px">@Model.CreditDays</span></label>
+            </div>
+        </div>
+      
+
+        <br />
+      
+
+        <table class="table table-bordered" id="ItemTbl">
+            <thead>
+                <tr class="active">
+                    <th>ID</th>
+                    <th width="10%">
+                        OEM No.
+                    </th>
+                    <th width="40%">
+                        Description
+                    </th>
+                    <th width="15%">
+                        Quantity
+                    </th>
+                    <th width="15%">
+                        Price
+                    </th>
+                    <th width="15%">
+                        Amount
+                    </th>
+                  
+                </tr>
+            </thead>
+            <tbody class="active">
+                @for (int i = 0; i < Model.PurchaseBillItem_List.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(item => item.PurchaseBillItem_List[i].ItemID)   
+                        </td>
+                        <td>
+                            @Html.DisplayFor(item => item.PurchaseBillItem_List[i].Item.OEMNo)                              
+                        </td>
+                        <td>
+                            @Html.DisplayFor(item => item.PurchaseBillItem_List[i].Item.ProductDescription)                                                          
+                        </td>
+                        <td>
+                            <input style="display:none" asp-for="@Model.PurchaseBillItem_List[i].Quantity" class="form-control Quantity" />
+                            @Html.DisplayFor(item => item.PurchaseBillItem_List[i].Quantity)                            
+                        </td>
+                        
+                        <td>
+                            <input style="display:none" asp-for="@Model.PurchaseBillItem_List[i].PurchasePrice" class="form-control PurchasePrice" />
+                            @Html.DisplayFor(item => item.PurchaseBillItem_List[i].PurchasePrice)
+                           </td>
+                        <td>
+                            <label id="Amount" ></label>
+                         
+                           </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+        <div class="row">
+             
+            <div class="col-lg-2 col-lg-offset-4">
+                <label>Total Quantity : <span style="padding-left:10px">@Model.TotalQuantity</span></label>
+            </div>
+            <div class="col-lg-2">
+                <label>Gross Total : <span style="padding-left:10px">@Model.GrossTotal</span></label>
+            </div>
+            <div class="col-lg-2">
+                <label>Total Discount : <span style="padding-left:10px">@Model.TDiscount</span></label>
+            </div>
+            <div class="col-lg-2">
+                <label>Net Amount : <span style="padding-left:10px">@Model.NetAmount</span></label>
+            </div>
+        </div>
+
+            @*<table class="table table-bordered" id="PaymentTbl">
+                <thead>
+                    <tr class="active">
+                        <th width="10%">
+                            Mode
+                        </th>
+                        <th width="20%">
+                            Amount
+                        </th>
+                      
+                        <th width="20%">
+                            Cheque
+                        </th>
+                        <th width="30%">
+                            Date
+                        </th>
+                        <th width="20%">
+                            Paid
+                        </th>
+                      
+                    </tr>
+                </thead>
+                <tbody class="active">
+                    @for (int i = 0; i < Model.TransactionList.Count; i++)
+                                {
+                        <tr>
+                            
+                            <td>
+                                <label id="modedisplay"></label>
+
+                                <select style="display:none" asp-for="@Model.TransactionList[i].Mode" asp-items="@Html.GetEnumSelectList<PaymentMode>()" class="form-control Mode"></select>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(item => item.TransactionList[i].Amount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(item => item.TransactionList[i].Cheque)
+                                
+                            </td>
+                            <td>
+                                @Html.DisplayFor(item => item.TransactionList[i].Date)
+                                
+                            </td>
+                            <td>  
+                                @{
+                                    if (Model.TransactionList[i].Paid == true)
+                                    {
+                                        <label>Paid</label>
+                                    }
+                                    else
+                                    {
+                                        <label>UnPaid</label>
+                                    }
+                                }                                           
+                            </td>
+                            
+                             </tr>
+                                }
+                </tbody>
+            </table>*@
+
+        <div class="row">
+            <div class="col-lg-6">
+                <label>Remarks : <span style="padding-left:10px">@Model.Remarks</span></label>
+            </div>
+           
+        </div>
+    
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        debugger;
+
+        FirstamountCalculate();
+        FirstLoadPayment();
+
+        //window.print();
+
+
+
+    });
+    function FirstamountCalculate() {
+        debugger;
+        $('#ItemTbl > tbody > tr').each(function () {
+            $this = $(this)
+            debugger;
+            var price = $this.find(".PurchasePrice").val();
+            var quantity = $this.find(".Quantity").val();
+            var amount = (price * quantity);
+
+            $this.find("#Amount").append(amount);
+          
+        });
+    }
+    function FirstLoadPayment()
+    {
+        debugger;
+        $('#PaymentTbl > tbody > tr').each(function () {
+            $this = $(this)
+            debugger;
+            var aa = $this.find(".Mode option:selected").text();
+            var bb = $this.find(".BankID option:selected").text();
+           
+           $this.find("#modedisplay").append(aa);
+           $this.find("#bankdisplay").append(bb);
+
+      
+        });
+
+    }
+
+</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,19 @@
+﻿@model Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole
+@{    
+    Layout = "~/Views/Shared/_LayoutSiteAdmin.cshtml";
+}
+
+<h2>Create Site Role</h2>
+
+<form asp-area="SiteAdmin" asp-controller="SiteRoles" asp-action="Create" method="post">
+     
+    <table id="tbrole">
+        <tr>
+            <td class="c">Enter Role Name To be Created:</td>
+            <td class="c">
+                @Html.EditorFor(m => m.Name)
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="Create Role" />
+   </form>

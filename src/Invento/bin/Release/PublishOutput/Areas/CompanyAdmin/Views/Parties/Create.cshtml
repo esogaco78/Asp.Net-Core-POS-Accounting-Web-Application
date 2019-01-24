@@ -1,0 +1,249 @@
+@model Invento.Areas.CompanyAdmin.Models.Company.Parties
+
+@{
+    ViewData["Title"] = "Parties";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        
+        <div class="well" style="padding-bottom:5px">
+            <div class="row">
+                <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Create Party</span>
+                <a asp-controller="Parties" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+                <input type="submit" value="Save" class="btn btn-primary pull-right" style="margin-right:20px" />
+            </div>
+        </div>      
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        
+        
+        
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">Party Basic Information</div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-md-3"><label asp-for="PartyName" class="col-md-7 control-label "></label></div>
+                    <div class="col-md-3"><label asp-for="BusinessRelation" class="col-md-8 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="ContactPerson" class="col-md-9 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="Phone1" class="col-md-9 control-label"></label></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">                            
+                            <div class="col-md-12">
+                                <input asp-for="PartyName" class="form-control" required />
+                                <span asp-validation-for="PartyName" class="text-danger" ></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">                           
+                            <div class="col-md-12">
+                                <input asp-for="BusinessRelation" class="form-control" />
+                                <span asp-validation-for="BusinessRelation" class="text-danger" ></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">                            
+                            <div class="col-md-12">
+                                <input asp-for="ContactPerson" class="form-control" required/>
+                                <span asp-validation-for="ContactPerson" class="text-danger"  ></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">                            
+                            <div class="col-md-12">
+                                <input asp-for="Phone1" class="form-control" required />
+                                <span asp-validation-for="Phone1" class="text-danger"  ></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3"><label asp-for="Road" class="col-md-3 control-label "></label></div>
+                    <div class="col-md-3"><label asp-for="Area" class="col-md-3 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="City" class="col-md-3 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="State" class="col-md-3 control-label"></label></div>
+                </div>
+                <div class="row">                   
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input asp-for="Road" class="form-control" />
+                                <span asp-validation-for="Road" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input asp-for="Area" class="form-control" />
+                                <span asp-validation-for="Area" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input asp-for="City" class="form-control" />
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input asp-for="State" class="form-control" />
+                                <span asp-validation-for="State" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3"><label asp-for="OtherDetails" class="col-md-6 control-label "></label></div>
+                    <div class="col-md-3"><label asp-for="State" class="col-md-3 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="CountryID" class="col-md-6 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="Email" class="col-md-3 control-label"></label></div>                    
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <textarea asp-for="OtherDetails" class="form-control"></textarea>
+                                <span asp-validation-for="OtherDetails" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input asp-for="State" class="form-control" />
+                                <span asp-validation-for="State" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <select asp-for="CountryID" class="form-control" asp-items="ViewBag.CountryID">
+                                    <option>Select</option>
+                                </select>
+                                <span asp-validation-for="CountryID" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+            </div>
+        </div>
+                      
+        <div class="panel panel-default">
+            <div class="panel-heading">Party Additional Information</div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-md-3"><label asp-for="AdditionalInfo1" class="col-md-10 control-label "></label></div>
+                    <div class="col-md-3"><label asp-for="AdditionalInfo2" class="col-md-10 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="Observations" class="col-md-9 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="Remarks" class="col-md-9 control-label"></label></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <textarea asp-for="AdditionalInfo1" class="form-control" cols="5" rows="5"></textarea>
+                                <span asp-validation-for="AdditionalInfo1" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <textarea asp-for="AdditionalInfo2" class="form-control" cols="5" rows="5"></textarea>
+                                <span asp-validation-for="AdditionalInfo2" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <textarea asp-for="Observations" class="form-control" cols="5" rows="5"></textarea>
+                                <span asp-validation-for="Observations" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <textarea asp-for="Remarks" class="form-control" cols="5" rows="5"></textarea>
+                                <span asp-validation-for="Remarks" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3"><label asp-for="PartyShortName" class="col-md-8 control-label "></label></div>
+                    <div class="col-md-3"><label asp-for="Phone2" class="col-md-7 control-label"></label></div>   
+                    <div class="col-md-3"><label asp-for="Fax" class="col-md-7 control-label"></label></div>                 
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input asp-for="PartyShortName" class="form-control" />
+                                <span asp-validation-for="PartyShortName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input asp-for="Phone2" class="form-control" />
+                                <span asp-validation-for="Phone2" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>   
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input asp-for="Fax" class="form-control" />
+                                <span asp-validation-for="Fax" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>                  
+                </div>               
+            </div>
+        </div>
+        
+    </div>
+</form>
+ 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

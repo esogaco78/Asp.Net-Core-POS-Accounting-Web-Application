@@ -1,0 +1,72 @@
+@model Invento.Areas.SiteAdmin.Models.Country
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_LayoutSiteAdmin.cshtml";
+}
+
+<h2>Edit</h2>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>Country</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="CountryID" />
+        <div class="form-group">
+            <label asp-for="ISO" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ISO" class="form-control" />
+                <span asp-validation-for="ISO" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Iso3" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Iso3" class="form-control" />
+                <span asp-validation-for="Iso3" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="NiceName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="NiceName" class="form-control" />
+                <span asp-validation-for="NiceName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="NumCode" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="NumCode" class="form-control" />
+                <span asp-validation-for="NumCode" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneCode" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="PhoneCode" class="form-control" />
+                <span asp-validation-for="PhoneCode" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

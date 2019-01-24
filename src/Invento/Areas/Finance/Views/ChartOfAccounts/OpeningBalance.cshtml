@@ -1,0 +1,138 @@
+﻿@model IEnumerable<Invento.Areas.Finance.Models.TransactionAccount>
+ 
+@{
+    ViewData["Title"] = "Opening Balance Trial";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:0px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+        @*@{
+            if (User.IsInRole("CompanyAdmin"))
+            {
+                <a asp-area="CompanyAdmin" asp-controller="Home" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+            }
+            else
+            {
+                <a asp-area="CompanyUser" asp-controller="Home" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+            }
+        }*@
+        <span style="padding-right:30px" class="pull-right HideItems">            
+            <button type="button" class="btn-sm btn-default" title="Print Opening Balance Trial" onclick="Print();"><span class="glyphicon glyphicon-print"></span></button>
+        </span>                
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr class="active">
+                <th>
+                    Account Name
+                </th>
+                <th>
+                    Debit
+                </th>
+                <th>
+                    Credit
+                </th>                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+        {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SubAccount.MainAccount.MainAccountNumber)
+                        <span>-</span>
+                        @Html.DisplayFor(modelItem => item.SubAccount.SubAccountNumber)
+                        <span>-</span>
+                        @Html.DisplayFor(modelItem => item.TransactionAccountNumber)
+                        <span> , </span>
+                        <span style="font-weight:bold">@Html.DisplayFor(modelItem => item.AccountName)</span>
+                    </td>
+                    <td>
+                        @{
+                        if (item.OpeningBalance < 0)
+                        {
+                                <span class="Debit"></span>
+                        }
+                        else
+                        {
+                                <span class="Debit">@Html.DisplayFor(modelitem => item.OpeningBalance)</span>
+                        }
+                        }
+
+                    </td>
+                    <td>
+                        @{
+                        if (item.OpeningBalance > 0)
+                        {
+                                <span class="Credit"></span>
+                        }
+                        else
+                        {
+                            decimal aa = item.OpeningBalance * -1;
+                                <span class="Credit">@aa</span>
+                        }
+                        }
+                    </td>
+                </tr>
+        }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td><p style="font-weight:bold ; border-top:1px solid rgb(0,0,0);" id="TotalDebit"></p></td>
+                <td><p style="font-weight:bold ; border-top:1px solid rgb(0,0,0);" id="TotalCredit"></p></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        debitCalculate();
+        creditCalculate();
+    });
+
+    function debitCalculate() {
+        debugger;
+        var debit = 0;
+        $('#TotalDebit').val('');
+        $('.Debit').each(function () {
+            debugger;
+            var q = $(this).text();
+            if (q == '')
+            { q = 0 }
+            debit += parseFloat(q);
+        });
+        $('#TotalDebit').text(debit);
+    }
+
+    function creditCalculate() {
+        var credit = 0;
+        $('#TotalCredit').val('');
+        $('.Credit').each(function () {
+            var q = $(this).text();
+            if (q == '')
+            { q = 0 }
+            credit += parseFloat(q);
+        });
+        $('#TotalCredit').text(credit);
+    }
+
+    function Print() {
+        $('.HideItems').hide();
+        window.print();
+        $('.HideItems').show();
+    }
+</script>

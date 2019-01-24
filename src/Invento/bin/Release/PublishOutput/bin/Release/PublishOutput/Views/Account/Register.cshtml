@@ -1,0 +1,75 @@
+﻿@model RegisterVMCompanyUser
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_LayoutCompanyAdmin";
+}
+
+@{
+    List<SelectListItem> RolesList = new List<SelectListItem>();
+    if (Model.RoleList != null)
+    {
+        for (int i = 0; i < Model.RoleList.Count; i++)
+        {
+            RolesList.Add(new SelectListItem
+            {
+                Text = Model.RoleList[i].Name,
+                Value = Model.RoleList[i].Name
+            });
+        }
+    }
+}
+
+<form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+
+    <div class="well">
+        <div class="row">
+            <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">System User Account</span>
+            <a asp-area="CompanyAdmin" asp-controller="Home" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+
+            <button type="submit" class="btn btn-primary pull-right" style="margin-right:20px">
+                Create
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+
+        </div>
+    </div>
+
+    
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="well">
+        <div class="form-group">
+            <label asp-for="Email" class="col-md-4 control-label"></label>
+            <div class="col-md-8">
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="col-md-4 control-label"></label>
+            <div class="col-md-8">
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ConfirmPassword" class="col-md-4 control-label"></label>
+            <div class="col-md-8">
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="SelectedRoles" class="col-md-4 control-label"></label>
+            <div class="col-md-8">
+                <select asp-for="SelectedRoles" asp-items="RolesList" multiple="multiple" class="form-control"></select>
+                <span asp-validation-for="SelectedRoles" class="text-danger"></span>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

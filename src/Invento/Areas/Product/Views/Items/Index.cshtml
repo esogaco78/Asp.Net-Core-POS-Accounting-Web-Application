@@ -1,0 +1,213 @@
+@model IEnumerable<Invento.Areas.Product.Models.Item>
+ 
+@{
+    ViewData["Title"] = Localizer["Product List"];
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>      
+        @*<select asp-items="ViewBag.ProductGroupID">
+            <option value="">Select</option>
+        </select>*@
+        @if (User.IsInRole("CompanyAdmin") || User.IsInRole("Add Products"))
+        {
+            <a asp-action="Create" class="btn btn-default pull-right" style="margin-right:20px"><span class="glyphicon glyphicon-plus"></span> @Localizer["Add New"] </a>
+        }
+        
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed" style="width:100%" id="MyTable">
+        <thead>
+            <tr class="active">
+                <th style="width:3%" class="HideItems">@Localizer["Image"]</th>
+                <th style="width:12%">
+                    @Html.DisplayNameFor(model => model.OEMNo)
+                </th> 
+                <th style="width:12%">
+                    @Html.DisplayNameFor(model => model.CrossRef)
+                </th>
+                <th style="width:10%">
+                    Name
+                </th>
+                <th style="width:20%">
+                    @Html.DisplayNameFor(model => model.ProductDescription)
+                </th>
+                <th style="width:5%">
+                    @Html.DisplayNameFor(model => model.ItemType)
+                </th>
+                <th style="width:5%">
+                    Price
+                </th>
+                <th style="width:5%">
+                    @Html.DisplayNameFor(model => model.ItemMainCompany)
+                </th>
+                <th style="width:2%">
+                    @Html.DisplayNameFor(model => model.Size)
+                </th>
+                <th style="width:5%">
+                    @Html.DisplayNameFor(model => model.Remark)
+                </th>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.Value)
+                </th>*@
+                @*<th>
+                    @Html.DisplayNameFor(model => model.LCPrice)
+                </th>*@
+                <th style="width:5%">
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </th>
+                <th style="width:5%">
+                    @Html.DisplayNameFor(model => model.CreatedBy)
+                </th>
+                <th style="width:5%">
+                    @Html.DisplayNameFor(model => model.ItemExtra_String_1)
+                </th>
+                <th style="width:5%">
+                    @Html.DisplayNameFor(model => model.ItemExtra_String_2)
+                </th>
+                <th style="width:5%">
+                    @Html.DisplayNameFor(model => model.ItemExtra_String_3)
+                </th>
+                @if (User.IsInRole("Edit Products") || User.IsInRole("CompanyAdmin"))
+                {
+                    <th style="width:3%">Edit</th>
+                }
+                @if (User.IsInRole("View Products Details") || User.IsInRole("CompanyAdmin"))
+                {
+                    <th style="width:3%">View</th>
+                }
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>    
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                dom: 'lBfrtip', 
+                buttons:
+                    [
+                        {
+                            "extend": 'print',
+                            @*"message": '@ViewData["CompanyName"]',*@
+                            "title": 'Product List',
+                            "orientation": 'landscape',
+                            "text": "Print",
+                            "autoPrint": true,
+                            exportOptions: {
+                                "columns": ':visible',
+                            },
+                        },
+                        {
+                            "extend": 'excel',
+                            @*"message": '@ViewData["CompanyName"]',*@
+                            "title": 'Product List',
+                            "text": "Excel",
+                            "autoPrint": true,
+                            exportOptions: {
+                                "columns": ':visible',
+                            },
+                        },
+                         {
+                             "extend": 'pdfHtml5',
+                             "orientation": 'landscape',
+                             @*"message": '@ViewData["CompanyName"]',*@
+                            "title": 'Product List',
+                             "text": "PDF", 
+                             exportOptions: {
+                                 "columns": ':visible',
+                             },
+                         },
+                         {
+                             extend: 'colvis',
+                             collectionLayout: 'fixed two-column'
+                         }
+
+                    ],
+                    "columnDefs": [
+                    { "visible": false, "targets": [7, 8, 9, 10, 11, 12, 13,14,15,16], "searchable": false }
+                    ],
+
+                "ajax": {
+                    "url": "/Product/Items/LoadItems",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                     {
+                         "data": null,
+                         "mRender": function (data, type, row) {
+                             return $("<div />")
+                                 .append($(" <div class='text-center'> <a class='btn btn-sm btn-default modal-link' href='/Product/Items/ItemPhoto?id=" + data.itemID + "'><span class='glyphicon glyphicon-picture'></span></a>  </div> "))
+                                 .html();
+                         }
+                     },
+                    //{
+
+                    //    "data": null, 
+                    //    "mRender": function (data, type, row) { 
+                    //        return $("<div />")                                    
+                    //                .append($(" <div class='text-center'> <a class='modal-link' href='/Product/Items/ItemPhoto?id=" + data.itemID + "'><img src=data:image/png;base64," + data.photoData + " width='60' height='40' /></a>  </div> "))
+                    //                .html();
+                    //        }
+                    // },
+                    { "data": "oemNo", "autoWidth": true },
+                    { "data": "crossRef", "autoWidth": true },
+                    { "data": "itemName", "autoWidth": true },
+                    { "data": "productDescription", "autoWidth": true },
+                    { "data": "itemType", "autoWidth": true },
+                    { "data": "salePrice", "autoWidth": true },
+                    { "data": "itemMainCompany", "autoWidth": true },
+                    { "data": "size", "autoWidth": true },
+                    { "data": "remark", "autoWidth": true },
+                    //{ "data": "value", "autoWidth": true },
+                    //{ "data": "lcPrice", "autoWidth": true },
+                    { "data": "quantity", "autoWidth": true },
+                    { "data": "createdBy", "autoWidth": true },
+                    { "data": "itemExtra_String_1", "autoWidth": true },
+                    { "data": "itemExtra_String_2", "autoWidth": true },
+                    { "data": "itemExtra_String_3", "autoWidth": true },
+
+                    @if (User.IsInRole("Edit Products") || User.IsInRole("CompanyAdmin"))
+                    {
+                            <text>
+                            {
+                                "data": null,
+                                "mRender": function (data, type, row) {
+                                    return $("<div />")
+                                        .append($(" <div class='text-center'> <a class='btn btn-sm btn-default' title='Edit Product Details' href='/Product/Items/Edit?id=" + data.itemID + "'><span class='glyphicon glyphicon-pencil'></span></a>  </div> "))
+                                        .html();
+                                }
+                        },
+                            </text>
+                    }
+                            @if(User.IsInRole("View Products Details") || User.IsInRole("CompanyAdmin"))
+                {
+                            <text>
+                    {
+                        "data": null,
+                        "mRender": function (data, type, row) {
+                            return $("<div />")
+                                .append($(" <div class='text-center'>  <a class='btn btn-sm btn-default modal-link' title='View Product Details' href='/Product/Items/Details?id=" + data.itemID + "'><span class='glyphicon glyphicon-eye-open'></span></a>   </div> "))
+                                .html();
+                        }
+                    }       </text>
+                }
+                ]
+            });
+        });
+    </script>
+}

@@ -1,0 +1,83 @@
+@model IEnumerable<Invento.Areas.CompanyAdmin.Models.Company.Parties>
+
+@{
+    ViewData["Title"] = "Parties";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+@await Html.PartialAsync("_PageHeader-NonModal")
+
+<table class="table table-bordered table-hover" id="MyTable">
+    <thead>
+        <tr class="active">
+            
+            <th>
+                @Html.DisplayNameFor(model => model.PartyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ContactPerson)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "ajax": {
+                    "url": "/Company/Parties/LoadParties",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                   
+                    { "data": "partyName", "autoWidth": true },
+                    { "data": "phone1", "autoWidth": true },
+                    { "data": "contactPerson", "autoWidth": true },
+                    { "data": "city", "autoWidth": true },
+                    { "data": "remarks", "autoWidth": true },
+                    {
+                        "data": null,
+                        "mRender": function (data, type, row) {
+                            return $("<div />")
+                                .append($(" <div class='text-center'> <a class='btn btn-sm btn-default' href='/Company/Parties/Edit?id=" + data.partiesID + "'><span class='glyphicon glyphicon-pencil'></span></a>    <a class='btn btn-sm btn-default modal-link' href='/Company/Parties/Details?id=" + data.partiesID + "'><span class='glyphicon glyphicon-eye-open'></span></a>    </div> "))
+                                .html();
+                        }
+                    }
+
+                    // <a class='btn btn-sm btn-default ' href='/Company/Parties/Delete?id=" + data.PartiesID + "'><span class='glyphicon glyphicon-trash'></span></a>
+
+                    //,
+                    // {
+                    //     "data": null,
+                    //     "mRender": function (data, type, row) {
+                    //         return $("<div />")
+                    //             .append($("   <a class='btn btn-sm btn-default' href='/Company/Banks/Delete?id=" + data.bankID + "'><span class='glyphicon glyphicon-trash'></span></a>  "))
+                    //             .html();
+                    //     }
+                    // }
+                ]
+            });
+        });
+    </script>
+}

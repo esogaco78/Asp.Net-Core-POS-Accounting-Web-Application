@@ -1,0 +1,67 @@
+@model Invento.Areas.Product.Models.GRN
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>GRN</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CompanyID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactPerson)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactPerson)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.GRNDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GRNDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.GRN_I_Extra)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GRN_I_Extra)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Remarks)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalQuantity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TotalQuantity)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.GRNID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,162 @@
+@model Invento.Areas.CompanyAdmin.Models.Company.Parties
+
+@{
+    ViewData["Title"] = "Delete";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Parties</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AdditionalInfo1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdditionalInfo1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AdditionalInfo2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AdditionalInfo2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Area)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Area)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.BusinessRelation)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.BusinessRelation)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.City)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CompanyID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactPerson)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactPerson)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExtraBool)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExtraBool)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExtraInt)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExtraInt)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ExtraString)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ExtraString)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Fax)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fax)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Observations)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Observations)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OtherDetails)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OtherDetails)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PartyName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PartyName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PartyShortName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PartyShortName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Phone1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Phone2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Remarks)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Road)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Road)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.State)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

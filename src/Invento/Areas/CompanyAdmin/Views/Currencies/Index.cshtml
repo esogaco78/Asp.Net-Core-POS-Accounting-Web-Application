@@ -1,0 +1,114 @@
+@model IEnumerable<Invento.Areas.CompanyAdmin.Models.Company.Currency>
+ 
+@{
+    ViewData["Title"] = Localizer["Currency"];
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+        
+        @if (User.IsInRole("CompanyAdmin") || User.IsInRole("Add Currencies"))
+        {
+            <a asp-action="Create" class="btn btn-default pull-right modal-link" style="margin-right:20px"><span class="glyphicon glyphicon-plus"></span> @Localizer["Add New"]</a>
+        }
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered table-hover " id="MyTable">
+        <thead>
+            <tr class="active">
+                <th>
+                    @Localizer["ID"]
+                </th>
+                <th>
+                    @Localizer["Name"]
+                     @*@Html.DisplayNameFor(model => model.CurrencyName)*@
+                </th>
+                <th>
+                    @Localizer["ISO"]
+                    @*@Html.DisplayNameFor(model => model.ISO)*@
+                </th>              
+               @if (User.IsInRole("Edit Currencies") || User.IsInRole("CompanyAdmin"))
+               {
+                <th>@Localizer["Edit"]</th>
+               }
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+
+                dom: 'lBfrtip',
+                buttons:
+                    [
+                        {
+                            "extend": 'print',
+                            "title": 'Currencies',
+                            "text": "Print",
+                            "autoPrint": true,
+                            exportOptions: {
+                                "columns": ':visible',
+                            },
+                        },
+                        {
+                            "extend": 'excel',
+                            "title": 'Currencies',
+                            "text": "Excel",
+                            "autoPrint": true,
+                            exportOptions: {
+                                "columns": ':visible',
+                            },
+                        },
+                         {
+                             "extend": 'pdfHtml5',
+                             "title": 'Currencies',
+                             "text": "PDF",
+                             exportOptions: {
+                                 "columns": ':visible',
+                             },
+                         },
+                         {
+                             extend: 'colvis',
+                         }
+                    ],
+                "ajax": {
+                    "url": "/Company/Currencies/LoadCurriencies",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "currencyID", "autoWidth": true },
+                    { "data": "currencyName", "autoWidth": true },
+                    { "data": "iso", "autoWidth": true },
+                     @if(User.IsInRole("Edit Currency") || User.IsInRole("CompanyAdmin"))
+                {
+                        <text>
+                    {
+                        "data": null,
+                        "mRender": function (data, type, row) {
+                            return $("<div />")
+                                .append($(" <a class='btn btn-sm btn-default modal-link' href='/Company/Currencies/Edit?id=" + data.currencyID + "'><span class='glyphicon glyphicon-pencil'></span></a>   "))
+                                .html();
+                        }
+                    },
+                      </text>
+                     }
+                ]
+            });
+        });
+    </script>
+}
+

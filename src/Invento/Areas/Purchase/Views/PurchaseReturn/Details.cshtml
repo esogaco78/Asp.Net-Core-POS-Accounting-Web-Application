@@ -1,0 +1,121 @@
+ @model Invento.Areas.Purchase.Models.PurchaseReturn
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PurchaseReturn</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AmountToReceive)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AmountToReceive)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CompanyID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactPerson)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactPerson)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OldQuantity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OldQuantity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PR_B_1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PR_B_1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PR_D_1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PR_D_1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PR_D_2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PR_D_2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PR_I_1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PR_I_1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PR_I_2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PR_I_2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PR_S_1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PR_S_1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PR_S_2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PR_S_2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PurBillReturnDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PurBillReturnDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Remarks)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReturnQuantity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReturnQuantity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalAmount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TotalAmount)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.PurchaseReturnID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

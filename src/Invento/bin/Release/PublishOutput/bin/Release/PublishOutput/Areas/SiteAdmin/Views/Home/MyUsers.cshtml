@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Invento.Areas.CompanyAdmin.Models.Company.SiteUserInfo>
+@{
+    ViewData["Title"] = "My Users";
+    Layout = "~/Views/Shared/_LayoutSiteAdmin.cshtml";
+}
+
+
+<div class="well">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">My Application Users</span>
+        <a asp-area="SiteAdmin" asp-controller="Home" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+        <a asp-area="" asp-controller="Account" asp-action="RegisterCompanyAdmin" class="btn btn-primary pull-right" style="margin-right:20px">
+            Add
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </a>
+    </div>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr class="active">
+            @*<th></th>*@
+            <th>
+                User Email ID
+            </th>
+            <th>
+                Roles Assigned to User
+            </th>
+            <th>
+                Company ID
+            </th>
+            <th>
+                Account Status
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>@Html.DisplayFor(modelItem => item.UserID)</td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompanyID)
+                </td>
+                <td>
+
+                    @{
+                        if (item.AccountActive == true)
+                        {
+                            <a asp-area="SiteAdmin" asp-controller="Home" asp-action="AccountActive" asp-route-id="@item.UserID" class="btn btn-primary" style="margin-right:5px">Activate Account</a>
+                        }
+                        else
+                        {
+                            <a asp-area="SiteAdmin" asp-controller="Home" asp-action="AccountDeActive" asp-route-id="@item.UserID" class="btn btn-primary" style="margin-right:5px">Deactivate Account</a>
+                        }
+                    }
+                    
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

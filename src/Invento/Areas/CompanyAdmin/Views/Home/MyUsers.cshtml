@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Invento.Areas.CompanyAdmin.Models.Company.SiteUserInfo>
+ 
+@{
+    ViewData["Title"] = Localizer["Application Users"];
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+
+<div class="well">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>        
+        <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-default pull-right" title="Create New Sub User" style="margin-right:20px">           
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+             @Localizer["Add New User"]
+        </a>
+    </div>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr class="active">          
+            <th>
+                @Localizer["User Email ID"]
+            </th>
+            <th>
+                @Localizer["Roles Assigned to User"]
+            </th>
+            <th>
+                @Localizer["Edit Roles"]
+            </th>
+            <th>
+                @Localizer["Account Status"]
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>@Html.DisplayFor(modelItem => item.UserID)</td>*@
+                <td>
+                    <b>@Html.DisplayFor(modelItem => item.Email)</b>                    
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoleName)
+                </td>
+                <td>
+                    <a asp-area="" asp-controller="Account" asp-action="EditRoles" asp-route-id="@item.UserID" class="btn btn-default" title="Assign New Roles to User" style="margin-right:5px"><span class="glyphicon glyphicon-pencil"> </span> Edit Roles</a>
+                </td>
+                <td>
+                            @{
+                                if (item.AccountActive == true)
+                                {
+                                    <a asp-area="CompanyAdmin" asp-controller="Home" asp-action="AccountActive" asp-route-id="@item.UserID" class="btn btn-default" title="Activate User Account" style="margin-right:5px"><span class="glyphicon glyphicon-ok"> </span> Activate</a>
+                                }
+                                else
+                                {
+                                    <a asp-area="CompanyAdmin" asp-controller="Home" asp-action="AccountDeActive" asp-route-id="@item.UserID" class="btn btn-default" title="Deactivate User Account" style="margin-right:5px"><span class="glyphicon glyphicon-remove"> </span> Deactivate</a>
+                                }
+                            }          
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

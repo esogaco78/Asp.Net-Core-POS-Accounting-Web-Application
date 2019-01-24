@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Account Locked - ";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else if (User.IsInRole("CompanyUser"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+    else if (User.IsInRole("SiteAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutSiteAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+}
+
+<header>
+    <section class="hero">
+        <div class="texture-overlay"></div>
+        <div class="container">
+            <div class="row nav-wrapper">
+                <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                    <a asp-controller="Home" asp-action="Index" style="font-size:xx-large ; font-family:'Nunito'">Biznsbook</a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 text-right navicon">
+                    <p>MENU</p><a id="trigger-overlay" class="nav_slide_button nav-toggle" href="#"><span></span></a>
+                </div>
+            </div>
+            <div class="row hero-content">
+                <div class="col-md-12">   
+                    <h1 class="animated fadeInDown">Sorry.</h1>
+                    <h2 class="animated fadeInDown">Your Account is Deactivated. Please Contact Us to Activate your Account.</h2>
+                    <br />
+                    <br />
+                    <a asp-area="" asp-controller="Account" asp-action="Login" class="use-btn animated fadeInUp" style="font-weight:900;color:red">Customer Login</a>
+                    <a asp-area="" asp-controller="Home" asp-action="Contact" class="learn-btn animated fadeInUp">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</header>

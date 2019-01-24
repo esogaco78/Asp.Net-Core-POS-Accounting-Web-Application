@@ -1,0 +1,111 @@
+@model IEnumerable<Invento.Areas.Product.Models.ProductGroup>
+ 
+@{
+    ViewData["Title"] = Localizer["Product Group"];
+    if(User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+        
+        @if (User.IsInRole("CompanyAdmin") || User.IsInRole("Add Product Groups"))
+        {
+            <a asp-action="Create" class="btn btn-default pull-right modal-link" style="margin-right:20px"><span class="glyphicon glyphicon-plus"></span> @Localizer["Add New"] </a>
+        }
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover" id="MyTable">
+        <thead>
+            <tr class="active">
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductGroupID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductGroupName)
+                </th>
+                @if (User.IsInRole("Edit Product Groups") || User.IsInRole("CompanyAdmin"))
+            {
+                    <th>@Localizer["Edit"]</th>
+            }
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+
+                dom: 'lBfrtip',
+                buttons:
+                    [
+                        {
+                            "extend": 'print',
+                            "title": 'Product Groups',
+                            "text": "Print",
+                            "autoPrint": true,
+                            exportOptions: {
+                                "columns": ':visible',
+                            },
+                        },
+                        {
+                            "extend": 'excel',
+                            "title": 'Product Groups',
+                            "text": "Excel",
+                            "autoPrint": true,
+                            exportOptions: {
+                                "columns": ':visible',
+                            },
+                        },
+                         {
+                             "extend": 'pdfHtml5',
+                             "title": 'Product Groups',
+                             "text": "PDF",
+                             exportOptions: {
+                                 "columns": ':visible',
+                             },
+                         },
+                         {
+                             extend: 'colvis',
+                         }
+                    ],
+                "ajax": {
+                    "url": "/Product/ProductGroups/LoadProductGroups",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+
+                    { "data": "productGroupID", "autoWidth": true },
+                    { "data": "productGroupName", "autoWidth": true },
+                    @if(User.IsInRole("Edit Product Groups") || User.IsInRole("CompanyAdmin"))
+                {
+                            <text>
+                    {
+                        "data": null,
+                        "mRender": function (data, type, row) {
+                            return $("<div />")
+                                .append($(" <div class='text-center'> <a class='btn btn-sm btn-default modal-link' href='/Product/ProductGroups/Edit?id=" + data.productGroupID + "'><span class='glyphicon glyphicon-pencil'></span></a>    </div> "))
+                                .html();
+                        }
+                    }
+                     </text>
+                }
+                ]
+            });
+        });
+    </script>
+}

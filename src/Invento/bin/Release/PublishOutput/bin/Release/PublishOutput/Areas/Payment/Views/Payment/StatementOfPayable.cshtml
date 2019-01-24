@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Statement Of Payable";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+
+        @{
+            if (User.IsInRole("CompanyAdmin"))
+            {
+                <a asp-area="CompanyAdmin" asp-controller="Home" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+            }
+            else
+            {
+                <a asp-area="CompanyUser" asp-controller="Home" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+            }
+        }
+    </div>
+</div>
+
+<table class="table table-bordered table-hover" id="MyTable">
+    <thead>
+        <tr class="active">
+            @*<th>
+                Party ID
+            </th>*@
+            <th>
+                Name
+            </th>
+            <th>
+                Amount To Pay
+            </th>
+            @*<th></th>*@
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+ 
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            var table = $('#MyTable').DataTable({
+                "ajax": {
+                    "url": "/Payment/Payment/LoadPayable",
+                    "type": "GET",
+                    "datatype":"json"
+                },
+                "columns": [
+                     //{ "data": "partiesID", "autpWidth": true },                     
+                     { "data": "partyName", "autpWidth": true },
+                     { "data": "payAmount", "autpWidth": true },
+                     //{
+                     //    "data": null,
+                     //    "mRender": function (data, type, row) {
+                     //        return $("<div />")
+                     //            .append($(" <div class='text-center'> <a class='btn btn-sm btn-default ' href='/Product/Items/Edit?id=" + data.itemID + "'><span class='glyphicon glyphicon-pencil'></span></a> </div> "))
+                     //            .html();
+                     //    }
+                     //}
+                ],
+                "order": [[1, 'asc']]
+            });            
+        });
+
+    </script>
+}
+
+

@@ -1,0 +1,639 @@
+﻿@{
+    ViewData["Title"] = "Features - ";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else if (User.IsInRole("CompanyUser"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+    else if (User.IsInRole("SiteAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutSiteAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+} 
+ 
+<header>
+    <section class="hero">
+        <div class="texture-overlay"></div>
+        <div class="container">
+            <div class="row nav-wrapper">
+                <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                    <a asp-controller="Home" asp-action="Index" style="font-size:xx-large ; font-family:'Nunito'">Biznsbook</a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 text-right navicon">
+                    <p>MENU</p><a id="trigger-overlay" class="nav_slide_button nav-toggle" href="#"><span></span></a>
+                </div>
+            </div>
+            <div class="row hero-content">
+                <div class="col-md-12">
+                    <h1 class="animated fadeInDown">View Biznsbook's Point Of Sale and Accounting Features. Best Suited for your Business.</h1>
+                    <a asp-area="" asp-controller="Home" asp-action="Contact" class="use-btn animated fadeInUp" style="font-weight:900;color:red">Contact Us</a>
+                    <a href="#screenshots" class="learn-btn animated fadeInUp">Product Features<i class="glyphicon glyphicon-arrow-down"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+</header>
+
+<section class="video" id="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1><a href="https://www.youtube.com/channel/UCBQJmYpnFH4caKLjt7Xi-Tw" target="_blank" ><i class="fa fa-play-circle-o"></i> WATCH BIZNSBOOK'S VIDEOS</a></h1>
+            </div>
+        </div>
+    </div>
+</section>
+ 
+<img src="~/img/Cap1.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap2.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap3.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap4.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap5.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap6.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap7.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap8.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap9.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap10.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap11.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap12.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap13.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap14.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap15.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap16.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap17.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap18.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap19.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap20.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap21.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap22.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap23.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap24.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+<img src="~/img/Cap25.PNG" alt="Cap 1" class="img-thumbnail img-responsive" align="middle" />
+
+
+@*<section class="screenshots" id="screenshots">
+    <div class="container-fluid">
+        <div class="row">
+            <ul class="grid">
+                <li>
+                    <figure>
+                        
+                        <figcaption>
+                            <div class="caption-content">
+                                
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+              
+            </ul>
+        </div>
+
+        <div class="row">
+            <ul class="grid">
+                <li>
+                    <figure>
+                        <img src="~/img/Cap5.PNG" alt="Cap 5" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap5.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>View, Search &amp; Filter Data</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap6.PNG" alt="Cap 6" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap6.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Cash Book</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap7.PNG" alt="Cap 7" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap7.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Trial Balance</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap8.PNG" alt="Cap 8" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap8.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Notes To The Accounts</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <ul class="grid">
+                <li>
+                    <figure>
+                        <img src="~/img/Cap9.PNG" alt="Cap 9" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap9.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Different Reports</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap10.PNG" alt="Cap 10" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap10.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>General Ledger</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap11.PNG" alt="Cap 11" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap11.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Profit &amp; Loss Statement</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap12.PNG" alt="Cap 12" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap12.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Balance Sheet</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <ul class="grid">
+                <li>
+                    <figure>
+                        <img src="~/img/Cap13.PNG" alt="Cap 13" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap13.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Cash Flow Statement</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap14.PNG" alt="Cap 14" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap14.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Complete Edit Ability</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap15.PNG" alt="Cap 15" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap15.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Sub User Creation</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap16.PNG" alt="Cap 16" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap16.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Bills And Voucher Edit</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <ul class="grid">
+                <li>
+                    <figure>
+                        <img src="~/img/Cap17.PNG" alt="Cap 17" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap17.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Sale Return</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap18.PNG" alt="Cap 18" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap18.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Complete Data Correction Checks</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap19.PNG" alt="Cap 19" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap19.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Cancel Invoices</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap20.PNG" alt="Cap 20" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap20.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>User Friendly</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>*@
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+@*<section class="screenshots" id="screenshots">
+    <div class="container-fluid">
+        <div class="row">
+            <ul class="grid">
+                <li>
+                    <figure> 
+                        <img src="~/img/Cap1.PNG" alt="Cap 1"/>                        
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap1.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>System Analysis Dasboard</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap2.PNG" alt="Cap 2" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap2.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>View &amp; Print Invoices</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap3.PNG" alt="Cap 3" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap3.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Good Receive Notes</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap4.PNG" alt="Cap 4" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap4.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Differnt Type Of Vouchers</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>                              
+            </ul>
+        </div>   
+       
+        <div class="row">
+            <ul class="grid">
+                <li>
+                    <figure>
+                        <img src="~/img/Cap5.PNG" alt="Cap 5" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap5.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>View, Search &amp; Filter Data</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap6.PNG" alt="Cap 6" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap6.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Cash Book</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap7.PNG" alt="Cap 7" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap7.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Trial Balance</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap8.PNG" alt="Cap 8" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap8.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Notes To The Accounts</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+            </ul>
+        </div>        
+        <div class="row">
+            <ul class="grid">
+                <li>
+                    <figure>
+                        <img src="~/img/Cap9.PNG" alt="Cap 9" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap9.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Different Reports</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap10.PNG" alt="Cap 10" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap10.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>General Ledger</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap11.PNG" alt="Cap 11" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap11.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Profit &amp; Loss Statement</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap12.PNG" alt="Cap 12" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap12.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Balance Sheet</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+            </ul>
+        </div>        
+        <div class="row">
+            <ul class="grid">
+                <li>
+                    <figure>
+                        <img src="~/img/Cap13.PNG" alt="Cap 13" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap13.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Cash Flow Statement</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap14.PNG" alt="Cap 14" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap14.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Complete Edit Ability</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap15.PNG" alt="Cap 15" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap15.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Sub User Creation</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap16.PNG" alt="Cap 16" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap16.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Bills And Voucher Edit</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+            </ul>
+        </div>        
+        <div class="row">
+            <ul class="grid">
+                <li>
+                    <figure>
+                        <img src="~/img/Cap17.PNG" alt="Cap 17" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap17.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Sale Return</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap18.PNG" alt="Cap 18" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap18.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Complete Data Correction Checks</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap19.PNG" alt="Cap 19" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap19.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>Cancel Invoices</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="~/img/Cap20.PNG" alt="Cap 20" />
+                        <figcaption>
+                            <div class="caption-content">
+                                <a href="~/img/Cap20.PNG" class="single_image">
+                                    <i class="glyphicon glyphicon-zoom-in"></i><br>
+                                    <p>User Friendly</p>
+                                </a>
+                            </div>
+                        </figcaption>
+                    </figure>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>*@
+ 
+<section class="download" id="download">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center wp4">
+                <h1>Try Our Products</h1>
+                <a asp-controller="Home" asp-action="Contact" class="download-btn">Contact Us! <i class="fa fa-download"></i></a>
+            </div>
+        </div>
+    </div>
+</section>
+ 

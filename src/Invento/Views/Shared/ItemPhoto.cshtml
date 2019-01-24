@@ -1,0 +1,38 @@
+﻿@model Invento.Areas.Product.Models.ItemDetailVM
+
+<div class="modal-content ">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-weight:bolder;color:blue;padding-left:20px">@Html.DisplayFor(m => m.ItemName) </h4>
+    </div>
+    <div class="modal-body">
+
+        <input type="hidden" asp-for="ItemDetailVMID" class="form-control" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="row center-block text-center">
+         @{
+             if (Model.ItemPhoto == null)
+             {
+                <h3>No Image for <span style="font-weight:bolder;color:blue">@Html.DisplayFor(m => m.ItemName)</span>.</h3>
+             }
+             else
+             {
+                 string imageSrc = Model.ItemPhoto;                 
+                <img src="@imageSrc" class="img-thumbnail" width="250" height="400" />
+             }
+        }
+        </div>
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

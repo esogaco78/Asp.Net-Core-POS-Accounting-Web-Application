@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Invento.Areas.Product.Models.Item>
+
+@{
+    ViewData["Title"] = "Stock Card";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+@await Html.PartialAsync("_PageHeader-NonModal")
+
+<table class="table table-bordered table-hover" id="MyTable">
+    <thead>
+        <tr class="active">
+            <th></th>
+
+            <th width="90px">
+                @Html.DisplayNameFor(model => model.OEMNo)
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CrossRef)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ItemType)
+            </th>
+            <th>
+                    Quantity
+                </th>
+            @*<th>
+                Price Per Unit
+            </th>*@
+
+            <th width="70px"></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "ajax": {
+                    "url": "/Product/Items/LoadItems",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                     {
+                         "data": null,
+                         "mRender": function (data, type, row) {
+                             return $("<div />")
+                                 .append($(" <div class='text-center'> <a class='btn btn-sm btn-default modal-link' href='/Product/Items/ItemPhoto?id=" + data.itemID + "'><span class='glyphicon glyphicon-picture'></span></a>  </div> "))
+                                 .html();
+                         }
+                     },
+                    { "data": "oemNo", "autoWidth": true },
+                    { "data": "itemName", "autoWidth": true },
+                    { "data": "crossRef", "autoWidth": true },
+                    { "data": "productDescription", "autoWidth": true },
+                    { "data": "itemType", "autoWidth": true },
+                    { "data": "quantity", "autoWidth": true },
+                    //{ "data": "salePrice", "autoWidth": true },
+
+                    {
+                        "data": null,
+                        "mRender": function (data, type, row) {
+                            return $("<div />")
+                                .append($(" <div class='text-center'> <a class='btn btn-sm btn-default ' href='/Product/Items/Edit?id=" + data.itemID + "'><span class='glyphicon glyphicon-pencil'></span></a>  <a class='btn btn-sm btn-default modal-link' href='/Product/Items/Details?id=" + data.itemID + "'><span class='glyphicon glyphicon-eye-open'></span></a>   </div> "))
+                                .html();
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

@@ -1,0 +1,186 @@
+@model Invento.Areas.Product.Models.Item
+
+@{
+    ViewData["Title"] = "Item";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<form asp-action="Edit" asp-controller="Items" method="post" enctype="multipart/form-data">
+    <div class="form-horizontal">
+
+        <div class="well" style="padding-bottom:5px">
+            <div class="row">
+                <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Edit Item</span>
+                <a asp-controller="Items" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+                <input type="submit" value="Save" class="btn btn-primary pull-right" style="margin-right:20px" />
+            </div>
+        </div>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="ItemID" />
+        <input type="hidden" asp-for="PhotoData" />
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Item Details</div>
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="col-md-3"><label asp-for="CrossRef" class="col-md-5 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="OEMNo" class="col-md-5 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="ItemName" class="col-md-5 control-label"></label></div>
+                    <div class="col-md-3"><label class="col-md-6 control-label">Item Picture</label></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="CrossRef" class="form-control" required />
+                                <span asp-validation-for="CrossRef" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+
+                            <div class="col-md-10">
+                                <input asp-for="OEMNo" class="form-control" />
+                                <span asp-validation-for="OEMNo" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="ItemName" class="form-control" />
+                                <span asp-validation-for="ItemName" class="text-danger" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-9">
+                                <input type="file" id="File" name="File" accept="image/jpg, image/jpeg, image/png, image/tif" />
+                                <p>Only .jpg , .jepg , .png , .TIF</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3"><label asp-for="ItemType" class="col-md-5 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="Value" class="col-md-5 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="ItemMainCompany" class="col-md-7 control-label"></label></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="ItemType" class="form-control" required />
+                                <span asp-validation-for="ItemType" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="Value" class="form-control" />
+                                <span asp-validation-for="Value" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="ItemMainCompany" class="form-control" />
+                                <span asp-validation-for="ItemMainCompany" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3"><label asp-for="SalePrice" class="col-md-5 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="ProductGroupID" class="col-md-7 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="Size" class="col-md-5 control-label"></label></div>
+                </div>
+                <div class="row">
+                     
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="SalePrice" class="form-control" required />
+                                <span asp-validation-for="SalePrice" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <select asp-for="ProductGroupID" class="form-control" asp-items="ViewBag.ProductGroupID">
+                                    <option value="">Select</option>
+                                </select>
+                                <span asp-validation-for="ProductGroupID" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="Size" class="form-control" />
+                                <span asp-validation-for="Size" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3"><label asp-for="ProductDescription" class="col-md-7 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="Remark" class="col-md-3 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="ItemType2" class="col-md-6 control-label"></label></div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <textarea asp-for="ProductDescription" class="form-control" cols="5" rows="5"></textarea>
+                                <span asp-validation-for="ProductDescription" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <textarea asp-for="Remark" class="form-control" cols="5" rows="5"></textarea>
+                                <span asp-validation-for="Remark" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="ItemType2" class="form-control" />
+                                <span asp-validation-for="ItemType2" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

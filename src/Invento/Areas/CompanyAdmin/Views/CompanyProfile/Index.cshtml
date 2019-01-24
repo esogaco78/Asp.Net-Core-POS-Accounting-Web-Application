@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<h2>Company Admin Dashboard</h2>

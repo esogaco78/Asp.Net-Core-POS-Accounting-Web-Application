@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutSiteAdmin.cshtml";
+}
+
+<h2>Available Roles For Application</h2>
+
+<p>
+    <a asp-action="Create" asp-controller="SiteRoles">Create New Role</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Role Name
+            </th>
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

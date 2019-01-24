@@ -1,0 +1,79 @@
+﻿  @model Invento.Areas.Purchase.Models.PurchaseBillVM
+@using Invento.Areas.Purchase.Models
+
+<div class="modal-content ">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-weight:bolder">Cancel Invoice</h4>
+    </div>
+    <div class="modal-body">
+
+        <form asp-action="CancelInvoice" id="MyForm">
+            <div class="form-horizontal">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <table class="table" id="ItemTbl" style="display:none">           
+                    <tbody class="active">
+                        @for (int i = 0; i < Model.PurchaseBillItem_List.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input asp-for="@Model.PurchaseBillItem_List[i].ItemID" class="form-control ItemID" readonly="readonly" />
+                                </td>      
+                                <td>
+                                    <input asp-for="@Model.PurchaseBillItem_List[i].Quantity" class="form-control Quantity" readonly="readonly" />
+                                </td>                              
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+                <input type="hidden" asp-for="TLandingExpenses" />
+                <input type="hidden" asp-for="PurchaseImport" />
+
+                <input type="hidden" asp-for="PurchaseBillID" />
+                <input type="hidden" asp-for="Advance" />
+                <input type="hidden" asp-for="Balance" />
+                <input type="hidden" asp-for="BillDate" />
+                <input type="hidden" asp-for="CompanyID" />
+                <input type="hidden" asp-for="ContactNumber" />
+                <input type="hidden" asp-for="ContactNumber" />
+                <input type="hidden" asp-for="ContactPerson"/>
+                <input type="hidden" asp-for="CreatedBy" />
+                <input type="hidden" asp-for="CreditDays" />
+                <input type="hidden" asp-for="CurrencyID" />
+                <input type="hidden" asp-for="ExchangeRate" />
+                <input type="hidden" asp-for="ExternalRef" />
+                <input type="hidden" asp-for="GrossTotal" />
+                <input type="hidden" asp-for="NetAmount" />
+                <input type="hidden" asp-for="PartiesID" />
+                <input type="hidden" asp-for="PayTerms" />
+                <input type="hidden" asp-for="PB_1" />
+                <input type="hidden" asp-for="PB_2" />
+                <input type="hidden" asp-for="PB_B_1" />
+                <input type="hidden" asp-for="PB_D_1" />
+                <input type="hidden" asp-for="PB_D_2" />
+                <input type="hidden" asp-for="PB_S_1" />
+                <input type="hidden" asp-for="PB_S_2" />
+                <input type="hidden" asp-for="PurchaseBillNo" />
+                <input type="hidden" asp-for="RefDate" />
+                <input type="hidden" asp-for="Remarks" />
+                <input type="hidden" asp-for="TDiscount" />
+                <input type="hidden" asp-for="TotalQuantity" />               
+
+                <h4><span class="glyphicon glyphicon-remove" style="color:red" >  </span> Do you Want to Cancel this Invoice?</h4>
+
+                <div class="modal-footer">
+                    <input type="submit" value="Yes" class="btn btn-primary">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>                   
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

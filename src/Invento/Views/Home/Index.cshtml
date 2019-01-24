@@ -1,0 +1,208 @@
+﻿@{   
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else if (User.IsInRole("CompanyUser"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+    else if (User.IsInRole("SiteAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutSiteAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+}
+
+<header>
+    <section class="hero">
+        <div class="texture-overlay"></div>
+        <div class="container">
+            <div class="row nav-wrapper">
+                <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                    <a href="#" style="font-size:xx-large;font-weight:bolder ; font-family:'Nunito'">Biznsbook</a>                                        
+                </div>                               
+                <div class="col-md-6 col-sm-6 col-xs-6 text-right navicon">
+                    <p>MENU</p><a id="trigger-overlay" class="nav_slide_button nav-toggle" href="#"><span></span></a>
+                </div>
+            </div>
+            <div class="row hero-content">
+                <div class="col-md-12">
+                    <h1 class="animated fadeInDown">Cloud Based Point Of Sale &amp; Accounting Software for Small and Medium Scale Businesses</h1>                    
+                    <a asp-area="" asp-controller="Account" asp-action="Login" class="use-btn animated fadeInUp" style="font-weight:900;color:red">Customer Login</a>
+                    <a href="#about" class="learn-btn animated fadeInUp">Learn more <i class="glyphicon glyphicon-arrow-down"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+</header>
+
+<section class="video" id="about">
+</section>
+
+<section class="features-intro">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 nopadding features-intro-img">
+                <div class="features-bg">
+                    <div class="texture-overlay"></div>
+                    <div class="features-img wp1">
+                        <span style="font-size:xx-large; font-weight:bolder ; font-family:'Times New Roman', Times, serif ;color:white">Manage Your Inventory.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 nopadding">
+                <div class="features-slider">
+                    <ul class="slides" id="featuresSlider">
+                        <li>
+                            <h1>Inventory Tracking, Control &amp; Reporting</h1>
+                            <p>Take control of your inventory manage your stock and follow complete history of any Product in an efficient way without wasting any time. Understand your Products Profit and make better decisions using BiznsBook Reporting Services and Accounting.</p>
+                            <p><a asp-controller="Home" asp-action="Features" class="arrow-btn">View All Product Features <i class="fa fa-long-arrow-right"></i></a></p>
+                        </li>
+                        <li>
+                            <h1>Make Your Business Grow</h1>
+                            <p>Simple and easy book keeping software for all sizes of businesses. Get rid of pencil and ledger book. Timely decisions can be taken with financial statements.</p>
+                            <p>Use Reporting, Accurate Data and real-time automation for Good forecasting.</p>
+                            <p><a asp-controller="Home" asp-action="Features"  class="arrow-btn">View All Product Features <i class="fa fa-long-arrow-right"></i></a></p>
+                        </li>
+                        <li>
+                            <h1>Secure And User Friendly</h1>
+                            <p>Fully Secure and Reliable with High Security Checks. Complete Data Security, Backup and integrity for safe and secure business transactions.</p>
+                            <p>Access anywhere, anytime with the mobile access and usage. Operate from a variety of locations and with an abundance of inventory and products.</p>
+                            <p><a asp-controller="Home" asp-action="Features" class="arrow-btn">View All Product Features <i class="fa fa-long-arrow-right"></i></a></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="features-list" id="features">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-4 feature-1 wp2">
+                    <div class="feature-icon">
+                        <i class="glyphicon glyphicon-phone"></i>
+                        <i class="glyphicon glyphicon-blackboard"></i>                        
+                    </div>
+                    <div class="feature-content">
+                        <h1>Responsive</h1>
+                        <p>Responsive site for on any device with Excellent User Experience, Super Flexible and make Easy to Manage your business.</p>
+                        <a asp-controller="Home" asp-action="Features" class="read-more-btn">View On Devices<i class="fa fa-chevron-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 feature-2 wp2 delay-05s">
+                    <div class="feature-icon">
+                        <i class="glyphicon glyphicon-globe"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h1>Multi-Purpose</h1>
+                        <p>Highly Adaptable to any kind and scale of businesses. Easy To Use, Quick, Secure and Efficient Business Management.</p>
+                        <a asp-controller="Home" asp-action="Features" class="read-more-btn">For your Business<i class="fa fa-chevron-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 feature-3 wp2 delay-1s">
+                    <div class="feature-icon">
+                        <i class="glyphicon glyphicon-usd"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h1>Affordable</h1>
+                        <p>Price that fits your business, 24/7 Maintenance and support, Hardware and Implementation all DONE. More User you add more Cost-Effecient.</p>
+                        <a asp-controller="Home" asp-action="Features" class="read-more-btn">Read More <i class="fa fa-chevron-circle-right"></i></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<section class="showcase">
+    <div class="showcase-wrap">
+        <div class="texture-overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="device wp3">
+                        <div class="device-content">
+                            <div class="showcase-slider">
+                                <ul class="slides" id="showcaseSlider">
+                                    <li>
+                                        <img src="~/img/mobile4.png" alt="Device Content Image">
+                                    </li>
+                                    <li>
+                                        <img src="~/img/mobile2.png" alt="Device Content Image">
+                                    </li>
+                                    <li>
+                                        <img src="~/img/mobile3.png" alt="Device Content Image">
+                                    </li>
+                                    <li>
+                                        <img src="~/img/mobile1.png" alt="Device Content Image">
+                                    </li>
+                                    <li>
+                                        <img src="~/img/mobile5.png" alt="Device Content Image">
+                                    </li>
+                                    <li>
+                                        <img src="~/img/mobile6.png" alt="Device Content Image">
+                                    </li>
+                                    <li>
+                                        <img src="~/img/mobile7.png" alt="Device Content Image">
+                                    </li>
+                                    <li>
+                                        <img src="~/img/mobile8.png" alt="Device Content Image">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h1 style="font-weight:bolder">BiznsBook Accounting Features</h1>
+                    <p>With Complete Stock Management, Invoicing System, Point of Sale and Cashbook OnOnday is a double entry system with all the built in benefits that come from that providing different Financial and Accounting Features.</p>
+                    <hr />
+                    <div class="row" style="font-weight:900 ;color:white">
+                        <div class="col-lg-6">
+                            <h2 style="font-weight:bold">General Ledger</h2>
+                            <h2 style="font-weight:bold">Trial Balance</h2>
+                            <h2 style="font-weight:bold">Notes To The Accounts</h2>                            
+                            <h2 style="font-weight:bold">Profit &amp; Loss Statement</h2>
+                        </div>
+                        <div class="col-lg-6">                            
+                            <h2 style="font-weight:bold">Balance Sheet</h2>
+                            <h2 style="font-weight:bold">Cash Book</h2>    
+                            <h2 style="font-weight:bold">Cash Flow Statement</h2>
+                            <h2 style="font-weight:bold">Chart Of Accounts</h2>                            
+                        </div>
+                    </div>
+
+                    <a asp-action="Features" asp-controller="Home" class="download-btn">Accounting Features<i class="fa fa-download"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="screenshots-intro">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>View Powerful Features Of Biznsbook</h1>
+                <p>Easy to Use, Mobile Friendly, Accurate, Real-Time, Valuable, Effective, Analytical, Pofitable, Inventory Control, Accounting System, Data Security,  </p>
+                <h2><a asp-action="Features" asp-controller="Home" asp-fragment="screenshots" class="arrow-btn">SEE PRODUCT SCREENSHOTS! <i class="fa fa-long-arrow-right"></i></a></h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="download" id="download">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center wp4">
+                <h1>Try Our Products</h1>
+                <a asp-controller="Home" asp-action="Contact" class="download-btn">Contact Us! <i class="fa fa-download"></i></a>
+            </div>
+        </div>
+    </div>
+</section>

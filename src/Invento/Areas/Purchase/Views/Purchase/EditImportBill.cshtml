@@ -1,0 +1,960 @@
+  @model Invento.Areas.Purchase.Models.PurchaseBillVM
+@using Invento.Areas.Purchase.Models
+
+@{
+    ViewData["Title"] = "Import Bill";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<form asp-action="EditImportBill" id="MyForm">
+    <div class="form-horizontal">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="PurchaseBillID" />
+        <input type="hidden" asp-for="PB_D_1" />
+        <input type="hidden" asp-for="PurchaseImport" />
+
+        <div class="well" style="padding-bottom:5px">
+            <div class="row">
+                <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Import Bill - Edit</span>                
+                <button type="submit" class="btn btn-default pull-right" style="margin-right:10px ; font-weight:bolder" title="Save">
+                    <i class="glyphicon glyphicon-save"></i> Save
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <label>Bill No</label>
+            </div>
+            <div class="col-md-2 pull-left">
+                <label>Date</label>
+            </div>
+            <div class="col-md-2 pull-left">
+                <label>Company Name</label>
+            </div>
+            <div class="col-md-2 pull-left">
+
+            </div>
+            <div class="col-md-2 pull-left">
+                <label>Contact Person</label>
+            </div>
+            <div class="col-md-2 pull-left">
+                <label>Contact Number</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <input asp-for="PurchaseBillNo" class="form-control" readonly="readonly" />
+                <span asp-validation-for="PurchaseBillNo" class="text-danger" />
+            </div>
+            <div class="col-md-2">
+                <input asp-for="BillDate" class="form-control" />
+                <span asp-validation-for="BillDate" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                @*<input asp-for="PartiesID" type="hidden" />*@
+                <select asp-for="PartiesID" class="form-control" asp-items="ViewBag.PartiesID"> 
+                    <option selected value="">Cash Purchase</option>                   
+                </select>
+                @*<span asp-validation-for="PartiesID" class="text-danger" />*@
+            </div>
+            <div class="col-md-2">
+                <input asp-for="ContactPerson" class="form-control" />
+                <span asp-validation-for="ContactPerson" class="text-danger" />
+            </div>
+            <div class="col-md-2">
+                <input asp-for="ContactNumber" class="form-control" />
+                <span asp-validation-for="ContactNumber" class="text-danger" />
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-md-2">
+                <label>Currency</label>
+            </div>
+            <div class="col-md-2 pull-left">
+                <label>Exchange Rate</label>
+            </div>
+            <div class="col-md-2 pull-left">
+                <label>External Ref.</label>
+            </div>
+            <div class="col-md-2 pull-left">
+                <label>Ref. Date</label>
+            </div>
+            <div class="col-md-2 pull-left">
+                <label>Pay Terms</label>
+            </div>
+            <div class="col-md-2 pull-left" style="display:none" id="CreditDaysLabel">
+                <label>Credit Days</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <select asp-for="CurrencyID" class="form-control" asp-items="ViewBag.CurrencyID" required>
+                    <option disabled selected>Select Currency...</option>
+                </select>
+                @*<span asp-validation-for="CurrencyID" class="text-danger" />*@
+            </div>
+            <div class="col-md-2">
+                <input asp-for="ExchangeRate" value="0" class="form-control" />
+                <span asp-validation-for="ExchangeRate" class="text-danger" />
+            </div>
+            <div class="col-md-2">
+                <input asp-for="ExternalRef" class="form-control" />
+                <span asp-validation-for="ExternalRef" class="text-danger" />
+            </div>
+            <div class="col-md-2">
+                <input asp-for="RefDate" class="form-control" />
+                <span asp-validation-for="RefDate" class="text-danger" />
+            </div>
+            <div class="col-md-2">
+                <select asp-for="PayTerms" asp-items="@Html.GetEnumSelectList<PayTerms>()" class="form-control" onchange="PayTermChange();"></select>
+                <span asp-validation-for="PayTerms" class="text-danger" />
+            </div>
+            <div class="col-md-2" style="display:none" id="CreditDaysTextBox">
+                <input asp-for="CreditDays" class="form-control" />
+                <span asp-validation-for="CreditDays" class="text-danger" />
+            </div>
+        </div>
+
+        <br />
+
+        <table class="table" id="ItemTbl">
+            <thead>
+                <tr class="active">
+                    <th></th>
+                    <th width="15%">
+                        OEM No.
+                    </th>
+                    <th width="5%"></th>
+                    <th width="25%">
+                        Description
+                    </th>
+                    <th></th>
+                    <th width="15%">
+                        Quantity
+                    </th>
+                    <th width="15%">
+                        Price
+                    </th>
+                    <th width="15%">
+                        Amount
+                    </th>
+                    <th width="10%">
+                        <button type="button" class="btn btn-default btn-sm pull-right" id="insertRow">
+                            @*Add Item*@
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="active">
+                @for (int i = 0; i < Model.PurchaseBillItem_List.Count; i++)
+                {
+                <tr>
+                    <td>
+                        <input asp-for="@Model.PurchaseBillItem_List[i].ItemID" class="form-control ItemID" readonly="readonly" />
+                    </td>
+                    <td style="display:none">
+                        <input asp-for="@Model.PurchaseBillItem_List[i].PurchaseBillExtraInt_2" class="form-control PurchaseBillExtraInt_2" readonly="readonly" />
+                    </td>
+                    <td>                        
+                        <input asp-for="@Model.PurchaseBillItem_List[i].Item.OEMNo" class="form-control OEMNo" required oninput="OemNoAutoComplete(this);" onkeydown="LoadDescription(this);" onchange="LoadDescription(this);" />                       
+                    </td>
+                    <td>
+                        <input type="checkbox" asp-for="@Model.PurchaseBillItem_List[0].Item.CheckCase_1" class="form-control SearchItemBox" />
+                    </td>
+                    <td>
+                        <input asp-for="@Model.PurchaseBillItem_List[i].Item.ProductDescription" class="form-control ProductDescription" readonly="readonly" />
+                    </td>
+                    <td>
+                        <a title="View Item Details" class="btn btn-default btn-sm" id="DetailView" onclick="ItemBriefDetails(this);"><span class="glyphicon glyphicon-eye-open"></span></a>
+                    </td>
+                    <td>
+                        <input asp-for="@Model.PurchaseBillItem_List[i].Quantity" class="form-control Quantity" oninput="amountCalculate(this);" required />
+                    </td>
+                    <td style="display:none">
+                        <input asp-for="@Model.PurchaseBillItem_List[i].PurchaseBillExtraInt" class="PurchaseBillExtraInt" />
+                    </td>
+                    <td>
+                        <input asp-for="@Model.PurchaseBillItem_List[i].PurchasePrice" class="form-control PurchasePrice" oninput="amountCalculate(this);" required />
+                    </td>
+                    <td>
+                        <input asp-for="@Model.PurchaseBillItem_List[i].PurchaseBillExtraDecimal" class="form-control PurchaseBillExtraDecimal" readonly="readonly" />
+                    </td>
+                    <td style="display:none">
+                        <input asp-for="@Model.PurchaseBillItem_List[i].PurchaseBillExtraInt_1" class="form-control PurchaseBillExtraInt_1" />
+                    </td>
+                     
+                    @*<td> <button type="button" class="form-control RemoveRow btn-sm btn btn-default" onclick="RemoveRow(this)">
+                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button> </td>*@
+                </tr>
+                }
+
+            </tbody>
+        </table>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-1">
+                        <label>Remarks</label>
+                    </div>
+                    <div class="col-md-2 col-md-offset-4">
+                        <label>Total Quantity</label>
+                    </div>
+                    <div class="col-md-2 pull-left">
+                        <input asp-for="TotalQuantity" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="TotalQuantity" class="text-danger" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        <textarea asp-for="Remarks" class="form-control" rows="7" cols="4"></textarea>
+                        <span asp-validation-for="Remarks" class="text-danger" />
+                    </div>
+                    <div class="col-md-10">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="font-weight:bold">
+                                Payment Methods <span class="pull-right">
+                                    <button type="button" class="btn btn-default btn-sm " id="insertPaymentRow">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <div class="panel-body">
+
+                                @*Payment Method Table*@
+                                <table class="table" id="PaymentTbl">
+                                    <thead>
+                                        <tr class="active">
+                                            <th width="25%">
+                                                Mode
+                                            </th>
+                                            <th width="20%">
+                                                Amount
+                                            </th>
+                                            <th width="20%">
+                                                Bank
+                                            </th>
+                                            <th width="20%">
+                                                Cheque
+                                            </th>
+                                            <th width="25%">
+                                                Date
+                                            </th>
+                                            <th width="5%">
+                                                Paid
+                                            </th>
+                                            <th></th><th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="active">
+                                        @for (int i = 0; i < Model.TransactionList.Count; i++)
+                                        {
+                                        <tr>
+                                            <td style="display:none">
+                                                <input asp-for="@Model.TransactionList[i].TransactionID" class="form-control TransactionID" />
+                                            </td>
+                                            <td>
+                                                <select asp-for="@Model.TransactionList[i].Mode" asp-items="@Html.GetEnumSelectList<PaymentMode>()" class="form-control Mode" onchange="PaymentModeChange(this);"></select>
+                                            </td>
+                                            <td>
+                                                <input asp-for="@Model.TransactionList[i].Amount" class="form-control Amount" oninput="TotalPaymentCalculate();" required />
+                                            </td>
+                                            <td>
+                                                <select asp-for="@Model.TransactionList[i].BankID" class="form-control BankID" asp-items="@ViewBag.BankID" >
+                                                    <option selected></option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input asp-for="@Model.TransactionList[i].Cheque" class="form-control Cheque" />
+                                            </td>
+                                            <td>
+                                                <input asp-for="@Model.TransactionList[i].Date" type="Date" class="form-control Date" />
+                                            </td>
+                                            <td>
+                                                @if (i == 0)
+                                                {
+                                                    <input asp-for="@Model.TransactionList[i].Paid" type="checkbox" class="form-control Paid" />
+                                                }                                                
+                                            </td>
+                                            @*onchange="PaidChange(this);"*@
+                                            <td></td>
+                                            <td> <button type="button" class="form-control RemoveRow btn btn-default glyphicon glyphicon-trash" onclick="RemovePaymentRow(this)"> </button> </td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                                @*Payment Method Table*@
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 ">
+                <div class="row">
+                    <div class="col-md-5">
+                        <label> Gross Total</label>
+                    </div>
+                    <div class="col-md-7">
+                        <input asp-for="GrossTotal" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="GrossTotal" class="text-danger" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>T-Discount<span style="color:red"> %</span></label>
+                    </div>
+                    <div class="col-md-4">
+                        <input asp-for="TDiscount" class="form-control" oninput="NetAmountCalculate();" />
+                        <span asp-validation-for="TDiscount" class="text-danger" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="padding-top:5px ; padding-left:0px" id="AmountDiscount"></label>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Net Amount</label>
+                    </div>
+                    <div class="col-md-7">
+                        <input asp-for="NetAmount" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="NetAmount" class="text-danger" />
+                    </div>
+                </div>
+                <input asp-for="Advance" type="hidden" class="form-control" value="0" />
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Amount Paid</label>
+                    </div>
+                    <div class="col-md-7">
+                        <input asp-for="CashPaid" class="form-control" onchange="FinalCalculate();" readonly="readonly" />
+                        <span asp-validation-for="CashPaid" class="text-danger" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Balance</label>
+                    </div>
+                    <div class="col-md-7">
+                        <input asp-for="Balance" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="Balance" class="text-danger" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>T-Landing Exp</label>
+                    </div>
+                    <div class="col-md-5">
+                        <input asp-for="TLandingExpenses" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="TLandingExpenses" class="text-danger" />
+                    </div>
+                    <div class="col-md-2">
+                        <a title="Add Import Expense Vouchers" class="btn-default btn-sm pull-left" onclick="LoadVouchers();" id="AddVoucher"><span class="glyphicon glyphicon-plus"> </span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" id="VoucherBox">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table class="table" id="VoucherTbl">
+                            <thead>
+                                <tr class="active">
+                                    <th width="20%">
+                                        Voucher ID
+                                    </th>
+                                    <th width="15%">
+                                        Date
+                                    </th>
+                                    <th width="20%">
+                                        Narration
+                                    </th>
+                                    <th width="20%">
+                                        Amount
+                                    </th>
+                                    @*<th><a title="Add Import Expense Vouchers" class="btn-default btn-lg" onclick="LoadVouchers();" id="AddVoucher"><span class="glyphicon glyphicon-plus"> </span></a></th>*@
+                                </tr>
+                            </thead>
+                            <tbody class="active" id="VoucherBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    function LoadVouchers()
+    {
+        var BillNum = $('#PurchaseBillNo').val();
+        $URL = '@Url.Action("LoadVouchers", "Purchase", new { area= "Purchase" })';      
+               
+        $.ajax({
+            method: "GET",
+            url: $URL,
+            data: { BillNum: BillNum },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            cache: false,
+            success: function (data) {         
+                
+                var trHTML = '';   
+                $('#VoucherBody').empty();
+                    
+                $.each(data, function (index, value) {
+                
+                    var TableRow = "<tr>";
+                    $.each(value, function (key, val) {
+                        TableRow += "<tr><td>" + val.voucherID + "</td>";
+                        TableRow += "<td>" + val.date + "</td>";
+                        TableRow += "<td>" + val.narration + "</td>";
+                        TableRow += "<td class='VoucherAmount'>" + val.amount + "</td></tr>";
+                        //TableRow += "<td></td><tr>";
+                    });
+                    TableRow += "</tr>";
+                    $('#VoucherBody').append(TableRow);
+                });
+            },        
+            error: function (msg) {            
+                alert(msg.responseText);
+            }
+        });      
+        VoucherCal();
+    }
+
+    function VoucherCal()
+    {
+        debugger;
+        var amountVoucher = 0;
+        $('#TLandingExpenses').val('');
+        $('.VoucherAmount').each(function () {
+            debugger;
+            var q = $(this).text();
+            amountVoucher += parseFloat(q);
+        });
+        $('#TLandingExpenses').val(amountVoucher); 
+    }
+
+    $('#MyForm').submit(function ()
+    {
+        var netAmount = $("#NetAmount").val();
+        var partyID = $("#PartiesID").val();
+        netAmount = parseInt(netAmount);
+        if(netAmount <= 0)
+        {
+            var mytitle = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Error";                  
+            $('.modal-title').html(mytitle);
+            var myHeading = "<b>Net Amount Must be more than zero.</b>";
+            $(".modal-body").html(myHeading);
+            $('#modal-error').modal('show');
+            return false;
+        }
+        if(partyID == "")
+        {               
+            var bal = $("#Balance").val();                
+            if(bal < 0 || bal != 0)
+            {
+                var myHeading = "<b>Balance Must be zero.</b>";
+                var mytitle = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Error";                  
+                $('.modal-title').html(mytitle);
+                $(".modal-body").html(myHeading);
+                $('#modal-error').modal('show');
+                return false;
+            }
+        }
+    });
+
+    $("#MyForm").validate();
+
+    window.onload = function () {
+        $("#insertRow").click(function () {
+            var tblRows = $("#ItemTbl tbody tr").length;
+            $('#ItemTbl tbody').append('<tr class="child">  <td> <input class="form-control ItemID" readonly="readonly" type="text" id="PurchaseBillItem_List_' + tblRows + '__ItemID" required name="PurchaseBillItem_List[' + tblRows + '].ItemID" value="" > </td> <td>  <input class="form-control OEMNo" type="text" id="PurchaseBillItem_List_' + tblRows + '__Item_OEMNo" name="PurchaseBillItem_List[' + tblRows + '].OEMNo"  value="" required oninput="OemNoAutoComplete(this);" onkeydown="LoadDescription(this);" onchange="LoadDescription(this);"  >  </td>  <td> <input type="checkbox" id="PurchaseBillItem_List_' + tblRows + '__Item_CheckCase_1" name="PurchaseBillItem_List[' + tblRows + '].CheckCase_1"  class="form-control SearchItemBox" /> </td>   <td> <input class="form-control ProductDescription" type="text" id="PurchaseBillItem_List_' + tblRows + '__Item_ProductDescription" name="PurchaseBillItem_List[' + tblRows + '].ProductDescription" value="" readonly="readonly" > </td>  <td> <a title="View Item Details" class="btn btn-default btn-sm" id="DetailView" onclick="ItemBriefDetails(this);"><span class="glyphicon glyphicon-eye-open"></span></a> </td>  <td>  <input class="form-control Quantity" oninput="amountCalculate(this);" type="number" id="PurchaseBillItem_List_' + tblRows + '__Quantity" name="PurchaseBillItem_List[' + tblRows + '].Quantity" value="0" data-val="true" data-val-required="The Quantity field is required." required > </td>        <td> <input class="form-control PurchasePrice" oninput="amountCalculate(this);" type="number" id="PurchaseBillItem_List_' + tblRows + '__PurchasePrice" name="PurchaseBillItem_List[' + tblRows + '].PurchasePrice" data-val="true" data-val-required="The Price field is required." required > </td> <td> <input class="form-control PurchaseBillExtraDecimal"  type="number" id="PurchaseBillItem_List_' + tblRows + '__PurchaseBillExtraDecimal" name="PurchaseBillItem_List[' + tblRows + '].PurchaseBillExtraDecimal" value="0"  data-val="true" data-val-required="The Amount field is required."  readonly="readonly" >      </td>       <td> <button type="button" class="form-control btn btn-default" onclick="RemoveRow(this)"><span class="glyphicon glyphicon-trash" ></span></button> </td>        <td style="display:none" > <input class="form-control PurchaseBillExtraInt" type="number" id="PurchaseBillItem_List_' + tblRows + '__PurchaseBillExtraInt" name="PurchaseBillItem_List[' + tblRows + '].PurchaseBillExtraInt" value="0"  data-val="true" data-val-required="The PurchaseBillExtraInt field is required.">      </td>      <td style="display:none" >     <input class="form-control" type="text" id="PurchaseBillItem_List_' + tblRows + '__PurchaseBillExtraInt_1" name="PurchaseBillItem_List[' + tblRows + '].PurchaseBillExtraInt_1" value="" readonly="readonly" > </td>   </tr>');
+        });
+
+        $("#insertPaymentRow").click(function () {
+            var PaytblRows = $("#PaymentTbl tbody tr").length;
+            $('#PaymentTbl tbody').append('<tr class="child">  <td style="display:none">  <input class="form-control TransactionID " id="TransactionList_' + PaytblRows + '__TransactionID" name="TransactionList[' + PaytblRows + '].TransactionID"  value="" >  </td>      <td>    <select class="form-control Mode" id="TransactionList_' + PaytblRows + '__Mode"  name="TransactionList[' + PaytblRows + '].Mode" onchange="PaymentModeChange(this);" asp-items="Html.GetEnumSelectList<PaymentMethod>()"> > <option value="0">Cash</option> <option value="1">Cheque</option>   </select> </td>     <td>  <input class="form-control Amount " id="TransactionList_' + PaytblRows + '__Amount" name="TransactionList[' + PaytblRows + '].Amount"  value="" required oninput="TotalPaymentCalculate();" >  </td>     <td>  <select class="form-control BankID" id="TransactionList_' + PaytblRows + '__BankID"  name="TransactionList[' + PaytblRows + '].BankID"  style="display:none" >  <option selected >Bank...</option>  </select>   </td>   <td>    <input class="form-control Cheque " id="TransactionList_' + PaytblRows + '__Cheque" name="TransactionList[' + PaytblRows + '].Cheque"  style="display:none" value="" >      </td>       <td>  <input class="form-control Date " id="TransactionList_' + PaytblRows + '__Date" name="TransactionList[' + PaytblRows + '].Date"  value="" type="Date" >       </td>  <td>     </td>  <td>     </td>       <td> <button type="button" class="form-control btn btn-default" onclick="RemovePaymentRow(this)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button> </td>     </tr>');
+
+            debugger;
+            var Ids = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Ids) as String);
+            var Name = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Name) as String);
+
+
+            var sel = document.getElementById('TransactionList_'+ PaytblRows +'__BankID');
+              for (var i = 0; i < Name.length; i++)
+              {
+                    var opt = document.createElement('option');
+                    opt.innerHTML = Name[i];
+                    opt.value = Ids[i];
+                    sel.appendChild(opt);
+                }
+        });
+        VoucherCal();
+    }
+
+    function RemovePaymentRow(val) {
+        debugger;
+        $(val).parent().parent().hide();
+        var index = $(val).parent().parent().index();
+        $('#TransactionList_' + index + '__TransactionID').val(777777);
+        $('#TransactionList_' + index + '__Amount').val(0);
+        $('#TransactionList_' + index + '__BankID').val(0);
+        $('#TransactionList_' + index + '__Cheque').val('');
+        $('#TransactionList_' + index + '__Paid').attr('checked', false);
+    }
+
+    function RemoveRow(val) {
+        debugger;
+        $(val).parent().parent().hide();
+        var index = $(val).parent().parent().index();
+        $('#PurchaseBillItem_List_' + index + '__PurchaseBillExtraInt_1').val(777777);
+        $('#PurchaseBillItem_List_' + index + '__Quantity').val(0);
+        $('#PurchaseBillItem_List_' + index + '__PurchaseBillExtraDecimal').val(0);
+        $('#PurchaseBillItem_List_' + index + '__PurchasePrice').val(0);
+        $('#PurchaseBillItem_List_' + index + '__ItemID').val(0);
+
+        amountCalculate();
+    }
+
+    $(document).ready(function () {
+        debugger;     
+        FirstamountCalculate();
+        OldQuantityRecord();
+        LoadVouchers();
+    });   
+
+    function First_OemNoAutoComplete(val) {
+        // OEM No. Auto Complete
+        debugger;
+        $.ajax({
+
+            url: "/Purchase/Purchase/First_LoadOEMNoAutoComplete",
+            type: "GET",
+            dataType: "json",
+            data: { id: val.term },
+            success: function (data) {
+                debugger;
+                $(".OEMNo").val(data);
+            }
+        })
+        // OEM No. Auto Complete
+    }
+
+    function FirstLoadOemAndDesc()
+    {
+        debugger;
+        $('#ItemTbl > tbody > tr').each(function() {
+            $this = $(this)
+            First_OemNoAutoComplete(this);
+        });
+    }
+
+    function FirstamountCalculate()
+    {
+        debugger;
+        $('#ItemTbl > tbody > tr').each(function() {
+            $this = $(this)
+            var price = $this.find(".PurchasePrice").val();
+            var quantity = $this.find(".Quantity").val();
+            var amount = (price * quantity);
+
+            $this.find(".PurchaseBillExtraDecimal").val(amount);
+
+        });
+    }
+
+    function TotalPaymentCalculate()
+    {
+        debugger;
+        var quantity = 0;
+        var netamount = 0;
+        var balance = 0;
+
+        $('.Amount').each(function () {
+            var q = $(this).val();
+            quantity += parseFloat(q);
+        });
+        $("#CashPaid").val(quantity);
+
+        netamount = $("#NetAmount").val();
+        balance = netamount - quantity;
+        $("#Balance").val(balance);
+    }
+
+    function OldQuantityRecord()
+    {
+        debugger;
+        $('#ItemTbl > tbody > tr').each(function() {
+            $this = $(this)
+            debugger;
+            var Oldquantity = $this.find(".Quantity").val();
+            var OldItemID = $this.find(".ItemID").val();
+
+            $this.find(".PurchaseBillExtraInt").val(Oldquantity);
+            $this.find(".PurchaseBillExtraInt_2").val(OldItemID);
+        });
+
+    }
+
+    function PaidChange(val)
+    {
+        debugger;
+        var index = $(val).parent().parent().index();
+        var CheckedOrNot = $('#TransactionList_' + index + '__Paid').is(':checked');
+
+        if(CheckedOrNot == true)
+        {
+            PaymentAmountChange_Paid(val);
+            $(".Paid").attr("disabled", true);
+            $('#TransactionList_' + index + '__Paid').attr('disabled', false);
+        }
+        else
+        {
+            PaymentAmountChange_UnPaid(val);
+            $(".Paid").attr("disabled", false);
+        }
+    }
+
+
+    function OemNoAutoComplete(val) {
+        debugger;
+        var index = $(val).parent().parent().index();
+        var name = $(val).val();
+
+        var CheckBOX = false;
+        var CheckVal = $('#PurchaseBillItem_List_' + index + '__Item_CheckCase_1').prop('checked');
+        if(CheckVal == true)
+        {
+            CheckBOX = true;
+        }
+
+        if(CheckBOX == true)
+        {
+            // Cross Ref No. Auto Complete
+            $(val).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+
+                        url: "/Purchase/Purchase/LoadCrossRefAutoComplete",
+                        type: "GET",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            //debugger;
+                            response($.map(data, function (item) {
+                                //debugger;
+                                return { label: item, value: item };
+                            }))
+                        }
+                    })
+                },
+                messages : {
+                    noResults : '',
+                    results : function(resultsCount) {}
+                }
+            });
+            LoadDescription(val);
+            // Cross Ref No. Auto Complete
+        }
+        else
+        {
+            // OEM No. Auto Complete
+            $(val).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+
+                        url: "/Purchase/Purchase/LoadOEMNoAutoComplete",
+                        type: "GET",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            //debugger;
+                            response($.map(data, function (item) {
+                                //debugger;
+                                return { label: item, value: item };
+                            }))
+                        }
+                    })
+                },
+                messages : {
+                    noResults : '',
+                    results : function(resultsCount) {}
+                }
+            });
+            LoadDescription(val);
+            // OEM No. Auto Complete
+        }
+    }
+
+       // Fill Description By Oem No.
+    function LoadDescription(val) {
+        debugger;
+        var index = $(val).parent().parent().index();
+        var name = $(val).val();
+
+        var CheckBOX = false;
+        var CheckVal = $('#PurchaseBillItem_List_' + index + '__Item_CheckCase_1').prop('checked');
+        if(CheckVal == true)
+        {
+            CheckBOX = true;
+        }        
+        $('#PurchaseBillItem_List_' + index + '__Item_ProductDescription').val("");
+        $('#PurchaseBillItem_List_' + index + '__ItemID').val("");
+        $('#PurchaseBillItem_List_' + index + '__PurchasePrice').val("");
+
+        if(CheckBOX == true)
+        {
+            $URL = '@Url.Action("LoadDescriptionByCrossRef", "Purchase", new { area= "Purchase" })';
+            $.ajax({
+                method: "GET",
+                url: $URL,
+                data: { name: name },
+                contentType: "application/json;charset=utf-8"
+            })
+                .done(function (data) {
+                    debugger;
+                    $('#PurchaseBillItem_List_' + index + '__Item_ProductDescription').val(data.productDescription);
+                    $('#PurchaseBillItem_List_' + index + '__ItemID').val(data.itemID);
+                    $('#PurchaseBillItem_List_' + index + '__PurchasePrice').val(data.purchasePrice.purchasePrice);
+                });
+
+        }
+        else
+        {
+            $URL = '@Url.Action("LoadDescription", "Purchase", new { area= "Purchase" })';
+            $.ajax({
+                method: "GET",
+                url: $URL,
+                data: { name: name },
+                contentType: "application/json;charset=utf-8"
+            })
+                .done(function (data) {
+                    debugger;
+                    $('#PurchaseBillItem_List_' + index + '__Item_ProductDescription').val(data.productDescription);
+                    $('#PurchaseBillItem_List_' + index + '__ItemID').val(data.itemID);
+                    $('#PurchaseBillItem_List_' + index + '__PurchasePrice').val(data.purchasePrice.purchasePrice);
+                });
+
+        }
+    }
+    // Fill Description By Oem No.
+
+    function PaymentAmountChange_Paid(val)
+    {
+        debugger;
+        var amountPaid = $(val).parent().parent().find('.Amount').val();
+        var NetAmount = $("#NetAmount").val();
+
+        if(amountPaid > NetAmount)
+        {
+            var mytitle = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Error";                  
+            $('.modal-title').html(mytitle);
+            var myHeading = "<b>Amount Paid Can not be more than Net Amount.</b>";
+            $(".modal-body").html(myHeading);
+            $('#modal-error').modal('show');
+
+            $(val).parent().parent().find('.Amount').val(0);
+            $('.Paid').attr('checked', false);
+        }
+        else
+        {
+            $("#CashPaid").val(amountPaid);
+            FinalCalculate();
+        }
+    }
+
+
+    function PaymentAmountChange_UnPaid(val)
+    {
+        debugger;
+        var amountPaid = $(val).parent().parent().find('.Amount').val();
+        var NetAmount = $("#NetAmount").val();
+
+        $(val).parent().parent().find('.Amount').val("");
+        $("#CashPaid").val(0);
+        $("#Balance").val(0);
+    }
+
+
+    // Calculation Functions
+
+    function amountCalculate(val) {
+        debugger;
+        var pur = $(val).parent().parent().find('.PurchasePrice').val();
+        var qua = $(val).parent().parent().find('.Quantity').val();
+
+        var quantity = parseInt(qua);
+        var price = parseFloat(pur).toFixed(6);
+
+        var amountA = parseFloat(price * quantity).toFixed(6);
+        $(val).parent().parent().find('.PurchaseBillExtraDecimal').val(amountA);
+
+        GrossTotalCalculate();
+        TotalQuantityCalculate();
+        NetAmountCalculate();        
+        FinalCalculate();
+
+        //var partyID = $("#PartiesID").val();
+        //if(partyID == "")
+        //{
+        //    var NetAmount = $("#NetAmount").val();
+        //    $("#CashPaid").val(NetAmount);
+        //    $("#Balance").val(0);
+        //}
+    }
+
+    function GrossTotalCalculate() {
+        debugger;
+        var quantity = 0;
+        $('#GrossTotal').val(0);
+        $('.PurchaseBillExtraDecimal').each(function () {
+            var q = $(this).val();
+            quantity += parseFloat(q);
+        });
+        $('#GrossTotal').val(quantity);
+        NetAmountCalculate();
+    }
+
+    function TotalQuantityCalculate() {
+        debugger;
+        var quantity = 0;
+        $('#TotalQuantity').val('');
+        $('.Quantity').each(function () {
+            var q = $(this).val();
+            quantity += parseInt(q);
+        });
+        $('#TotalQuantity').val(quantity);
+    }
+
+    function NetAmountCalculate() {
+        debugger;
+        var NetAmount = 0;
+        var GrossTotal = $('#GrossTotal').val();
+        var Discount = $('#TDiscount').val();
+
+        NetAmount = GrossTotal;
+
+        if(Discount != 0 && Discount != null)
+        {
+            var array = Discount.split('');
+
+            var found = $.inArray('%', array) > -1;
+
+            if (found == true) {
+                Discount = Discount.replace('%', '');
+                if (Discount != 0 && Discount > 0) {
+                    var DiscountPercentage = (Discount / 100);
+                    var NetAmountA = GrossTotal * DiscountPercentage;
+                    NetAmount = GrossTotal - NetAmountA;
+                    var DicountTrim = NetAmountA.toFixed(2);
+                    $('#AmountDiscount').text(DicountTrim);
+                }
+            }
+            else if (found == false) {
+                if (Discount != 0 && Discount > 0) {
+                    NetAmount = GrossTotal - Discount;
+                    $('#AmountDiscount').text(Discount);
+                }
+             }
+        }
+
+        $('#NetAmount').val(NetAmount);
+        //var partyID = $("#PartiesID").val();
+        //if(partyID == "")
+        //{
+        //    var NetAmount = $("#NetAmount").val();
+        //    $("#CashPaid").val(NetAmount);
+        //    $("#Balance").val(0);
+        //}
+    }
+
+    function FinalCalculate() {
+        debugger;
+        var a = 0;
+        var b = 0;
+        var NetAmount = $('#NetAmount').val();        
+        var CashPaid = $('#CashPaid').val();
+
+        if (CashPaid != 0 && CashPaid > 0) {
+            b = NetAmount - CashPaid;
+            $('#Balance').val(b);
+        }
+    }
+
+    function PaymentModeChange(val)
+    {
+        debugger;
+        var mode = $(val).parent().parent().find('.Mode').val();
+
+        if (mode == 0) {
+            $(val).parent().parent().find('.BankID').hide();
+            $(val).parent().parent().find('.BankID').val(0);
+            $(val).parent().parent().find('.Cheque').hide();
+            $(val).parent().parent().find('.Cheque').val("");
+        }
+        else {
+            $(val).parent().parent().find('.BankID').show();
+            $(val).parent().parent().find('.Cheque').show();
+        }
+    }
+
+
+    function ItemBriefDetails(val)
+    {
+        debugger;
+        var Item = $(val).parent().parent().find('.ItemID').val();
+        if(Item == '')
+        {
+            var myHeading = "<b>No Product Selected for this Row.</b>";
+            var mytitle = "<span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span> Product Purchase View";                  
+            $('.modal-title').html(mytitle)
+            $(".modal-body").html(myHeading);
+            $('#modal-error').modal('show');
+        }
+        else
+        {
+            debugger;
+            $URL = '@Url.Action("ItemBriefDetails", "Purchase", new { area= "Purchase" })';
+            $.ajax({
+                method: "GET",
+                url: $URL,
+                data: { ItemID: Item },
+                contentType: "application/json;charset=utf-8"
+            })
+                .done(function (data) {
+                    debugger;                    
+                    var mytitle = "<span class='glyphicon glyphicon-menu-hamburger' aria-hidden='true'></span> Product Purchase View <span style='padding-left:15px' > </span> <span style='padding-left:25px'> "+ data.data.oemNo + " / " + data.data.crossRef+ " </span> <span> ";                  
+                    var myHeading = "<div style='color:black'><b>Total Purchases : </b>" + data.data.totalRowsCount +" <b style='padding-left:25px' >Total Quantity Purchased: </b>"+ data.data.totalQuantity +"</br></br>  <b style='padding-left:25px'>Last Purchase Price : </b>"+ data.data.lastPurchasePrice +" <b style='padding-left:25px'>Quantity Available: </b>"+ data.data.quantityAvailable +"</br></br><b style='padding-left:25px'>Average Price: </b> "+ data.data.averagePrice +" <b style='padding-left:25px'>Total Price : </b>"+ data.data.totalPrice +"</br></br>  </div>" ;
+                    $('.modal-title').html(mytitle)
+                    $(".modal-body").html(myHeading);
+                    $('#modal-error').modal('show');                    
+                });
+        }      
+    }
+
+</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

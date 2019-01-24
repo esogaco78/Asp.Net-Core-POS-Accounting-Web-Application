@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Reports";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="">
+    <div class="well" style="padding-bottom:5px">
+        <div class="row">
+            <span class="glyphicon glyphicon-stats glyphicon-bold " style="font-size: 1.5em; padding-left:10px;color:darkblue" aria-hidden="true"></span>
+            <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Reporting</span>
+        </div>
+    </div>
+
+    <div class="row BoxStyle">        
+        <div class="col-lg-3 Boxes" style="margin-left:100px" data-toggle="tooltip" data-placement="bottom" title="View your Products Profit Report">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <p class="panel-title" style="font-size:large">
+                        <a asp-action="ProductProfitLedger" asp-controller="Home" asp-area="Reports" target="_blank">Product Profit Report</a>
+                        <span class="pull-right">
+                            <i class="glyphicon glyphicon-signal"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="panel-body">
+                    <a asp-action="ProductProfitLedger" asp-controller="Home" asp-area="Reports" target="_blank">
+                        <div class="feature-icon col-lg-4">
+                            <i class="glyphicon glyphicon-signal"></i>
+                        </div>
+                        <div class="col-lg-6" style="color:black">
+                            <h3>Item No. A 7500$/year</h3>
+                        </div>
+                    </a>                                            
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 Boxes" style="margin-left:50px"  data-toggle="tooltip" data-placement="bottom" title="View your Products Purchase Report">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <p class="panel-title" style="font-size:large">
+                        <a asp-action="ProductPurchaseLedger" asp-controller="Home" asp-area="Reports" target="_blank">Product Purchase Report</a>
+                        <span class="pull-right">
+                            <i class="glyphicon glyphicon-indent-right"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="panel-body">
+                    <a asp-action="ProductPurchaseLedger" asp-controller="Home" asp-area="Reports" target="_blank">
+                        <div class="feature-icon col-lg-4">
+                            <i class="glyphicon glyphicon-indent-right"></i>
+                        </div>
+                        <div class="col-lg-6" style="color:black">
+                            <h3>Item No. B 1200$/month</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 Boxes" style="margin-left:50px"  data-toggle="tooltip" data-placement="bottom" title="View your Products Sale Report">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <p class="panel-title" style="font-size:large">
+                        <a asp-action="ProductSaleLedger" asp-controller="Home" asp-area="Reports" target="_blank">Product Sale Report</a>
+                        <span class="pull-right">
+                            <i class="glyphicon glyphicon-random"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="panel-body">
+                    <a asp-action="ProductSaleLedger" asp-controller="Home" asp-area="Reports" target="_blank">
+                        <div class="feature-icon col-lg-4">
+                            <i class="glyphicon glyphicon-random"></i>
+                        </div>
+                        <div class="col-lg-6" style="color:black">
+                            <h3>Item No. B 110$/day</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 
+ 

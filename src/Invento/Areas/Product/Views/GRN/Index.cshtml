@@ -1,0 +1,154 @@
+@model IEnumerable<Invento.Areas.Product.Models.GRN>
+
+@{
+    ViewData["Title"] = Localizer["Good Receive Note"];
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>        
+        @if (User.IsInRole("CompanyAdmin") || User.IsInRole("Add Good Receive Notes"))
+        {
+            <a asp-action="Create" class="btn btn-default pull-right" style="margin-right:20px"><span class="glyphicon glyphicon-plus"></span> @Localizer["Add New"] </a>
+        }
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover" id="MyTable">
+        <thead>
+            <tr class="active">
+                @*<th></th>*@
+                <th>
+                    @Localizer["ID"]
+                </th>
+                <th>
+                    @Localizer["Date"]
+                </th>
+                <th>
+                    @Localizer["Parties"]
+                </th>
+                <th>
+                    @Localizer["Total Quantity"]
+                </th>
+                <th>
+                    @Localizer["Person"]
+                </th>
+                <th>
+                    @Localizer["Contact"]
+                </th>
+                <th>
+                    @Localizer["Created By"]
+                </th>
+                @if (User.IsInRole("View Good Receive Notes Details") || User.IsInRole("CompanyAdmin"))
+            {
+                    <th></th>
+            }
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            var table = $('#MyTable').DataTable({
+
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        "extend": 'print',
+                        "title": "GRN",
+                        "text": "Print",
+                        "autoPrint": true,
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    }, 
+                    {
+                        "extend": 'excel',
+                        "title": "GRN",
+                        "text": "Excel",
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    }, 
+                    {
+                        "extend": 'pdf',
+                        "title": "GRN",
+                        "text": "PDF",
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    },
+                    'colvis',
+                ],
+
+                "ajax": {
+                    "url": "/Product/GRN/LoadGRN",
+                    "type": "GET",
+                    "datatype":"json"
+                },
+                "columns": [
+                     { "data": "grnid", "autpWidth": true, "order": [0, 'desc'] },
+                     { "data": "grnDate", "autpWidth": true },
+                     { "data": "partyName", "autpWidth": true },
+                     { "data": "totalQuantity", "autpWidth": true },
+                     { "data": "contactPerson", "autpWidth": true },
+                     { "data": "contactNumber", "autpWidth": true },
+                     { "data": "createdBy", "autpWidth": true },
+                      @if(User.IsInRole("View Good Receive Notes Details") || User.IsInRole("CompanyAdmin"))
+                {
+                            <text>
+                     {
+                         "data": null,
+                         "mRender": function (data, type, row) {
+                             return $("<div />")
+                                 .append($(" <div class='text-center'> <a class='btn btn-sm btn-default' href='/Product/GRN/Details?id=" + data.grnid + "'><span class='glyphicon glyphicon-eye-open'></span></a> </div> "))
+                                 .html();
+                         }
+                             </text>
+                     }
+                     }
+                ],
+                "order": [[0, 'desc']]
+            });
+
+            // Add event listener for opening and closing details
+            $('#MyTable tbody').on('click', 'td', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data()), 'no-padding').show();
+                    tr.addClass('shown');
+
+                }
+            });
+
+            $('#MyTable tbody').on('click', 'td > button', function (e) {
+
+               @*@Html.ActionLink("Edit", "CountryEdit", "SiteAdmin", new { area= "SiteAdmin" ,id= "d.CountryID" }, null)*@
+
+                alert('Tada!');
+                return false;
+            });
+        });
+    </script>
+}

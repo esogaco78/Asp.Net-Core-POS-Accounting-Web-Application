@@ -1,0 +1,227 @@
+@model Invento.Areas.Product.Models.Item
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Item</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckCase_1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CheckCase_1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckCase_2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CheckCase_2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CrossRef)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CrossRef)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_Dec_1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_Dec_1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_Dec_2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_Dec_2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_Dec_3)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_Dec_3)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_Dec_4)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_Dec_4)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_Dec_5)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_Dec_5)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_Int_1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_Int_1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_Int_2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_Int_2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_Int_3)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_Int_3)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_Int_4)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_Int_4)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_Int_5)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_Int_5)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_String_1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_String_1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_String_2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_String_2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_String_3)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_String_3)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_String_4)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_String_4)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemExtra_String_5)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemExtra_String_5)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemMainCompany)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemMainCompany)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemType)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemType2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemType2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LCPrice)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LCPrice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NotMappedBool)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NotMappedBool)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NotMappedInt)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NotMappedInt)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NotMappedString_1)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NotMappedString_1)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NotMappedString_2)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NotMappedString_2)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OEMNo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OEMNo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PhotoData)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PhotoData)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ProductDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Remark)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SalePrice)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SalePrice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Size)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Size)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Value)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Value)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

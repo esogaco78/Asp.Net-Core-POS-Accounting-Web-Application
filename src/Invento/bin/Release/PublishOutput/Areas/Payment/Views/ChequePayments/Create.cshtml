@@ -1,0 +1,146 @@
+@model Invento.Areas.Payment.Models.ChequePayment
+
+@{
+    ViewData["Title"] = "Cheque Payment";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="well" style="padding-bottom:5px">
+            <div class="row">
+                <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Cheque Payment</span>
+                <a asp-area="CompanyAdmin" asp-controller="Home" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+                <input type="submit" value="Save" class="btn btn-primary pull-right" style="margin-right:20px" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label asp-for="CurrencyID" class="col-md-2 control-label"></label>
+                <label asp-for="ExternalRef" class="col-md-3 control-label"></label>
+                <label asp-for="Date" class="col-md-2 control-label"></label>                
+                <label asp-for="DateOfDeposite" class="col-md-2 col-md-offset-1 control-label"></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-md-offset-1">
+                <select asp-for="CurrencyID" class="form-control" asp-items="ViewBag.CurrencyID"></select>
+            </div>
+            <div class="col-md-1 col-md-offset-1">
+                <input asp-for="ExternalRef" class="form-control" />
+                <span asp-validation-for="ExternalRef" class="text-danger" />
+            </div>
+            <div class="col-md-offset-1 col-md-2">
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger" />
+            </div>            
+            <div class="col-md-offset-1 col-md-2">
+                <input asp-for="DateOfDeposite" class="form-control" />
+                <span asp-validation-for="DateOfDeposite" class="text-danger" />
+            </div>            
+        </div>
+        <br />
+
+        <div class="row">
+            <div class="form-group">
+                <label asp-for="PartiesID" class="col-md-2 control-label"></label>
+                <label asp-for="Amount" class="col-md-3 control-label"></label>
+                <label asp-for="BankID" class="col-md-4 control-label"></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-md-offset-1">
+                <select asp-for="PartiesID" class="form-control" asp-items="ViewBag.PartiesID">
+                    <option disabled selected>Select ...</option>
+                </select>
+            </div>
+            <div class="col-md-3 col-md-offset-1">
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger" />
+            </div>
+            <div class="col-md-3">
+                <select asp-for="BankID" class="form-control" asp-items="ViewBag.BankID" required>
+                    <option disabled selected>Select ...</option>
+                </select>
+            </div>
+        </div>
+        <br />
+      
+        <div class="row">
+            <div class="form-group">
+                <label asp-for="ChequeNumber" class="col-md-3 control-label"></label>              
+                <label asp-for="DateOfMature" class="col-md-2 control-label pull-left"></label>
+                <label asp-for="CurrentStatus" class="col-md-2 control-label"></label>
+                <label asp-for="InNameOf" class="col-md-3 control-label"></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-md-offset-1">
+                <input asp-for="ChequeNumber" class="form-control" />
+                <span asp-validation-for="ChequeNumber" class="text-danger" />
+            </div>
+            
+            <div class="col-md-2">
+                <input asp-for="DateOfMature" class="form-control" />
+                <span asp-validation-for="DateOfMature" class="text-danger" />
+            </div>
+            <div class="col-md-offset-1 col-md-2">
+                <input asp-for="CurrentStatus" class="form-control" />
+                <span asp-validation-for="CurrentStatus" class="text-danger" />
+            </div>
+            <div class="col-md-offset-1 col-md-2">
+                <input asp-for="InNameOf" class="form-control" />
+                <span asp-validation-for="InNameOf" class="text-danger" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label asp-for="AmountInWords" class="col-md-2 col-md-offset-1 control-label"></label>
+                <label asp-for="Particulars" class="col-md-1 col-md-offset-3 control-label"></label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-1">
+                <textarea asp-for="AmountInWords" class="form-control col-md-offset-2" rows="5" cols="5"></textarea>
+                <span asp-validation-for="AmountInWords" class="text-danger" />
+            </div>
+            <div class="col-md-6">
+                <textarea asp-for="Particulars" class="form-control col-md-offset-2" rows="5" cols="5"></textarea>
+                <span asp-validation-for="Particulars" class="text-danger" />
+            </div>
+        </div>
+
+        <br />        
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        debugger;
+
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+
+        var output = d.getFullYear() + '-' +
+            (month < 10 ? '0' : '') + month + '-' +
+            (day < 10 ? '0' : '') + day;
+        $('#Date').val(output);
+        $('#DateOfDeposite').val(output); 
+        $('#DateOfMature').val(output);
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

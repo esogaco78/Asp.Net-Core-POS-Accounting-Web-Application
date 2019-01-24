@@ -1,0 +1,69 @@
+@model IEnumerable<Invento.Areas.Finance.Models.SubAccount>
+ 
+@{
+    ViewData["Title"] = "Sub Account - Chart Of Accounts";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:0px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>      
+        <span style="padding-right:30px" class="pull-right HideItems">
+            <a asp-action="CreateSubAccount" class="btn btn-default modal-link" style="margin-right:10px"> <span class="glyphicon glyphicon-plus"></span> Add New</a>            
+            <button type="button" class="btn-sm btn-default" title="Print Main Accounts" onclick="Print();"><span class="glyphicon glyphicon-print"></span></button>
+        </span>                        
+    </div>
+</div>
+
+<label class="text-danger">@ViewBag.SameCodeError</label>
+
+<div class="table-responsive">
+    <table class="table table-condensed table-striped table-bordered">
+        <thead>
+            <tr class="active">
+                <th>
+                    Account Number
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AccountName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MainAccount.MainAccountNumber)
+                        <span>-</span>
+                        @Html.DisplayFor(modelItem => item.SubAccountNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccountName)
+                    </td>
+                    <td class="HideItems">
+                        @*@if (item.SubAccountNumber != "0000")
+                        {*@
+                            <a asp-action="EditSubAccount" asp-route-id="@item.SubAccountID" class="btn btn-default btn-sm pull-right modal-link" style="margin-right:20px"><span class="glyphicon glyphicon-pencil"></span></a>
+                        @*}*@
+                    </td>
+                </tr>
+}
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    function Print() {
+        $('.HideItems').hide();
+        window.print();
+        $('.HideItems').show();
+    }
+</script>

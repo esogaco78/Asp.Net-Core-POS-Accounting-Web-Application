@@ -1,0 +1,318 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Biznsbook</title>
+
+    <environment names="Development">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/SideBar.css" />
+        <link href="~/css/styles.css" rel="stylesheet" />
+        <link rel="stylesheet" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" asp-append-version="true" />
+        <link href="~/lib/jqueryui/themes/base/jquery-ui.min.css" rel="stylesheet" />
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/SideBar.css" />
+        <link href="~/css/styles.css" rel="stylesheet" />
+        <link rel="stylesheet" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" asp-append-version="true" />
+        <link href="~/lib/jqueryui/themes/base/jquery-ui.min.css" rel="stylesheet" />
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    </environment>
+ 
+</head>
+<body>
+
+    <div id="modal-container" class="modal fade col-lg-offset-3 col-lg-5 col-sm-offset-2 col-sm-5 col-xs-8" tabindex="-1" role="dialog" style="padding-top:20px">
+        <div class="modal-content">
+        </div>
+    </div>
+
+    <div id="modal-error" class="modal fade col-lg-offset-3 col-lg-5 col-sm-offset-2 col-sm-5 col-xs-8" tabindex="-1" role="dialog" style="padding-top:20px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" style="font-weight:bolder">                    
+                </h4>
+            </div>
+            <div class="modal-body center-block alert-warning" style="text-align:center">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="wrapper">
+        <div class="overlay"></div>
+
+        <!-- Sidebar -->
+        <nav class="navbar navbar-inverse navbar-fixed-top col-lg-12" id="sidebar-wrapper" role="navigation">
+            <ul class="nav sidebar-nav">
+                <li class="sidebar-brand">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Invento</a>
+                </li>
+
+                @if (User.IsInRole("View Parties"))
+                {
+                    <li><a asp-area="CompanyAdmin" asp-controller="Parties" asp-action="Index">@Localizer["Parties"]</a></li>
+                }
+                @if (User.IsInRole("View Products"))
+                {
+                    <li><a asp-area="Product" asp-controller="Items" asp-action="Index">@Localizer["Products"]</a></li>
+                }
+                @if (User.IsInRole("View Good Receive Notes"))
+                {
+                    <li><a asp-area="Product" asp-controller="GRN" asp-action="Index">@Localizer["Good Receive Note"]</a></li>
+                }
+                @if (User.IsInRole("Balance Sheet") || User.IsInRole("General Ledger") || User.IsInRole("Trial Balance") || User.IsInRole("Profit Loss") || User.IsInRole("Notes to the Accounts") || User.IsInRole("Cash Flow Statment"))
+                {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Localizer["Finance"]<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-header">@Localizer["Accounting Information"]</li>
+                            @if (User.IsInRole("General Ledger"))
+                            {
+                            <li><a asp-area="Finance" asp-controller="Ledger" asp-action="GeneralLedger">@Localizer["General Ledger"]</a></li> }
+                            @if (User.IsInRole("Trial Balance"))
+                            {
+                            <li><a asp-area="Finance" asp-controller="Ledger" asp-action="TrialBalance">@Localizer["Trial Balance"]</a></li>}
+                            @if (User.IsInRole("Notes to the Accounts"))
+                            {
+                            <li><a asp-area="Finance" asp-controller="Ledger" asp-action="AccountNotes">@Localizer["Notes to the Accounts"]</a></li>}
+                            @if (User.IsInRole("Profit Loss"))
+                            {
+                            <li><a asp-area="Finance" asp-controller="Ledger" asp-action="ProfitLoss">@Localizer["Profit and Loss Statement"]</a></li> }
+                            @if (User.IsInRole("Balance Sheet"))
+                            {
+                            <li><a asp-area="Finance" asp-controller="Ledger" asp-action="BalanceSheet">@Localizer["Balance Sheet"]</a></li>}
+                            @if (User.IsInRole("View Cash Book"))
+                            {
+                            <li><a asp-area="Finance" asp-controller="Ledger" asp-action="CashBook">@Localizer["Cash Book"]</a></li>}
+                            @if (User.IsInRole("Cash Flow Statment"))
+                            {
+                            <li><a asp-area="Finance" asp-controller="Ledger" asp-action="CashFlowStatment">@Localizer["Cash Flow Statement"]</a></li> }
+                        </ul>
+                    </li>
+                    @if (User.IsInRole("Chart Of Accounts"))
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Localizer["Chart Of Accounts"]<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li class="dropdown-header">@Localizer["All Accounts"]/li>
+                                <li><a asp-area="Finance" asp-controller="ChartOfAccounts" asp-action="MainAccounts">@Localizer["Main Accounts"]</a></li>
+                                <li><a asp-area="Finance" asp-controller="ChartOfAccounts" asp-action="SubAccounts">@Localizer["Sub Accounts"]</a></li>
+                                <li><a asp-area="Finance" asp-controller="ChartOfAccounts" asp-action="TransactionAccounts">@Localizer["Transaction Accounts"]</a></li>
+                                <li><a asp-area="Finance" asp-controller="ChartOfAccounts" asp-action="OpeningBalance">@Localizer["Opening Balance Trial"]</a></li>
+                            </ul>
+                        </li>
+                    }
+                }
+                @if (User.IsInRole("View Vouchers"))
+                {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Localizer["Payments"]<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-header">@Localizer["Cash &amp; Cheque Payments"]</li>
+                            <li><a asp-area="Payment" asp-controller="CashReceipts" asp-action="Index">@Localizer["Cash Receipts - CRV"]</a></li>
+                            <li><a asp-area="Payment" asp-controller="CashPayments" asp-action="Index">@Localizer["Cash Payments - CPV"]</a></li>
+                            <li><a asp-area="Payment" asp-controller="CashInBanks" asp-action="Index">@Localizer["Cash in Bank - CBV"]</a></li>
+                            <li><a asp-area="Payment" asp-controller="ChequeReceipts" asp-action="Index">@Localizer["Cheque Receipts - BRV"]</a></li>
+                            <li><a asp-area="Payment" asp-controller="ChequePayments" asp-action="Index">@Localizer["Cheque Payments - BPV"]</a></li>
+                            <li><a asp-area="Payment" asp-controller="Vouchers" asp-action="Index">@Localizer["Journal Vouchers - JV"]</a></li>
+                        </ul>
+                    </li>
+                }
+                @if (User.IsInRole("View Countries") || User.IsInRole("View Product Groups") || User.IsInRole("View Banks") || User.IsInRole("View Currencies"))
+                {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Localizer["Management"]<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-header">@Localizer["Setup"]</li>
+                            @if (User.IsInRole("View Product Groups"))
+                            {
+                                <li><a asp-area="Product" asp-controller="ProductGroups" asp-action="Index">@Localizer["Product Group"]</a></li>
+                            }
+                            @if (User.IsInRole("View Banks"))
+                            {
+                                <li><a asp-area="CompanyAdmin" asp-controller="Banks" asp-action="Index">@Localizer["Banks"]</a></li>
+                            }
+                            @if (User.IsInRole("View Countries"))
+                            {
+                                <li><a asp-area="CompanyAdmin" asp-controller="Countries" asp-action="Index">@Localizer["Countries"]</a></li>
+                            }
+                            @if (User.IsInRole("View Currencies"))
+                            {
+                                <li><a asp-area="CompanyAdmin" asp-controller="Currencies" asp-action="Index">@Localizer["Currencies"]</a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+
+                @if (User.IsInRole("View Import Bills") || User.IsInRole("View Import Returns") || User.IsInRole("View Canceled Import Bills") || User.IsInRole("Add Import Bill"))
+                {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Localizer["Import"]<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-header">@Localizer["Import Record"]</li>
+                            @if (User.IsInRole("Add Import Bill"))
+                            {
+                                <li><a asp-area="Purchase" asp-controller="Purchase" asp-action="CreateImportBill">@Localizer["Create Import Bill"]</a></li>
+                            }
+                            @if (User.IsInRole("View Import Bills"))
+                            {
+                                <li><a asp-area="Purchase" asp-controller="Purchase" asp-action="ImportBills">@Localizer["Import Bills"]</a></li>
+                            }
+                            @if (User.IsInRole("View Canceled Import Bills"))
+                            {
+                                <li><a asp-area="Purchase" asp-controller="Purchase" asp-action="CancelImports">@Localizer["Canceled Import Bills"]</a></li>
+                            }
+                            @if (User.IsInRole("View Import Returns"))
+                            {
+                                <li><a asp-area="Purchase" asp-controller="PurchaseReturn" asp-action="ImportReturns">@Localizer["Import Return Bills"]</a></li>
+                            }                                                                                                             
+                        </ul>
+                    </li>
+                }
+                 
+                @if (User.IsInRole("View Purchase Returns") || User.IsInRole("View Sale Returns") || User.IsInRole("View Canceled Sale Invoices") || User.IsInRole("View Canceled Purchase Invoices"))
+                {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Localizer["Inventory Record"]<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-header">@Localizer["Inventory All Record"]</li>
+                            @if (User.IsInRole("View Purchase Returns"))
+                            {
+                                <li><a asp-area="Purchase" asp-controller="PurchaseReturn" asp-action="Index">@Localizer["Purchase Returns"]</a></li>}
+                            @if (User.IsInRole("View Sale Returns"))
+                            {
+                                <li><a asp-area="Sale" asp-controller="SaleReturn" asp-action="Index">@Localizer["Sale Returns"]</a></li>}
+                            @if (User.IsInRole("View Canceled Purchase Invoices"))
+                            {
+                                <li><a asp-area="Purchase" asp-controller="Purchase" asp-action="CancelInvoices">@Localizer["Cancel Purchase Invoice"]</a></li> }
+                            @if (User.IsInRole("View Canceled Sale Invoices"))
+                            {
+                                <li><a asp-area="Sale" asp-controller="Sale" asp-action="CancelInvoices">@Localizer["Cancel Sale Invoice"]</a></li>}
+                        </ul>
+                    </li>
+                }
+                
+            </ul>
+        </nav>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <button type="button" class="hamburger is-closed navbar-brand" data-toggle="offcanvas" style="background-color:white">
+                        <span class="hamb-top"></span>
+                        <span class="hamb-middle"></span>
+                        <span class="hamb-bottom"></span>
+                    </button>
+                </div>
+                <div class="navbar-collapse collapse" style="margin-left:90px">
+                    @await Html.PartialAsync("_NavBarCompanyUser")
+                    @await Html.PartialAsync("_LoginPartial")
+                </div>
+            </div>
+        </div>
+
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12" style="padding-left:50px">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+
+    <div class="row">
+        <hr />
+        <footer>
+            <div class="row">
+                <div class="col-sm-5">
+                    <p style="padding-left:70px">&copy; @DateTime.Now.Year - Biznsbook Software</p>
+                </div>
+                <div class="col-sm-6 text-right" id="LanguageChangeDiv" >
+                    @await Html.PartialAsync("_FooterPartial")
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jqueryui/jquery-ui.js"></script>     
+        <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+        <script src="//cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.colVis.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.flash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+        <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/pdfmake.min.js"></script>
+        <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+        </script>
+        <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/lib/jqueryui/jquery-ui.js"></script>        
+        <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+        <script src="//cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.colVis.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.flash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+        <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/pdfmake.min.js"></script>
+        <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
+    </environment>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+ 

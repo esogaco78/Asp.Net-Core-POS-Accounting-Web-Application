@@ -1,0 +1,200 @@
+﻿  @model Invento.Areas.Finance.Models.GeneralLedgerVM
+
+@{
+    ViewData["Title"] = "Trial Balance";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:0px">
+    <div class="row">
+        <div class="col-md-2">
+            <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+        </div>
+    </div>
+    <div class="row">                
+        <div class="row ShowItems pull-right" style="display:none;padding-top:10px">
+            <span class="col-md-1">By @Model.AccountName Account</span>
+            <span class="col-md-1" style="padding-left:0px">From <input type="date" class="col-md-1" asp-for="DateFrom" /></span>
+            <span class="col-md-1" style="padding-left:0px">To <input type="date" class="col-md-1" asp-for="DateTo" /></span>
+        </div>
+        <form asp-action="TrialBalance" method="get">            
+            <div class="col-md-1  col-md-offset-1 HideItems"><label class="pull-right">From</label></div>
+            <div class="col-md-2 HideItems" style="padding-left:0px">
+                <input type="date" class="form-control" name="DateFrom" id="DateFrom" asp-for="DateFrom" required />
+            </div>
+            <div class="col-md-1 HideItems"><label class="pull-right">To</label></div>
+            <div class="col-md-2 HideItems" style="padding-left:0px">
+                <input type="date" class="form-control" name="DateTo" id="DateTo" asp-for="DateTo" required />
+            </div>
+            <div class="col-lg-3 HideItems">
+                <label class="radio-inline" style="font-weight:bolder">
+                    <input type="radio" name="RBtn" value="Main">Main
+                </label>
+                <label class="radio-inline" style="font-weight:bolder">
+                    <input type="radio" name="RBtn" value="Sub">Sub
+                </label>
+                <label class="radio-inline" style="font-weight:bolder">
+                    <input type="radio" name="RBtn" value="Transaction">Transaction
+                </label>                
+            </div>            
+            <div class="col-md-2 HideItems">
+                <button type="submit" class="btn-sm btn-default" id="Search" value="Search" title="Search" style="font-weight:bolder"><span class="glyphicon glyphicon-search"></span></button>
+                <button type="button" class="btn-sm btn-default" title="Print Trial balance" onclick="Print();"><span class="glyphicon glyphicon-print"></span></button>
+                <a id="dlink" style="display:none;"></a>
+                <button class="btn-sm btn-default" onclick="tableToExcel('MyTable', 'Trial Balance', 'TrialBalance-BiznsBook.xls')" title="Export to Excel">
+                    <span class="glyphicon glyphicon-export"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-condensed" id="MyTable">
+        <thead>
+            <tr class="active">
+                <th>
+                    Account Number
+                </th>                
+                <th style="text-align:right;padding-right:80px">
+                    Debit
+                </th>
+                <th style="text-align:right;padding-right:80px">
+                    Credit
+                </th>
+                @*<th style="display:none">
+                    
+                </th>*@
+                @*<th>
+                    Balance
+                </th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.LedgerList != null)
+            {
+                @for (int i = 0; i < Model.LedgerList.Count; i++)
+                {
+                    <tr id="tblData" class="dataRows">
+                        <td>
+                            <span>@Html.DisplayFor(modelItem => Model.LedgerList[i].MainAccountNumber)</span><span>  </span><span>@Html.DisplayFor(modelItem => Model.LedgerList[i].SubAccountNumber)</span><span>  </span> <span>@Html.DisplayFor(modelItem => Model.LedgerList[i].TransactionAccountNumber)</span><span> , </span> <span style="font-weight:bold">@Html.DisplayFor(modelItem => Model.LedgerList[i].TransactionAccountName)</span>
+                        </td>
+                        <td class="DebitAmount" style="text-align:right;padding-right:80px">
+                            @{
+                                if (Model.LedgerList[i].Balance > 0)
+                                {
+                                    decimal aa = Model.LedgerList[i].Balance;                                    
+                                    string B = String.Format( "{0:#,##0.##}",aa);                                                                        
+                                    <span>@B</span>
+                                    //<span>@Html.DisplayFor(modelItem => Model.LedgerList[i].Balance)</span>
+                                }
+                                else
+                                {
+                                    <span style="display:none">0</span>
+                                }
+                            }                            
+                        </td>
+                        <td class="CreditAmount" style="text-align:right;padding-right:80px">
+                            @{
+                                if (Model.LedgerList[i].Balance < 0)
+                                {
+                                    decimal AA = @Model.LedgerList[i].Balance * (-1);
+                                    string B = String.Format("{0:#,##0.##}", AA);
+                                    <span>@B</span>                                    
+                                }
+                                else
+                                {
+                                    <span style="display:none">0</span>
+                                }
+                            }                            
+                        </td>
+                        @*<th style="display:none" class="OpeningBalanceAll">
+                            @Html.DisplayFor(modelItem => Model.LedgerList[i].Balance_Credit_Minus)
+                        </th>*@                        
+                    </tr>
+                                }
+                    }           
+        </tbody>
+        <tfoot>
+            <tr class="active">
+                <td></td>
+                <td><p style="font-weight:bold ; border-top:1px solid rgb(0,0,0); text-align:right;padding-right:80px" id="TotalDebit"></p></td>
+                <td><p style="font-weight:bold ; border-top:1px solid rgb(0,0,0); text-align:right;padding-right:80px" id="TotalCredit"></p></td>                
+            </tr>
+        </tfoot>
+    </table>
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        debugger;
+        TotalCalculate();
+        TotalDebitCalculate();            
+        TotalCreditCalculate();        
+    });
+
+    var tableToExcel = (function () {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+        , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+        , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+        , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+        return function (table, name, filename) {
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+
+            document.getElementById("dlink").href = uri + base64(format(template, ctx));
+            document.getElementById("dlink").download = filename;
+            document.getElementById("dlink").click();
+
+        }
+    })()
+
+    function Print() {
+        $('.HideItems').hide();
+        $('.ShowItems').show();
+        window.print();
+        $('.ShowItems').hide();
+        $('.HideItems').show();
+    }
+
+    function TotalCalculate() {
+        var debit = 0;
+        $('.OpeningBalanceAll').each(function () {
+            debit += parseFloat($(this).text());
+        });
+        $('#OpenBalance').text(debit);
+    }
+
+    function TotalDebitCalculate() {
+        var debit = 0;
+        
+        $('.DebitAmount').each(function () {
+            var aa = $(this).text().replace(",", "");
+            debit += parseFloat(aa);
+        });          
+        debit = numberWithCommas(debit);
+        $('#TotalDebit').text(debit);
+    }
+
+   function TotalCreditCalculate() {
+       var credit = 0;
+       $('.CreditAmount').each(function () {
+           var aa = $(this).text().replace(",", "");
+           credit += parseFloat(aa);           
+       });
+       credit = numberWithCommas(credit);
+       $('#TotalCredit').text(credit);
+   }
+
+   function numberWithCommas(x) {
+       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+   }
+</script>    

@@ -1,0 +1,331 @@
+﻿@model Invento.Areas.Finance.Models.GeneralLedgerVM
+ 
+@{
+    ViewData["Title"] = "Cash Book";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:0px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+        <span class="pull-right" style="margin-right:100px;font-size:small;font-weight:bolder">Account Number: <span style="font-family:'Times New Roman', Times, serif ; font-weight:bold ; font-size:medium ;margin-right:50px">@Model.AccountNumber</span> Account Name: <span style="font-family:'Times New Roman', Times, serif ; font-weight:bold ; font-size:medium">@Model.AccountName </span></span>
+
+        <div class="row ShowItems pull-right" style="display:none;padding-top:10px">
+            <span class="col-md-2">From <input type="date" class="col-md-1" asp-for="DateFrom" /></span>
+            <span class="col-md-2">To <input type="date" class="col-md-1" asp-for="DateTo" /></span>
+        </div>
+
+        <div class="row"  style="padding-bottom:0px">
+            <form asp-action="CashBook" method="get" class="HideItems">                
+                    <div class="col-md-3 col-md-offset-4" style="padding-bottom:0px">
+                        <div class="row">
+                            <div class="col-md-2"><label style="padding-top:5px ; font-size:small">From</label></div>
+                            <div class="col-md-10"><input type="date" class="form-control" name="DateFrom" id="DateFrom" asp-for="DateFrom" required /></div>
+                        </div>                        
+                    </div>
+                    <div class="col-md-3" style="padding-bottom:0px">
+                        <div class="row">
+                            <div class="col-md-2"><label style="padding-top:5px ; font-size:small" class="pull-right">To</label></div>
+                            <div class="col-md-10"><input type="date" class="form-control pull-right" name="DateTo" id="DateTo" asp-for="DateTo" required /></div>
+                        </div>
+                    </div>      
+                    <div class="col-md-2 HideItems">
+                        <button type="submit" class="btn-sm btn-default" id="Search" value="Search" title="Search" style="font-weight:bolder"><span class="glyphicon glyphicon-search"></span></button>
+                        <button type="button" class="btn-sm btn-default" title="Print Cash Book" onclick="Print();"><span class="glyphicon glyphicon-print"></span></button>
+                        <a id="dlink" style="display:none;"></a>                        
+                        <button class="btn-sm btn-default" title="Export to Excel" onclick="tablesToExcel()"><span class="glyphicon glyphicon-export"></span></button>
+                    </div>                
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="padding-left:15px;padding-right:15px">
+    <div class="row">
+        <div class="col-md-4 HideItems">
+            <h4 style="font-weight:600;text-align:left;padding-left:30px">Dr. (Receipts)</h4>
+        </div>
+        <div class="col-md-4">
+            <h4 style="font-weight:900;text-align:center">CASH BOOK</h4>
+        </div>
+        <div class="col-md-4 HideItems">
+            <h4 style="font-weight:600;text-align:right;padding-right:30px">Cr. (Payments)</h4>
+        </div>       
+    </div>
+    <div class="row">
+        <h4 style="font-weight:600;text-align:left;padding-left:30px ; display:none" class="ShowItems">Dr. (Receipts)</h4>
+        <div class="col-lg-6" style="padding-right:0px">
+            <table class="table table-bordered table-condensed" id="MyTable_1">
+                <thead class="active" style="font-weight:bolder">
+                    <tr class="active">
+                        <td>Date</td>
+                        <td>Voucher #</td>
+                        <td>Description</td>
+                        <td style="text-align:center">Cash</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.CashBook_DR != null)
+                    {
+                        @foreach (var item in Model.CashBook_DR)
+                        {
+                            <tr>
+                                <td>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (item.Date_1 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Date_1.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => item.Date_1.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => item.Date_1.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (item.Date_2 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Date_2.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => item.Date_2.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => item.Date_2.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (item.Date_3 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Date_3.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => item.Date_3.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => item.Date_3.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (item.Date_4 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Date_4.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => item.Date_4.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => item.Date_4.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                </td>
+                                <td>
+                                    @{
+                                        if (item.Voucher_1 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">CRV-@Html.DisplayFor(modelItem => item.Voucher_1)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (item.Voucher_2 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">PRV-@Html.DisplayFor(modelItem => item.Voucher_2)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (item.Voucher_3 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">SBV-@Html.DisplayFor(modelItem => item.Voucher_3)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (item.Voucher_4 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">JV-@Html.DisplayFor(modelItem => item.Voucher_4)</span>
+                                        }
+                                    }
+                                </td>
+                                <td style="font-size:small">
+                                    @{
+                                        if (item.Narration_1 != null)
+                                        {
+                                            <span style="font-weight:lighter;text-align:left" >@Html.DisplayFor(modelItem => item.Narration_1)</span>
+                                        }
+                                        else if (item.Narration_2 != null)
+                                        {
+                                            <span style="font-weight:lighter;text-align:left" >@Html.DisplayFor(modelItem => item.Narration_2)</span>
+                                        }
+                                        else if (item.Narration_3 != null)
+                                        {
+                                            <span style="font-weight:lighter;text-align:left" >@Html.DisplayFor(modelItem => item.Narration_3)</span>
+                                        }
+                                        else if (item.Narration_4 != null)
+                                        {
+                                            <span style="font-weight:lighter;text-align:left" >@Html.DisplayFor(modelItem => item.Narration_4)</span>
+                                        }
+                                    }
+                                </td>
+                                <td class="DebitAmount" style="text-align:right;padding-right:80px">
+                                    @{
+                                        @Html.DisplayFor(modelItem => item.Debit)                                       
+                                    }
+                                </td>
+                            </tr>
+                        }
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><p style="text-align:right;padding-right:80px; font-weight:bold ; border-top:1px solid rgb(0,0,0);" id="TotalDebit"></p></td>                                                
+                            </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <h4 style="font-weight:600;text-align:left;padding-left:30px ; display:none" class="ShowItems">Cr. (Payments)</h4>
+        <div class="col-lg-6" style="padding-left:0px">            
+            <table class="table table-bordered table-condensed" id="MyTable_2">
+                <thead class="active" style="font-weight:bolder">
+                    <tr class="active">
+                        <td>Date</td>
+                        <td>Voucher #</td>
+                        <td>Description</td>
+                        <td style="text-align:center">Cash</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.CashBook_CR != null)
+                    {
+                        @foreach (var item in Model.CashBook_CR)
+                        {
+                            <tr>
+                                <td>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (item.Date_1 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Date_1.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => item.Date_1.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => item.Date_1.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (item.Date_2 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Date_2.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => item.Date_2.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => item.Date_2.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (item.Date_3 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Date_3.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => item.Date_3.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => item.Date_3.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                    <span style="font-weight:lighter">
+                                        @{
+                                            if (item.Date_4 != null)
+                                            {
+                                                @Html.DisplayFor(modelItem => item.Date_4.Value.Day)<span>/</span>@Html.DisplayFor(modelItem => item.Date_4.Value.Month)<span>/</span>@Html.DisplayFor(modelItem => item.Date_4.Value.Year);
+                                            }
+                                        }
+                                    </span>
+                                </td>
+                                <td>
+                                    @{
+                                        if (item.Voucher_1 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">CPV-@Html.DisplayFor(modelItem => item.Voucher_1)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (item.Voucher_2 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">SRV-@Html.DisplayFor(modelItem => item.Voucher_2)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (item.Voucher_3 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">PBV-@Html.DisplayFor(modelItem => item.Voucher_3)</span>
+                                        }
+                                    }
+                                    @{
+                                        if (item.Voucher_4 != null)
+                                        {
+                                            <span style="font-weight:lighter;font-weight:900">JV-@Html.DisplayFor(modelItem => item.Voucher_4)</span>
+                                        }
+                                    }
+                                </td>
+                                <td style="font-size:small">
+                                    <span style="font-weight:lighter" class="pull-left">@Html.DisplayFor(modelItem => item.Narration_1)</span>
+                                    <span style="font-weight:lighter" class="pull-left">@Html.DisplayFor(modelItem => item.Narration_2)</span>
+                                    <span style="font-weight:lighter" class="pull-left">@Html.DisplayFor(modelItem => item.Narration_3)</span>
+                                    <span style="font-weight:lighter" class="pull-left">@Html.DisplayFor(modelItem => item.Narration_4)</span>
+                                </td>
+                                <td class="CreditAmount" style="text-align:right;padding-right:80px">
+                                    @{
+                                        @Html.DisplayFor(modelItem => item.Credit)                                     
+                                    }
+                                </td>
+                            </tr>
+                                        }
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><p style="text-align:right;padding-right:80px; font-weight:bold ; border-top:1px solid rgb(0,0,0);" id="TotalCredit"></p></td>
+                                        </tr>
+                                        }
+                </tbody>
+            </table>
+        </div>
+    </div>    
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        TotalDebitCalculate();
+        TotalCreditCalculate();        
+    });
+
+    function Print() {
+        $('.HideItems').hide();
+        $('.ShowItems').show();        
+        window.print();
+        $('.ShowItems').hide();
+        $('.HideItems').show();
+    }
+
+   function TotalDebitCalculate() {
+        var debit = 0;
+        $('.DebitAmount').each(function() {
+            debit += parseFloat($(this).text());
+        });
+        $('#TotalDebit').text(debit);
+    }
+    function TotalCreditCalculate() {
+        var credit = 0;
+        $('.CreditAmount').each(function () {
+            credit += parseFloat($(this).text());
+        });
+        $('#TotalCredit').text(credit);
+    }
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function tablesToExcel()
+    {
+        tableToExcel('MyTable_1', 'Cash Book Dr.', 'Dr. Cash Book-Biznsbook.xls');
+        tableToExcel('MyTable_2', 'Cash Book Cr.', 'Cr. Cash Book-Biznsbook.xls');
+    }
+
+    var tableToExcel = (function () {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+        , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+        , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+        , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+        return function (table, name, filename) {            
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+            document.getElementById("dlink").href = uri + base64(format(template, ctx));
+            document.getElementById("dlink").download = filename;
+            document.getElementById("dlink").click();
+        }        
+    })()
+</script>    

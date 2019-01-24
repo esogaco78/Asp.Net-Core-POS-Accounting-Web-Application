@@ -1,0 +1,250 @@
+﻿@model Invento.Areas.Finance.Models.GeneralLedgerVM
+ 
+@{
+    ViewData["Title"] = "Notes to the Accounts";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:0px">
+    <div class="row">
+        <div class="col-md-4">
+            <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+        </div>
+        <div class="row ShowItems pull-right" style="display:none;padding-top:10px">
+            <span class="col-md-2">From <input type="date" class="col-md-1" asp-for="DateFrom" /></span>
+            <span class="col-md-2">To <input type="date" class="col-md-1" asp-for="DateTo" /></span>
+        </div>   
+
+        <form asp-action="AccountNotes" method="get">                    
+                <div class="col-md-1 HideItems"><label class="pull-right">From</label></div>
+                <div class="col-md-2 HideItems" style="padding-left:0px">
+                    <input type="date" class="form-control" name="DateFrom" id="DateFrom" asp-for="DateFrom" required />
+                </div>
+                <div class="col-md-1 HideItems"><label class="pull-right">To</label></div>
+                <div class="col-md-2 HideItems" style="padding-left:0px">
+                    <input type="date" class="form-control" name="DateTo" id="DateTo" asp-for="DateTo" required />
+                </div>
+                <div class="col-md-2 HideItems">
+                    <button type="submit" class="btn-sm btn-default" id="Search" value="Search" title="Search" style="font-weight:bolder"><span class="glyphicon glyphicon-search"></span></button>
+                    <button type="button" class="btn-sm btn-default" title="Print Notes to the Accounts" onclick="Print();"><span class="glyphicon glyphicon-print"></span></button>
+                    <a id="dlink" style="display:none;"></a>
+                    <button class="btn-sm btn-default" onclick="tableToExcel('MyTable', 'Notes to the Accounts', 'AccountNotes-BiznsBook.xls')" title="Export to Excel">
+                        <span class="glyphicon glyphicon-export"></span>
+                    </button>
+                </div>            
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-condensed" style="width:100%" id="MyTable">
+        <thead>
+            <tr class="active">
+                <th style="width:88%">
+                    Account Number
+                </th>              
+                <th style="text-align:right;padding-right:75px; width:5%">
+                    Debit
+                </th>
+                <th style="text-align:right;padding-right:50px; width:5%">
+                    Credit
+                </th>
+                <th style="width:1%"></th>
+                @*<th style="display:none;width:1%"></th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @if(Model.LedgerList != null)
+            { 
+            @for (int i = 0; i < Model.LedgerList.Count; i++)
+            {
+                <tr id="tblData" class="dataRows">
+                    <td style="width:80%">                        
+                        <span>@Html.DisplayFor(modelItem => Model.LedgerList[i].MainAccountNumber)</span><span>  </span><span>@Html.DisplayFor(modelItem => Model.LedgerList[i].SubAccountNumber)</span><span>  </span> <span>@Html.DisplayFor(modelItem => Model.LedgerList[i].TransactionAccountNumber)</span><span> , </span> <span style="font-weight:bold">@Html.DisplayFor(modelItem => Model.LedgerList[i].TransactionAccountName)</span>
+                    </td>                   
+                    <td class="DebitAmount" style="text-align:right;padding-right:75px ;width:10%">
+                        @{
+                            if (Model.LedgerList[i].Balance > 0)
+                            {
+                                decimal aa = Model.LedgerList[i].Balance;
+                                string B = String.Format("{0:#,##0.##}", aa);
+                                <span>@B</span>
+                                //@Html.DisplayFor(modelItem => Model.LedgerList[i].Balance)
+                            }
+                            else
+                            {
+                                <span style="display:none">0</span>
+                            }
+                        }
+                    </td>
+                    <td class="CreditAmount" style="text-align:right;padding-right:50px;width:10%">
+                        @{
+                            if (Model.LedgerList[i].Balance < 0)
+                            {
+                                decimal AA = @Model.LedgerList[i].Balance * (-1);
+                                string AB = String.Format("{0:#,##0.##}", AA);                                
+                                <span>@AB</span>;
+                            }
+                            else
+                            {
+                                <span style="display:none">0</span>
+                            }
+                        }
+                    </td>
+                    <td style="width:0%">
+                        <span style="font-weight:bolder" id="SubAccountTotal"></span>
+                    </td>
+                    @*<th style="display:none;width:0%" class="OpeningBalanceAll">
+                        @Html.DisplayFor(modelItem => Model.LedgerList[i].Balance_Credit_Minus)
+                    </th>*@
+                </tr>
+                    if (i < Model.LedgerList.Count - 1)
+                    {
+                        if (Model.LedgerList[i].MainAccountNumber != Model.LedgerList[i + 1].MainAccountNumber)
+                        {
+                            <tr class="active">
+                                <td style="width:80%">
+                                    <span style="font-weight:bold">@Html.DisplayFor(modelItem => Model.LedgerList[i].MainAccountNumber)</span> <span>  </span> <span> , </span> <span style="font-weight:bold">@Html.DisplayFor(modelItem => Model.LedgerList[i].MainAccountName)</span>
+                                </td>                                                                                                                                                      
+                            @{
+                                foreach (var item in Model.ListPlus)
+                                {
+                                    if (Model.LedgerList[i].MainAccountID == item.ID)
+                                    {
+                                        if (item.TotalAdd < 0)
+                                        {
+                                            <td></td>
+                                            <td style="text-align:right;padding-right:50px"><span style="font-weight:bold ; border-top:1px solid rgb(0,0,0); border-bottom:1px solid rgb(0,0,0);" class="SubTotal">
+                                                @{ 
+                                                    string B = String.Format("{0:#,##0.##}", item.TotalAdd);
+                                                }                                                                                                
+                                                @B                                                
+                                                </span></td>
+                                            <td></td>
+                                        }
+                                        if (item.TotalAdd > 0)
+                                        {
+                                            <td style="text-align:right;padding-right:75px"><span style="font-weight:bold ; border-top:1px solid rgb(0,0,0); border-bottom:1px solid rgb(0,0,0);" class="SubTotal">
+                                                @{
+                                                    string C = String.Format("{0:#,##0.##}", item.TotalAdd);
+                                                }
+                                                @C</span></td>
+                                            <td></td>
+                                            <td></td>
+                                        }
+                                    }
+                                }
+                            }                                                                                  
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr class="active">
+                            <td style="width:80%">
+                                <span style="font-weight:bold">@Html.DisplayFor(modelItem => Model.LedgerList[i].MainAccountNumber)</span><span>  </span> <span> , </span> <span style="font-weight:bold">@Html.DisplayFor(modelItem => Model.LedgerList[i].MainAccountName)</span>
+                            </td>                                   
+                                   
+                                @{
+                                    foreach (var item in Model.ListPlus)
+                                    {
+                                        if (Model.LedgerList[i].MainAccountID == item.ID)
+                                        {
+                                            if (item.TotalAdd < 0)
+                                            {
+                                                <td></td>
+                                                <td style="text-align:right;padding-right:50px"><span style="font-weight:bold ; border-top:1px solid rgb(0,0,0); border-bottom:1px solid rgb(0,0,0);" class="SubTotal">
+                                                    @{
+                                                        string D = String.Format("{0:#,##0.##}", item.TotalAdd);
+                                                    }
+                                                    @D</span></td>
+                                                <td></td>
+                                            }
+                                            if (item.TotalAdd > 0)
+                                            {
+                                                <td style="text-align:right;padding-right:75px"><span style="font-weight:bold ; border-top:1px solid rgb(0,0,0); border-bottom:1px solid rgb(0,0,0);" class="SubTotal">
+                                                    @{
+                                                        string E = String.Format("{0:#,##0.##}", item.TotalAdd);
+                                                    }
+                                                    @E</span></td>
+                                                    <td></td>
+                                                    <td></td>
+                                            }
+                                        }
+                                    }
+                                }
+                                        
+                                 
+                        </tr>
+                        }
+                    }
+                                            }
+        </tbody>
+    </table>
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        TotalCalculate();
+        TotalDebitCalculate();
+        TotalCreditCalculate();
+    });
+
+    var tableToExcel = (function () {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+        , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+        , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+        , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+        return function (table, name, filename) {
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+
+            document.getElementById("dlink").href = uri + base64(format(template, ctx));
+            document.getElementById("dlink").download = filename;
+            document.getElementById("dlink").click();
+
+        }
+    })()
+
+    function Print() {
+        $('.HideItems').hide();
+        $('.ShowItems').show();
+        window.print();
+        $('.ShowItems').hide();
+        $('.HideItems').show();
+    }
+
+    function TotalCalculate() {
+        var debit = 0;
+        $('.OpeningBalanceAll').each(function () {
+            debit += parseFloat($(this).text());
+        });
+        $('#OpenBalance').text(debit);
+    }
+
+    function TotalDebitCalculate() {
+        var debit = 0;
+        debugger;
+        $('.DebitAmount').each(function () {
+            debit += parseFloat($(this).text());
+        });
+        $('#TotalDebit').text(debit);
+    }
+
+    function TotalCreditCalculate() {
+        var debit = 0;
+        $('.CreditAmount').each(function () {
+            debit += parseFloat($(this).text());
+        });
+        $('#TotalCredit').text(debit);
+    }
+
+</script>    

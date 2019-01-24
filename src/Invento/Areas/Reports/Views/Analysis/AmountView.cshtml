@@ -1,0 +1,102 @@
+﻿@model Invento.Areas.Reports.Models.AnalysisVM
+@{
+    ViewData["Title"] = "Analysis - Amount View";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="">
+    <div class="well" style="padding-bottom:5px">
+        <div class="row">
+            <form asp-action="AmountView" asp-controller="Analysis" method="get">
+                <div class="input-group">
+                    <span class="glyphicon glyphicon-stats glyphicon-bold " style="font-size: 1.5em; padding-left:10px;color:darkblue" aria-hidden="true"></span>
+                    <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Receivable Payable View</span>
+                    <div class="col-md-3 pull-right">
+                        <select class="form-control" asp-items="@Model.PartyList"  name="Party" id="Party">
+                            <option selected>All Party Accounts</option>
+                        </select>
+                    </div>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit" style="margin-right:50px"><span class="glyphicon glyphicon-search"></span></button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-12 ">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h1 class="panel-title">
+                        Amount Receivable &amp; Payable View
+                    </h1>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <canvas id="mycanvas" width="700" height="400"></canvas>
+                        </div>
+                        <div class="col-lg-3 pull-right">
+                            <div class="row">
+                                <br /><br /><br />
+                                <div style="background-color:cornflowerblue" title="Amount Receivable"><p style="font-weight:bolder;padding-left:5px">Amount Receivable</p></div>
+                                <div style="background-color:lightgreen" title="Amount Payable"><p style="font-weight:bolder;padding-left:5px">Amount Payable</p></div>
+                               </div>
+                        </div>
+                    </div>                       
+                </div>
+            </div>
+        </div>         
+    </div>    
+       
+</div>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+ 
+    <script>
+        $(document).ready(function () {
+            @*var ctx = $("#mycanvas").get(0).getContext("2d");
+            var data = [
+                {
+                    value: @Model.Deci1,
+                    color: "cornflowerblue",
+                    highlight: "#f76a5d",
+                    label: "Amount to be Received."
+                },
+                {
+                    value: @Model.Deci2,
+                    color: "lightgreen",
+                    highlight: "#f76a5d",
+                    label: "Amount to Be Paid."
+                }  
+            ];
+            var piechart = new Chart(ctx).Pie(data);*@
+            var ctx = $("#mycanvas").get(0).getContext("2d");
+
+            var data = [
+                {
+                    value: @Model.Deci1,
+                    color: "cornflowerblue",
+                    highlight: "lightskyblue",
+                    label: "Amount to be Received."
+                },
+                {
+                    value: @Model.Deci2,
+                    color: "lightgreen",
+                    highlight: "yellowgreen",
+                    label: "Amount to Be Paid."
+                } 
+            ];
+
+            var chart = new Chart(ctx).Doughnut(data);
+        });
+
+    </script>

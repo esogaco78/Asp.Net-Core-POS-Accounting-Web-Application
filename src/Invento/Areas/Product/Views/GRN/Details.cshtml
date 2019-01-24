@@ -1,0 +1,129 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model Invento.Areas.Product.Models.GRNVM
+@using Invento.Areas.Purchase.Models
+
+@{
+    ViewData["Title"] = "GRN";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+    <div class="form-horizontal">
+
+        <div class="well" style="padding-bottom:5px" id="header">
+            <div class="row">
+                <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Good Receive Note</span>                
+                <a id="printbtn" value="Print" class="btn btn-primary pull-right" onclick="PrintGRN();" style="margin-right:20px" ><span class="glyphicon glyphicon-print"> Print</span></a>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-2 pull-left">
+                <label>Date</label>
+            </div>
+            <div class="col-md-2 pull-left">
+                <label>Company Name</label>
+            </div>
+            <div class="col-md-2 pull-left">
+
+            </div>
+            <div class="col-md-2 pull-left">
+                <label>Contact Person</label>
+            </div>
+            <div class="col-md-2 pull-left">
+                <label>Contact Number</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                @Html.DisplayFor(itemmodel => Model.GRNDate)                
+            </div>
+            <div class="col-md-4">
+                @Html.DisplayFor(itemmodel => Model.PartyName)                
+            </div>
+            <div class="col-md-2">
+                @Html.DisplayFor(itemmodel => Model.ContactPerson)                               
+            </div>
+            <div class="col-md-2">
+                @Html.DisplayFor(itemmodel => Model.ContactNumber)                               
+            </div>
+        </div>
+
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table" id="ItemTbl">
+                    <thead>
+                        <tr class="active">                            
+                            <th width="15%">
+                                OEM No.
+                            </th>
+                            <th width="35%">
+                                Description
+                            </th>
+                            <th width="15%">
+                                Quantity
+                            </th>                            
+                        </tr>
+                    </thead>
+                    <tbody class="active">
+                        @foreach (var item in Model.GRNItem)
+                        {
+                            <tr>
+                                <td>                                    
+                                    @Html.DisplayFor(itemmodel => item.Item.OEMNo)                                    
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(itemmodel => item.Item.ProductDescription)                                    
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(itemmodel => item.Quantity)                                    
+                                </td>
+                            </tr>
+                        }                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Total Quantity</label>
+            </div>
+            <div class="col-lg-1 pull-left">
+                @Html.DisplayFor(itemmodel => Model.TotalQuantity)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-lg-1">
+                <label>Remarks</label>
+            </div>
+            <div class="col-lg-5">
+                <textarea asp-for="Remarks" class="form-control" rows="7" cols="4" readonly="readonly"></textarea>
+            </div>
+         </div>
+
+    </div>
+
+
+<script type="text/javascript">
+
+        function PrintGRN()
+        {
+            $('#cancelbtn').hide();
+            $('#printbtn').hide();
+            window.print();
+        }    
+</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

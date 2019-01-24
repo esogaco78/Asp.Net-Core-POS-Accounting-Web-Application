@@ -1,0 +1,98 @@
+@model Invento.Areas.Finance.Models.SubAccount
+  
+<div class="modal-content ">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-weight:bolder">Add New Sub Account</h4>
+    </div>
+    <div class="modal-body">
+
+        <form asp-action="CreateSubAccount" id="MyForm">
+            <div class="form-horizontal">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+               
+                <div class="form-group">
+                    <label asp-for="MainAccountID" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        <select asp-for="MainAccountID" class="form-control" asp-items="ViewBag.MainAccount" required onchange="GenerateSubAccountNumber();">
+                            <option disabled selected>Select</option>
+                        </select>
+                        <span asp-validation-for="MainAccountID" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="SubAccountNumber" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        <input asp-for="SubAccountNumber" class="form-control" required />
+                        <span asp-validation-for="SubAccountNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="AccountName" class="col-md-4 control-label"></label>
+                    <div class="col-md-8">
+                        <input asp-for="AccountName" class="form-control" required />
+                        <span asp-validation-for="AccountName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="modal-footer">                    
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $().ready(function () {
+
+        $("#MyForm").validate({
+            rules: {
+                SubAccountNumber: {
+                    required: true,
+                    maxlength: 4,
+                    digits: true
+                    //lettersonly: true
+                }
+            },
+            messages:
+                {
+                    required: "Please Enter Account Number.",
+                    maxlength: "Please Enter Max 4 digits.",
+                    digits: "Please Enter only digits."
+                }
+        })
+    })
+
+    function GenerateSubAccountNumber()
+    {
+        debugger;
+        var mainAccNum = $('#MainAccountID').val();
+
+        $URL = '@Url.Action("GenerateSubAccountNumber", "ChartOfAccounts", new { area= "Finance" })';
+        $.ajax({
+            method: "GET",
+            url: $URL,
+            data: { mainAccNum: mainAccNum },
+            contentType: "application/json;charset=utf-8"
+        })
+            .done(function (data) {
+                debugger;
+                $('#SubAccountNumber').val(data);
+            });
+
+    }
+
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

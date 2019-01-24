@@ -1,0 +1,80 @@
+﻿@using System.Collections.Generic
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+@model LoginViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<header>
+    <section class="hero">
+        <div class="texture-overlay"></div>
+        <div class="container">
+            <div class="row nav-wrapper">
+                <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                    <a asp-controller="Home" asp-action="Index" style="font-size:xx-large ; font-family:'Nunito'">Biznsbook</a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 text-right navicon">
+                    <p>MENU</p><a id="trigger-overlay" class="nav_slide_button nav-toggle" href="#"><span></span></a>
+                </div>
+            </div>
+            <div class="row hero-content">
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />                
+                <div class="col-md-6 col-md-offset-3" style="background-color:lavender">
+                    <br />
+                    <h3 style="color:black;font-weight:900;padding-left:20px">Login.</h3>
+                    <br />
+                    <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">                        
+
+                        <div asp-validation-summary="All" class="text-danger" style="color:firebrick;font-weight:bolder;padding-left:20px"></div>
+                        <div class="form-group">
+                            <label asp-for="Email" class="col-md-3 control-label" style="color:black ;font-family:'Bookman Old Style'"></label>
+                            <div class="col-md-7">
+                                <input asp-for="Email" class="form-control" required/>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password" class="col-md-3 control-label" style="color:black;font-family:'Bookman Old Style'"></label>
+                            <div class="col-md-7">
+                                <input asp-for="Password" class="form-control" required/>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-3 col-md-4" style="color:black">
+                                <div class="checkbox">
+                                    <label asp-for="RememberMe">
+                                        <input asp-for="RememberMe" />
+                                        @Html.DisplayNameFor(m => m.RememberMe)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-offset-1 col-md-3">
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        <button type="submit" class="btn btn-primary">Log in</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p>
+                            <a asp-area="" asp-action="ForgotPassword" class="col-md-offset-3" style="color:black"><u>Forgot your password?</u></a>
+                        </p>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</header>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

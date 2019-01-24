@@ -1,0 +1,107 @@
+﻿<div class="modal-content ">    
+    <div class="modal-body">
+        <div class="row center-block text-center">
+            <div id="container">
+                <ul id="theList" contenteditable="true">
+                    <li>Add Notes...</li>
+                </ul>                
+                <p><a style="color:black;font-weight:bolder" title="Save Notes..." href=javascript:void(); id="saveAll">Save All</a>   <a style="color:black;font-weight:bolder;padding-left:15px"  title="Delete All Notes..." href=javascript:void(); id="clearAll">Clear All</a> <a style="color:black;font-weight:bolder;padding-left:15px" data-dismiss="modal"  title="Close..." href=""><span class="glyphicon glyphicon-remove"></span></a></p>                
+            </div>
+        </div>
+    </div>
+</div> 
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var theList = document.getElementById('theList');
+		$("#saveAll").click(function(e) {
+			e.preventDefault();
+			localStorage.setItem('todoList', theList.innerHTML);
+		});
+		$("#clearAll").click(function(e) {
+			e.preventDefault();
+			localStorage.clear();
+			//location.reload();
+		});
+
+		loadToDo();
+
+		function loadToDo() {
+		  if ( localStorage.getItem('todoList') ) {
+			theList.innerHTML = localStorage.getItem('todoList');
+		  }
+		}
+	});
+</script>
+
+<style>
+    a,
+    a:link {
+        outline: none;
+    }
+
+    #container h1 {
+        font-weight: 100;
+        font-size: 72px;
+        margin: 20px 0;
+    }
+
+    #container {
+        width: 580px;
+        text-align: center;
+        margin: 20px auto;
+    }
+
+        #container input[type="text"] {
+            height: 30px;
+            width: 350px;
+            padding: 10px;
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        #container input[type="submit"] {
+            height: 56px;
+            padding: 10px;
+            border: 1px solid #333;
+            background-color: #ccc;
+            font-size: 24px;
+            cursor: pointer;
+            outline: none;
+            width: auto;
+            background: none;
+        }
+
+        #container ul {
+            margin: 15px auto 0;
+            padding: 0;
+            width: 470px;
+            margin-left:15px
+        }
+
+            #container ul li {
+                list-style-type: none;
+                font-size: 20px;
+                cursor: move;
+                background-color: #efefef;
+                margin-bottom: 5px;
+                padding: 7px;
+                text-align: left;
+            }
+
+                #container ul li span {
+                    cursor: text;
+                }
+
+                #container ul li a,
+                #container ul li a:link {
+                    float: right;
+                    display: none;
+                    text-decoration: none;
+                    color: #f03;
+                }
+
+                    #container ul li a:hover {
+                        text-decoration: underline;
+                    }
+</style>

@@ -1,0 +1,101 @@
+﻿ @model Invento.Areas.Payment.Models.ReceivablePaybleStatementVM
+
+@{
+    ViewData["Title"] = Localizer["Statement Of Payable"];
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <div class="row">
+            <div class="col-md-3">
+                <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+            </div>
+            <form asp-action="StatementOfPayable" method="get" class="HideItems">                                    
+                    <div class="col-md-3 col-md-offset-5">
+                        <select class="form-control" asp-items="@Model.PartyList" onchange="PartyChange();" name="Party" id="Party">
+                            <option selected>@Localizer["All Party Accounts"]</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1 HideItems">
+                        <button type="submit" class="btn-sm btn-default" id="Search" value="Search" title="Search" style="font-weight:bolder"><span class="glyphicon glyphicon-search"></span></button>
+                        <button type="button" class="btn-sm btn-default" title="Print Payable" onclick="Print();"><span class="glyphicon glyphicon-print"></span></button>
+                    </div>                                    
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover" id="MyTable">
+        <thead>
+            <tr class="active">
+                <th>
+                    @Localizer["Name"]
+                </th>
+                <th>
+                    @Localizer["Amount To Pay"]
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.StatementList)
+        {
+            decimal XYZ = item.OpeningBalance - item.credit + item.debit;
+            if (XYZ < 0)
+            {
+                    <tr id="tblData">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PartyName)
+                        </td>
+                        <td class="Amount">
+                            @{
+                            decimal AAA = XYZ * -1;
+                            }
+                            <span>@AAA</span>
+                        </td>
+                    </tr>
+            }
+        }
+        </tbody>
+        <tfoot>
+            <tr class="active">
+                <td></td>
+                @*border-top:1px solid rgb(0,0,0)    For Line on top*@
+                <td><p style="font-weight:bold ; " id="TotalAmount"></p></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            TotalPayableCalculate();
+        });
+
+        function Print() {
+            $('.HideItems').hide();            
+            window.print();
+            $('.HideItems').show();
+        }
+
+        function TotalPayableCalculate() {
+            debugger;
+            var amount = 0;
+            $('.Amount').each(function () {
+                amount += parseFloat($(this).text());
+            });
+            $('#TotalAmount').text(amount);
+        }
+    </script>
+}
+
+

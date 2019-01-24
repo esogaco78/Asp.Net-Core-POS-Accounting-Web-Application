@@ -1,0 +1,280 @@
+@model Invento.Areas.Product.Models.Item
+  
+@{
+    ViewData["Title"] = "Item";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<form asp-action="Create" asp-controller="Items" method="post" enctype="multipart/form-data" id="MyForm">
+    <div class="form-horizontal">
+
+        <div class="well" style="padding-bottom:5px">
+            <div class="row">
+                <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Add Product</span>                
+                <button type="submit" class="btn btn-default pull-right" style="margin-right:50px ; font-weight:bolder" title="Save">
+                    <i class="glyphicon glyphicon-save"></i> Save
+                </button>
+            </div>
+        </div>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+         
+        <div class="panel panel-default"> 
+            <div class="panel-body"> 
+                <div class="row">                                       
+                    <div class="col-md-3"><span class="glyphicon glyphicon-question-sign" title="OEM No. is the Primary Search Name for your Products OEM No. Should Be Unique for every Item for best Search."></span><label asp-for="OEMNo" class="col-md-5 control-label"></label></div>
+                    <div class="col-md-3"><span class="glyphicon glyphicon-question-sign" title="Cross Ref is the Secondary Search Name for your Products if you do not remember OEM No. in Purcahase or Sale Process."></span><label asp-for="CrossRef" class="col-md-5 control-label"></label></div>
+                    <div class="col-md-3"><span class="glyphicon glyphicon-question-sign" title="Item Name can be any for your Reports."></span><label asp-for="ItemName" class="col-md-6 control-label"></label></div>
+                    <div class="col-md-3"><span class="glyphicon glyphicon-question-sign" title="Select Image for your Product. Only .jpg , .jepg , .png , .TIF"></span><label class="col-md-6 control-label">Item Picture</label></div>
+                </div>
+                <div class="row">                                       
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="OEMNo" class="form-control" required onchange="checkOEM();" />
+                                <span asp-validation-for="OEMNo" class="text-danger" ></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="CrossRef" class="form-control" required onchange="checkCrossRef();" />
+                                <span asp-validation-for="CrossRef" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="ItemName" class="form-control" />
+                                <span asp-validation-for="ItemName" class="text-danger" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-9">
+                                <input type="file" id="File" name="File" accept="image/jpg, image/jpeg, image/png, image/tif" />
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3"><label asp-for="ItemType" class="col-md-5 control-label"></label></div>
+                    @*<div class="col-md-3"><label asp-for="Value" class="col-md-5 control-label"></label></div>*@
+                    <div class="col-md-3"><span class="glyphicon glyphicon-question-sign" title="Select Product Group (Create Product Group from Managment --> Product Group Section)"></span><label asp-for="ProductGroupID" class="col-md-7 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="SalePrice" class="col-md-6 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="ItemMainCompany" class="col-md-7 control-label"></label></div>                    
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="ItemType" class="form-control"  />
+                                <span asp-validation-for="ItemType" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="Value" class="form-control" required value="0"/>
+                                <span asp-validation-for="Value" class="text-danger" ></span>
+                            </div>
+                        </div>
+                    </div>*@
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <select asp-for="ProductGroupID" class="form-control" asp-items="ViewBag.ProductGroupID"  >
+                                    <option value="">Select</option>
+                                </select>
+                                <span asp-validation-for="ProductGroupID" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="SalePrice" class="form-control" required />
+                                <span asp-validation-for="SalePrice" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="ItemMainCompany" class="form-control" />
+                                <span asp-validation-for="ItemMainCompany" class="text-danger" ></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3"><label asp-for="ItemExtra_String_1" class="col-md-5 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="ItemExtra_String_2" class="col-md-4 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="ItemExtra_String_3" class="col-md-5 control-label"></label></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="ItemExtra_String_1" class="form-control"   />
+                                <span asp-validation-for="ItemExtra_String_1" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="ItemExtra_String_2" class="form-control"   />
+                                <span asp-validation-for="ItemExtra_String_2" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="ItemExtra_String_3" class="form-control"   />
+                                <span asp-validation-for="ItemExtra_String_3" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+
+                <div class="row">                                     
+                    <div class="col-md-3"><label asp-for="Size" class="col-md-5 control-label"></label></div>
+                </div>
+                <div class="row"> 
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="Size" class="form-control" />
+                                <span asp-validation-for="Size" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3"><span class="glyphicon glyphicon-question-sign" title="This Description will appear in Purchase and Sale Process."></span><label asp-for="ProductDescription" class="col-md-7 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="Remark" class="col-md-3 control-label"></label></div>
+                    <div class="col-md-3"><label asp-for="ItemType2" class="col-md-6 control-label"></label></div>
+                @if (User.IsInRole("CompanyAdmin"))
+                {
+                    <div class="col-md-3"><span class="glyphicon glyphicon-question-sign" title="Enter Opening Inventory for this Product."></span><label class="col-md-6 control-label">Opening Stock</label></div>
+                }
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <textarea asp-for="ProductDescription" class="form-control" cols="5" rows="5"></textarea>
+                                <span asp-validation-for="ProductDescription" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <textarea asp-for="Remark" class="form-control" cols="5" rows="5"></textarea>
+                                <span asp-validation-for="Remark" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <input asp-for="ItemType2" class="form-control" />
+                                <span asp-validation-for="ItemType2" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    @if (User.IsInRole("CompanyAdmin"))
+                    {
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    <input asp-for="Quantity" class="form-control" value="0" required/>
+                                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>   
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#MyForm").validate();
+    });
+
+    function checkOEM() {
+        debugger;
+        var OEM = $('#OEMNo').val();
+
+        $URL = '@Url.Action("CheckOEM", "Items", new { area= "Product" })';
+        $.ajax({
+            method: "GET",
+            url: $URL,
+            data: { OEM: OEM },
+            contentType: "application/json;charset=utf-8"
+        })
+            .done(function (data) {
+                debugger;
+                if (data == true) {
+                    var mytitle = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Error: Invalid OEM No.";
+                    $('.modal-title').html(mytitle);
+                    var myHeading = "<b>Product:  " + OEM + " Already Exists in Product List.</b>";
+                    $(".modal-body").html(myHeading);
+                    $('#modal-error').modal('show');
+
+                    $('#OEMNo').val("");
+                }
+            });
+    }
+    function checkCrossRef() {
+        debugger;
+        var CrossRef = $('#CrossRef').val();
+
+        $URL = '@Url.Action("CheckCrossRef", "Items", new { area= "Product" })';
+        $.ajax({
+            method: "GET",
+            url: $URL,
+            data: { CrossRef: CrossRef },
+            contentType: "application/json;charset=utf-8"
+        })
+            .done(function (data) {
+                debugger;
+                if (data == true) {
+                    var mytitle = "<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Error: Invalid Cross Ref. No.";
+                    $('.modal-title').html(mytitle);
+                    var myHeading = "<b>Product:  " + CrossRef + " Already Exists in Product List.</b>";
+                    $(".modal-body").html(myHeading);
+                    $('#modal-error').modal('show');
+
+                    $('#CrossRef').val("");
+                }
+            });
+    }
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

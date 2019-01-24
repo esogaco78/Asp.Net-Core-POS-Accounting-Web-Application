@@ -1,0 +1,262 @@
+  @model IEnumerable<Invento.Areas.Purchase.Models.PurchaseBill>
+
+@{
+    ViewData["Title"] = "Purchase Invoices";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>        
+        @if (User.IsInRole("CompanyAdmin") || User.IsInRole("Add Purchase Invoices"))
+        {
+            <a asp-action="Create" class="btn btn-default pull-right" style="margin-right:20px"><span class="glyphicon glyphicon-plus"></span> Add New </a>
+        }
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover" id="MyTable">
+        <thead>
+            <tr class="active">
+                <th></th>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Person
+                </th>
+                <th>
+                    Gross Total
+                </th>
+                <th>
+                    Discount
+                </th>
+                <th>
+                    Net Amount
+                </th>
+                <th>
+                    Parties
+                </th>
+                <th>
+                    Qty.
+                </th>
+                <th>
+                    Remarks
+                </th>
+                <th>
+                    Phone
+                </th>
+                <th>
+                    Currency
+                </th>
+                <th>
+                    Created By
+                </th>
+                @if (User.IsInRole("Edit Purchase Invoices") || User.IsInRole("CompanyAdmin"))
+            {
+                    <th><span class="glyphicon glyphicon-pencil"></span></th>
+                }
+                @if (User.IsInRole("View Purchase Invoices Details") || User.IsInRole("CompanyAdmin"))
+            {
+                    <th><span class="glyphicon glyphicon-eye-open"></span></th>
+                }
+                @if (User.IsInRole("Add Purchase Returns") || User.IsInRole("CompanyAdmin"))
+            {
+                    <th><span class="glyphicon glyphicon-share-alt"></span></th>
+                }
+                @if (User.IsInRole("Cancel Purchase Invoices") || User.IsInRole("CompanyAdmin"))
+                {
+                    <th><span class="glyphicon glyphicon-remove"></span></th>
+                }
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+        function format(d) {
+            // `d` is the original data object for the row
+            return '<div class="child-container">' +
+                '<table cellpadding="5" cellspacing="0" border="0">' +
+                    '<tr>' +
+                        '<td style="font-weight:bolder">Remark:</td>' +
+                        '<td>' + d.remarks + '</td>' +
+                        '<td style="font-weight:bolder">Phone:</td>' +
+                        '<td>' + d.phone1 + '</td>' +
+                        '<td style="font-weight:bolder">Currency:</td>' +
+                        '<td>' + d.currencyName + '</td>' +
+                        '<td style="font-weight:bolder">Created By:</td>' +
+                        '<td>' + d.createdBy + '</td>' +
+                    '</tr>' +
+                '</table>' +
+            '</div>';
+        }
+
+        $(document).ready(function () {
+            var table = $('#MyTable').DataTable({
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        "extend": 'print',
+                        "title": "Purchase Invoices",
+                        "text": "Print",
+                        "autoPrint": true,
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    },
+                    //'colvis',
+                    {
+                        "extend": 'excel',
+                        "title": "Purchase Invoices",
+                        "text": "Excel",
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    },
+                    //'colvis',
+                    {
+                        "extend": 'pdf',
+                        "title": "Purchase Invoices",
+                        "text": "PDF",
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    },
+                         {
+                             extend: 'colvis',
+                             collectionLayout: 'fixed two-column'
+                         }
+                ],
+                columnDefs: [{
+                    "visible": false, "targets": [ 9, 10, 11,12], "searchable": false                    
+                }],
+
+                "ajax": {
+                    "url": "/Purchase/Purchase/LoadPurchaseBills",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                     {
+
+                         "class": 'details-control',
+                         "orderable": false,
+                         "data": null,
+                         "defaultContent": ''
+                     },
+                     { "data": "purchaseBillID", "autpWidth": true, "order": [0, 'desc'] },
+                     { "data": "billDate", "autpWidth": true },
+                     { "data": "contactPerson", "autpWidth": true },
+                     { "data": "grossTotal", "autpWidth": true },
+                     { "data": "tDiscount", "autpWidth": true },
+                     { "data": "netAmount", "autpWidth": true },
+                     { "data": "partyName", "autpWidth": true },
+                     { "data": "totalQuantity", "autpWidth": true },
+                     { "data": "remarks", "autpWidth": true },
+                     { "data": "phone1", "autpWidth": true },
+                     { "data": "currencyName", "autpWidth": true },
+                     { "data": "createdBy", "autpWidth": true },
+                       @if(User.IsInRole("Edit Purchase Invoices") || User.IsInRole("CompanyAdmin"))
+                       {
+                            <text>
+                            {
+                             "data": null,
+                             "mRender": function (data, type, row) {
+                                 return $("<div />")
+                                     .append($(" <div class='text-center'> <a class='btn btn-sm btn-default' title='Edit Invoice' href='/Purchase/Purchase/Edit?id=" + data.purchaseBillID + "'><span class='glyphicon glyphicon-pencil'></span></a>  </div> "))
+                                     .html();
+                                        }
+                            },
+                          </text>
+                       }
+
+
+                      @if(User.IsInRole("View Purchase Invoices Details") || User.IsInRole("CompanyAdmin"))
+                {
+                            <text>
+                     {
+                         "data": null,
+                         "mRender": function (data, type, row) {
+                             return $("<div />")
+                                 .append($(" <div class='text-center'>  <a class='btn btn-sm btn-default' title='View Invoice' target='_blank' href='/Purchase/Purchase/Details?id=" + data.purchaseBillID + "'><span class='glyphicon glyphicon-eye-open'></span></a>   </div> "))
+                                 .html();
+                         }
+                     }
+                      </text>
+                      },
+
+                      
+                       @if(User.IsInRole("Add Purchase Returns") || User.IsInRole("CompanyAdmin"))
+                        {
+                            <text>
+                            {
+                                    "data": null,
+                                    "mRender": function (data, type, row) {
+                                        return $("<div />")
+                                            .append($(" <div class='text-center'> <a class='btn btn-sm btn-default' title='Purchase Return' href='/Purchase/PurchaseReturn/Create?id=" + data.purchaseBillID + "'><span class='glyphicon glyphicon-share-alt'></span></a>  </div> "))
+                                            .html();
+                                    }
+                                },
+                              </text>
+                            }
+
+                                 @if(User.IsInRole("Cancel Purchase Invoices") || User.IsInRole("CompanyAdmin"))
+                {
+                            <text>
+                            {
+                                "data": null,
+                                "mRender": function (data, type, row) {
+                                    return $("<div />")
+                                        .append($(" <div class='text-center'> <a class='btn btn-sm btn-default modal-link' title='Cancel Invoice' href='/Purchase/Purchase/CancelInvoice?id=" + data.purchaseBillID + "'><span class='glyphicon glyphicon-remove'></span></a>  </div> "))
+                                        .html();
+                                }
+                            },
+                              </text>
+                            }
+
+                ],
+                "order": [[1, 'desc']]
+            });
+
+            // Add event listener for opening and closing details
+            $('#MyTable tbody').on('click', 'td', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child(format(row.data()), 'no-padding').show();
+                    tr.addClass('shown');
+
+                }
+            });
+
+            $('#MyTable tbody').on('click', 'td > button', function (e) {
+
+                @*@Html.ActionLink("Edit", "CountryEdit", "SiteAdmin", new { area= "SiteAdmin" ,id= "d.CountryID" }, null)*@
+
+                alert('Tada!');
+                return false;
+            });
+        });
+    </script>
+}

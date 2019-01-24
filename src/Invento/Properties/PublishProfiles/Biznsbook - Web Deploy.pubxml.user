@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAySV5JetEPEewWS1gWr+NyAAAAAACAAAAAAAQZgAAAAEAACAAAABfQzr/B+33lLjF8Q7Sl9RyqvpS7gAw8mshOXo1ZslCHgAAAAAOgAAAAAIAACAAAACikqsrt/FB7ty/nZFh+JbVimJst5WwpiKGB3yfM86KcIAAAADIZrU1FvBqmWzR8lrWeEMFqmgVg53seLYAykELYlRK8/32lGav3u3tVM5n1SXYPHZtHle86ZrnEJPo+NZEepTTHWAM+mQ78vYcG0qdWgvNpNPs+k2nO7I1E4+pX/Bb8dm0t0PnUqgX+xMlMIEwAm6dBgfHhb7ekvJ23OQOtnK7O0AAAAAOs86VqH2+zlaUo1f4Y4rYSJLiWpNpPzyU81OqeWsikvB8qMHI9/ptiuER/j2LvS5jbcy88dkn9rX2pfrenu5e</EncryptedPassword>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>Server=tcp:SQL6005.site4now.net,1433;Initial Catalog=DB_A3FE15_fahadhameed3h;Persist Security Info=False;User ID=DB_A3FE15_fahadhameed3h_admin;Password=Television7516;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

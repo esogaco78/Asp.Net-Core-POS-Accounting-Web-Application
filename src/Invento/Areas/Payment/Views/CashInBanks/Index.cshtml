@@ -1,0 +1,158 @@
+  @model IEnumerable<Invento.Areas.Payment.Models.CashInBank>
+
+@{
+    ViewData["Title"] = Localizer["Cash In Bank"];
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"] Vouchers - CBV</span>        
+        @if (User.IsInRole("CompanyAdmin") || User.IsInRole("Add Vouchers"))
+        {
+            <a asp-action="Create" title="Add New Voucher" class="btn btn-default pull-right" style="margin-right:20px"><span class="glyphicon glyphicon-plus"></span> @Localizer["Add New"] </a>
+        }               
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover" id="MyTable">
+        <thead>
+            <tr class="active">
+                <th></th>
+                <th>
+                    @Localizer["ID"]
+                </th>
+                <th>
+                    @Localizer["Date"]
+                </th>
+                <th>
+                    @Localizer["Account Name"]
+                </th>
+                <th>
+                    @Localizer["Deposited By"]
+                </th>
+                <th>
+                    @Localizer["Amount"]
+                </th>
+                <th>
+                    @Localizer["Particulars"]
+                </th>
+                @if (User.IsInRole("Edit Vouchers") || User.IsInRole("CompanyAdmin"))
+            {
+                    <th>@Localizer["Edit"]</th>
+            }
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+
+        function format(d) {
+            return '<div class="child-container">' +
+                '<table cellpadding="5" cellspacing="0" border="0">' +
+                    '<tr>' +                        
+                        '<td style="font-weight:bolder">Amount:</td>' +
+                        '<td>' + d.amountInWords + '</td>' +
+                        '<td style="font-weight:bolder">Created By:</td>' +
+                        '<td>' + d.createdBy + '</td>' +
+                    '</tr>' +
+                '</table>' +
+            '</div>';
+        }
+        $(document).ready(function () {
+            var table = $('#MyTable').DataTable({
+                dom: 'lBfrtip',
+                buttons: [
+                    {
+                        "extend": 'print',
+                        "title": "Cash Receipts",
+                        "text": "Print",
+                        "autoPrint": true,
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    },
+                    //'colvis',
+                    {
+                        "extend": 'excel',
+                        "title": "Cash Receipt Bank",
+                        "text": "Excel",
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    },
+                    //'colvis',
+                    {
+                        "extend": 'pdf',
+                        "title": "Cash Receipt Bank",
+                        "text": "PDF",
+                        exportOptions: {
+                            "columns": ':visible',
+                        }
+                    },
+                     'colvis',
+                ],
+                columnDefs: [{
+                    //targets: -2,  // to by default hide some column                    
+                    visible: false
+                }],
+                "ajax": {
+                    "url": "/Payment/CashInBanks/LoadCashInBanks",
+                    "type": "GET",
+                    "datatype":"json"
+                },
+                "columns": [
+                     {
+                         "class": 'details-control',
+                         "orderable": false,
+                         "data": null,
+                         "defaultContent": ''
+                     },
+                     { "data": "cashInBankID", "autpWidth": true },
+                     { "data": "date", "autpWidth": true, "order": [0, 'desc'] },
+                     { "data": "partyName", "autpWidth": true },
+                     { "data": "depositedBy", "autpWidth": true },
+                     { "data": "amount", "autpWidth": true },
+                     { "data": "particulars", "autpWidth": true },
+                       @if(User.IsInRole("Edit Banks") || User.IsInRole("CompanyAdmin"))
+                {
+                        <text>
+                     {
+                         "data": null,
+                         "mRender": function (data, type, row) {
+                             return $("<div />")
+                                 .append($(" <div class='text-center'> <a class='btn btn-sm btn-default ' href='/Payment/CashInBanks/Edit?id=" + data.cashInBankID + "'><span class='glyphicon glyphicon-pencil'></span></a>  </div> "))
+                                 .html();
+                         }
+                     }
+                      </text>
+                }
+                ],
+                //"order": [[1, 'desc']]
+            });            
+            $('#MyTable tbody').on('click', 'td', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+                if (row.child.isShown()) {
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    row.child(format(row.data()), 'no-padding').show();
+                    tr.addClass('shown');
+                }
+            });
+        });
+    </script>
+}

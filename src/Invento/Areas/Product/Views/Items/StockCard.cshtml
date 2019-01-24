@@ -1,0 +1,200 @@
+﻿@model IEnumerable<Invento.Areas.Product.Models.Item>
+ 
+@{
+    ViewData["Title"] = Localizer["Stock Card"];
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>        
+    </div>
+</div>
+
+<div class="table-responsive data" id="data">   
+    <table class="table table-bordered table-hover" id="MyTable">
+        <thead>
+            <tr class="active">
+                <th class="HideItems">Image</th>
+                <th width="90px">
+                    @Html.DisplayNameFor(model => model.OEMNo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CrossRef)
+                </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ItemType)
+                </th>
+                <th>
+                    Price Per Unit
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ItemMainCompany)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Size)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Remark)
+                </th>
+                @*<th>
+                    @Html.DisplayNameFor(model => model.Value)
+                </th>*@
+                @*<th>
+                    @Html.DisplayNameFor(model => model.LCPrice)
+                </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ItemExtra_String_1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ItemExtra_String_2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ItemExtra_String_3)
+                </th>
+                @if (User.IsInRole("Edit Products") || User.IsInRole("CompanyAdmin"))
+                {
+                    <th>Edit</th>
+                }
+                @if (User.IsInRole("View Products Details") || User.IsInRole("CompanyAdmin"))
+                {
+                    <th>View</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @*@foreach (var item in Model)
+            {
+                <tr>
+                    <td> 
+                        @{
+                            if (item.PhotoData != null)
+                            {
+                                string imageBase64 = Convert.ToBase64String(item.PhotoData);
+                                string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+                                <img src="@imageSrc" class="" width="85" height="50" />
+                            }
+                        } 
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OEMNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CrossRef)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SalePrice)
+                    </td>
+                </tr>
+            }*@
+        </tbody>
+    </table>
+</div>
+@*<script src="https://cdn.datatables.net/select/1.2.1/js/dataTables.select.min.js"></script>*@
+@section Scripts{      
+    <script>  
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                dom: 'lBfrtip',
+                buttons: [ 
+                     {
+                         "extend": 'print',
+                         "message": 'Product List',
+                         "title": '@ViewData["CompanyName"]',
+                         "orientation": 'landscape',
+                         "text": "Print",
+                         "autoPrint": true,
+                         exportOptions: {
+                             "columns": ':visible', 
+                         },
+                     }, 
+                     {
+                         extend: 'colvis',
+                         collectionLayout: 'fixed two-column'
+                     } 
+                ], 
+                "columnDefs": [
+                { "visible": false, "targets": [5,7,8,9,10,11,12,13,14,15,16], "searchable": false }
+                ],
+                
+                "ajax": {
+                    "url": "/Product/Items/LoadItemsStockCard",
+                    "type": "GET",
+                    "datatype": "json"
+                },               
+                "columns": [
+                     {
+                        "data": null, 
+                        "mRender": function (data, type, row) { 
+                            return $("<div />")                                    
+                                    .append($(" <div class='text-center'> <img src=data:image/png;base64," + data.photoData + " width='80' height='55' /> </div> "))
+                                    .html();
+                            }
+                     },
+                       { "data": "oemNo", "autoWidth": true },
+                    { "data": "crossRef", "autoWidth": true },
+                    { "data": "itemName", "autoWidth": true },
+                    { "data": "productDescription", "autoWidth": true },
+                    { "data": "itemType", "autoWidth": true },
+                    { "data": "salePrice", "autoWidth": true },
+                    { "data": "itemMainCompany", "autoWidth": true },
+                    { "data": "size", "autoWidth": true },
+                    { "data": "remark", "autoWidth": true },
+                     
+                    { "data": "quantity", "autoWidth": true },
+                    { "data": "createdBy", "autoWidth": true },
+                    { "data": "itemExtra_String_1", "autoWidth": true },
+                    { "data": "itemExtra_String_2", "autoWidth": true },
+                    { "data": "itemExtra_String_3", "autoWidth": true },
+
+                    @if (User.IsInRole("Edit Products") || User.IsInRole("CompanyAdmin"))
+                {
+                            <text>
+                            {
+                                "data": null,
+                                "mRender": function (data, type, row) {
+                                    return $("<div />")
+                                        .append($(" <div class='text-center'> <a class='btn btn-sm btn-default' title='Edit Product Details' href='/Product/Items/Edit?id=" + data.itemID + "'><span class='glyphicon glyphicon-pencil'></span></a>  </div> "))
+                                        .html();
+                                }
+                            },
+                            </text>
+                    }
+                            @if(User.IsInRole("View Products Details") || User.IsInRole("CompanyAdmin"))
+                {
+                            <text>
+                    {
+                        "data": null,
+                        "mRender": function (data, type, row) {
+                            return $("<div />")
+                                .append($(" <div class='text-center'>  <a class='btn btn-sm btn-default modal-link' title='View Product Details' href='/Product/Items/Details?id=" + data.itemID + "'><span class='glyphicon glyphicon-eye-open'></span></a>   </div> "))
+                                .html();
+                        }
+                    }       </text>
+                }                   
+                ]                
+            });            
+        });        
+    </script>
+}

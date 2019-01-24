@@ -1,0 +1,98 @@
+﻿@model ContactVM
+@{
+    ViewData["Title"] = "Customer Support";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else if (User.IsInRole("CompanyUser"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+    else if (User.IsInRole("SiteAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutSiteAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+}
+
+
+<header>
+    <section class="hero">
+        <div class="texture-overlay"></div>
+        <div class="container">
+            <div class="row nav-wrapper">
+                <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                    <a asp-controller="Home" asp-action="Index" style="font-size:xx-large ; font-family:'Nunito'">Biznsbook</a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 text-right navicon">
+                    <p>MENU</p><a id="trigger-overlay" class="nav_slide_button nav-toggle" href="#"><span></span></a>
+                </div>
+            </div>
+            <div class="row hero-content">
+                <br />
+                <br />                                                
+                <br />
+                <div class="col-md-6 col-md-offset-3" style="background-color:lavender">
+                    <br />
+                    <h3 style="color:black;font-weight:900;padding-left:20px">Customer Support.</h3>
+                    <br />
+                    <form asp-controller="Home" asp-action="CustomerSupport" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+
+                        <div asp-validation-summary="All" class="text-danger" style="color:firebrick;font-weight:bolder;padding-left:20px"></div>
+                        <div class="form-group">
+                            <label asp-for="FullName" class="col-md-4 control-label" style="color:black ;font-family:'Bookman Old Style'"></label>
+                            <div class="col-md-7">
+                                <input asp-for="FullName" class="form-control" required placeholder="Full Name"/>
+                                <span asp-validation-for="FullName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Email" class="col-md-4 control-label" style="color:black;font-family:'Bookman Old Style'"></label>
+                            <div class="col-md-7">
+                                <input asp-for="Email" type="email" class="form-control" required placeholder="Email Address" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PhoneNumber" class="col-md-4 control-label" style="color:black;font-family:'Bookman Old Style'"></label>
+                            <div class="col-md-7">
+                                <input asp-for="PhoneNumber" class="form-control" required placeholder="Phone Number" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CustomerNo" class="col-md-4 control-label" style="color:black;font-family:'Bookman Old Style'"></label>
+                            <div class="col-md-7">
+                                <input asp-for="CustomerNo" class="form-control"  placeholder="Your Customer No." required/>
+                                <span asp-validation-for="CustomerNo" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Message" class="col-md-4 control-label" style="color:black;font-family:'Bookman Old Style'"></label>
+                            <div class="col-md-7">
+                                <textarea asp-for="Message" class="form-control" required rows="5" placeholder="Write your Message..."  ></textarea>
+                                <span asp-validation-for="Message" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">                            
+                            <div class="col-md-offset-4 col-md-3">
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        <button type="submit" class="btn btn-primary">LET'S TALK</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</header>

@@ -1,0 +1,104 @@
+﻿@model Invento.Areas.Reports.Models.ProductLedgerVM
+
+@{
+    ViewData["Title"] = "Product Profit Ledger";
+    if (User.IsInRole("CompanyAdmin"))
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyAdmin.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutCompanyUser.cshtml";
+    }
+}
+
+<div class="well" style="padding-bottom:0px">
+    <div class="row">
+        <form asp-action="ProductProfitLedger" asp-controller="Home" method="get">
+            <div class="input-group">
+                <input type="text" class="form-control pull-right" placeholder="Search..." name="Item" id="Item" oninput="OemNoAutoComplete(this);">
+                <div class="col-md-2 pull-right">
+                    <input type="date" class="form-control" name="DateTo" id="DateTo" asp-for="DateTo" />
+                </div>
+                <div class="col-md-2 pull-right">                    
+                    <input type="date" class="form-control" name="DateFrom" id="DateFrom" asp-for="DateFrom" />
+                </div>                                
+                <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">@ViewData["Title"]</span>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit" style="margin-right:50px"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive" style="padding-top:0px">
+    <table class="table table-condensed table-bordered table-hover" id="MyTable">
+        <thead>
+            <tr class="active">
+                <th>OEM No.</th>
+                <th>Cross Ref.</th>
+                <th>Net Sales</th>
+                <th>Net Cost</th>
+                <th>Profit</th>
+                <th>Profit %</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ListProfitItem)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.OemNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.CrossRef)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.TotalSalePrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.TotalPurcahasePrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.TotalProfit)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.ProfitPercentage) <span>%</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+
+    @section Scripts{
+        <script type="text/javascript">
+            function OemNoAutoComplete(val) {
+                debugger;
+                var name = $(val).val();
+                $(val).autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/Purchase/Purchase/LoadOEMNoAutoComplete",
+                            type: "GET",
+                            dataType: "json",
+                            data: { Prefix: request.term },
+                            success: function (data) {
+                                debugger;
+                                response($.map(data, function (item) {
+                                    debugger;
+                                    return { label: item, value: item };
+                                }))
+                            }
+                        })
+                    },
+                    messages: {
+                        noResults: '',
+                        results: function (resultsCount) { }
+                    }
+                });
+            }
+
+        </script>
+    }

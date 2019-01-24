@@ -1,0 +1,189 @@
+@model IEnumerable<Invento.Areas.SiteAdmin.Models.Country>
+
+@{
+    ViewData["Title"] = "Countries";
+    Layout = "~/Views/Shared/_LayoutSiteAdmin.cshtml";
+} 
+
+<div class="well" style="padding-bottom:5px">
+    <div class="row">
+        <span style="font-family:'Times New Roman', Times, serif ; font-weight:bolder ; font-size:x-large ; margin-left:15px">Countries</span>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary pull-right" style="margin-right:55px">Cancel</a>
+        <a asp-action="Create" class="btn btn-primary pull-right" style="margin-right:20px">Add New <span class="glyphicon glyphicon-plus"></span></a>
+    </div>
+</div>      
+<div> @*class="table-responsive"*@    
+    <table class="table table-bordered table-hover " id="MyTable">
+        <thead>
+            <tr class="active">
+                <th>
+                    ID
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ISO)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Iso3)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NiceName)
+                </th>
+                <th>
+                    Code
+                </th>
+                <th>
+                    Phone
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @*@foreach (var item in Model) {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ISO)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Iso3)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NiceName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NumCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PhoneCode)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.CountryID"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a asp-action="Details" asp-route-id="@item.CountryID"><span class="glyphicon glyphicon-pencil"></span></a> |
+                                <a asp-action="Delete" asp-route-id="@item.CountryID"><span class="glyphicon glyphicon-trash"></span></a>
+                            </td>
+                        </tr>
+                }*@
+        </tbody>
+    </table>
+</div>
+@section Scripts{    
+    <script>
+
+        $(document).ready(function () {           
+            $('#MyTable').DataTable({
+                "ajax": {
+                    "url": "/SiteAdmin/Countries/LoadCountries",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    { "data": "countryID", "autoWidth": true },
+                    { "data": "iso", "autoWidth": true },
+                    { "data": "name", "autoWidth": true },
+                    { "data": "niceName", "autoWidth": true },
+                    { "data": "iso3", "autoWidth": true },
+                    { "data": "numCode", "autoWidth": true },
+                    { "data": "phoneCode", "autoWidth": true },
+                    {
+                        "data": null,
+                        "mRender": function (data, type, row) {
+                            return $("<div />")
+                                .append($(" <a class='btn btn-sm btn-default' href='/SiteAdmin/Countries/Edit?id=" + data.countryID + "'><span class='glyphicon glyphicon-pencil'></span></a>   "))
+                                .html();
+                        }
+                    },
+                     {
+                         "data": null,
+                         "mRender": function (data, type, row) {
+                             return $("<div />")
+                                 .append($("   <a class='btn btn-sm btn-default' href='/SiteAdmin/Countries/Delete?id=" + data.countryID + "'><span class='glyphicon glyphicon-trash'></span></a>  "))
+                                 .html();
+                         }
+                     }
+                ]
+            });
+        });
+
+
+
+        // asasas
+
+        //function format(d) {
+        //    // `d` is the original data object for the row
+        //    return '<div class="child-container">' +
+        //        '<table cellpadding="5" cellspacing="0" border="0">' +
+        //            //'<tr>' +
+        //            //    '<td style="font-weight:bolder">Full name:</td>' +
+        //            //    '<td>' + d.name + '</td>' +
+        //            //    '<td style="font-weight:bolder">Nice Name:</td>' +
+        //            //    '<td>' + d.niceName + '</td>' +
+        //            //    '<td style="font-weight:bolder">Nice Name:</td>' +
+        //            //    '<td>' + d.niceName + '</td>' +
+        //                '<td>        <a class="modal-link btn btn-sm btn-primary" href="/SiteAdmin/SiteAdmin/CountryEdit?id=' + d.countryID + '">Edit</a>        </td>' +
+        //            '</tr>' +
+
+        //        '</table>' +
+        //    '</div>';
+        //}
+
+        //$(document).ready(function () {
+        //    var table = $('#CountryTable').DataTable({
+        //       "ajax": {
+        //                    "url": "/SiteAdmin/Countries/LoadCountries",
+        //                        "type": "GET",
+        //                        "datatype":"json"
+        //                    },
+        //       "columns": [
+        //            {
+        //                "class": 'details-control',
+        //                "orderable": false,
+        //                "data": null,
+        //                "defaultContent": ''
+        //            },
+        //            { "data": "countryID" , "searchable": false },
+        //            { "data": "name", "autpWidth": true },
+        //            { "data": "niceName", "autpWidth": true },
+        //            { "data": "iso3", "autpWidth": true },
+        //            { "data": "numCode", "autpWidth": true },
+        //            { "data": "phoneCode", "autpWidth": true },
+        //        ],
+        //        "order": [[1, 'asc']]
+        //    });
+
+        //    // Add event listener for opening and closing details
+        //    $('#CountryTable tbody').on('click', 'td', function () {
+        //        var tr = $(this).closest('tr');
+        //        var row = table.row(tr);
+
+        //        if (row.child.isShown()) {
+        //            // This row is already open - close it
+        //            row.child.hide();
+        //            tr.removeClass('shown');
+        //        }
+        //        else {
+        //            // Open this row
+        //            row.child(format(row.data()), 'no-padding').show();
+        //            tr.addClass('shown');
+
+        //        }
+        //    });
+
+            //$('#CountryTable tbody').on('click', 'td > button', function (e) {
+
+               @*@Html.ActionLink("Edit", "CountryEdit", "SiteAdmin", new { area= "SiteAdmin" ,id= "d.CountryID" }, null)*@
+
+        //        alert('Tada!');
+        //        return false;
+        //    });
+        //});
+
+      
+    </script>
+}
+
