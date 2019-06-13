@@ -21,12 +21,10 @@
 
 ### Project Sample Images
 
-![1-Main (Default)](https://user-images.githubusercontent.com/31726780/56282502-a872a480-610f-11e9-9a9f-12e37419359e.png)
 ![1-Main](https://user-images.githubusercontent.com/31726780/56282503-a872a480-610f-11e9-95a7-d42af7d486a8.png)
+![1-Main (Default)](https://user-images.githubusercontent.com/31726780/56282502-a872a480-610f-11e9-9a9f-12e37419359e.png)
 ![Screenshot (149)](https://user-images.githubusercontent.com/31726780/56282529-ab6d9500-610f-11e9-8307-02467d8ad45b.png)
-![Screenshot (151)](https://user-images.githubusercontent.com/31726780/56282530-ab6d9500-610f-11e9-8ec8-921702130206.png)
 ![Screenshot (161)](https://user-images.githubusercontent.com/31726780/56282531-ab6d9500-610f-11e9-9fc6-07d25ea477a1.png)
-![Screenshot (171)](https://user-images.githubusercontent.com/31726780/56282532-ab6d9500-610f-11e9-951c-7edb022a80c2.png)
 ![Screenshot (174)](https://user-images.githubusercontent.com/31726780/56282533-ab6d9500-610f-11e9-99f0-a77875d09c4a.png)
 ![Screenshot (175)](https://user-images.githubusercontent.com/31726780/56282534-ab6d9500-610f-11e9-842c-ea5f950ec5d6.png)
 ![Screenshot (187)](https://user-images.githubusercontent.com/31726780/56282535-ac062b80-610f-11e9-8c0a-4a8667b53f17.png)
